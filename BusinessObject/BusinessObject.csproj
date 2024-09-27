@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ResponseModel\" />
-    <Folder Include="RequestModel\" />
+    <Compile Remove="RequestModel\**" />
+    <Compile Remove="ResponseModel\**" />
+    <EmbeddedResource Remove="RequestModel\**" />
+    <EmbeddedResource Remove="ResponseModel\**" />
+    <None Remove="RequestModel\**" />
+    <None Remove="ResponseModel\**" />
   </ItemGroup>
 
   <ItemGroup>

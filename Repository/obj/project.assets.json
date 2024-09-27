@@ -910,6 +910,19 @@
         "runtime": {
           "bin/placeholder/BusinessObject.dll": {}
         }
+      },
+      "DAO/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "BusinessObject": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/DAO.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DAO.dll": {}
+        }
       }
     }
   },
@@ -2289,11 +2302,16 @@
       "type": "project",
       "path": "../BusinessObject/BusinessObject.csproj",
       "msbuildProject": "../BusinessObject/BusinessObject.csproj"
+    },
+    "DAO/1.0.0": {
+      "type": "project",
+      "path": "../DAO/DAO.csproj",
+      "msbuildProject": "../DAO/DAO.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "BusinessObject >= 1.0.0"
+      "DAO >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -2323,8 +2341,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj": {
-              "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj"
+            "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\DAO.csproj": {
+              "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\DAO.csproj"
             }
           }
         }
