@@ -361,3 +361,11 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+BusinessObject/obj/Debug/net6.0/BusinessObject.AssemblyInfo.cs
+BusinessObject/obj/Debug/net6.0/BusinessObject.AssemblyInfoInputs.cache
+Fall2024__SWD392_SE1704_111/obj/Debug/net6.0/Fall2024__SWD392_SE1704_111.AssemblyInfo.cs
+Fall2024__SWD392_SE1704_111/obj/Debug/net6.0/Fall2024__SWD392_SE1704_111.AssemblyInfoInputs.cache
+Repository/obj/Debug/net6.0/Repository.AssemblyInfo.cs
+Repository/obj/Debug/net6.0/Repository.AssemblyInfoInputs.cache
+Service/obj/Debug/net6.0/Service.AssemblyInfo.cs
+Service/obj/Debug/net6.0/Service.AssemblyInfoInputs.cache
