@@ -6,7 +6,20 @@ using System.Threading.Tasks;
 
 namespace BusinessObject
 {
+    public enum User
+    {
+        None = 0,
+        Customer,
+        Stylist,
+        Staff,
+        Manager,
+        Admin,
+    }
+
     public enum UserStatus
     {
+        None = 0,
+        Active,
+        Banned,
     }
 }

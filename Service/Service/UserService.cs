@@ -70,7 +70,7 @@ namespace Service.Service
             }
         }
 
-        private string GenerateToken(User account)
+        private string GenerateToken(BusinessObject.Model.User account)
         {
             var tokenSecret = _config["Jwt:Key"];
             var tokenHandler = new JwtSecurityTokenHandler();
