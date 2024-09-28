@@ -1,18 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\",
+  "WorkspaceRootPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{579FC8A7-CB84-4C3F-824F-573E4E166F6D}|Service\\Service.csproj|d:\\fpt\\fall 2024\\swd392\\fall2024swd392_se1704_111\\fall2024__swd392_se1704_111\\service\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{579FC8A7-CB84-4C3F-824F-573E4E166F6D}|Service\\Service.csproj|solutionrelative:service\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79C008B2-134B-4142-A79C-E7F1D5A1DD72}|Fall2024__SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111.csproj|d:\\fpt\\fall 2024\\swd392\\fall2024swd392_se1704_111\\fall2024__swd392_se1704_111\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79C008B2-134B-4142-A79C-E7F1D5A1DD72}|Fall2024__SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111.csproj|solutionrelative:fall2024__swd392_se1704_111\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Repository\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Repository\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{579FC8A7-CB84-4C3F-824F-573E4E166F6D}|Service\\Service.csproj|d:\\fpt\\fall 2024\\swd392\\fall2024swd392_se1704_111\\service\\iservice\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{579FC8A7-CB84-4C3F-824F-573E4E166F6D}|Service\\Service.csproj|solutionrelative:service\\iservice\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F378CD61-0E54-465C-96AC-EB67365CDECF}|DAO\\DAO.csproj|d:\\fpt\\fall 2024\\swd392\\fall2024swd392_se1704_111\\fall2024__swd392_se1704_111\\dao\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F378CD61-0E54-465C-96AC-EB67365CDECF}|DAO\\DAO.csproj|solutionrelative:dao\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{579FC8A7-CB84-4C3F-824F-573E4E166F6D}|Service\\Service.csproj|d:\\fpt\\fall 2024\\swd392\\fall2024swd392_se1704_111\\service\\service\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{579FC8A7-CB84-4C3F-824F-573E4E166F6D}|Service\\Service.csproj|solutionrelative:service\\service\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,41 +30,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Class1.cs",
-              "DocumentMoniker": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Service\\Class1.cs",
-              "RelativeDocumentMoniker": "Service\\Class1.cs",
-              "ToolTip": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Service\\Class1.cs",
-              "RelativeToolTip": "Service\\Class1.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "DocumentIndex": 2,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Service\\Service\\UserService.cs",
+              "RelativeDocumentMoniker": "Service\\Service\\UserService.cs",
+              "ToolTip": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Service\\Service\\UserService.cs",
+              "RelativeToolTip": "Service\\Service\\UserService.cs",
+              "ViewState": "AQIAACcAAAAAAAAAAAAYwDIAAABFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-27T10:08:11.615Z",
+              "WhenOpened": "2024-09-28T10:17:11.14Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Class1.cs",
-              "DocumentMoniker": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Repository\\Class1.cs",
-              "RelativeDocumentMoniker": "Repository\\Class1.cs",
-              "ToolTip": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Repository\\Class1.cs",
-              "RelativeToolTip": "Repository\\Class1.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Service\\IService\\IUserService.cs",
+              "RelativeDocumentMoniker": "Service\\IService\\IUserService.cs",
+              "ToolTip": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Service\\IService\\IUserService.cs",
+              "RelativeToolTip": "Service\\IService\\IUserService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAA5AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-27T10:07:33.751Z",
+              "WhenOpened": "2024-09-28T10:16:35.375Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Class1.cs",
-              "DocumentMoniker": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\Class1.cs",
-              "RelativeDocumentMoniker": "DAO\\Class1.cs",
-              "ToolTip": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\Class1.cs",
-              "RelativeToolTip": "DAO\\Class1.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "DocumentIndex": 0,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "Fall2024__SWD392_SE1704_111\\Controllers\\UserController.cs",
+              "ToolTip": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Controllers\\UserController.cs",
+              "RelativeToolTip": "Fall2024__SWD392_SE1704_111\\Controllers\\UserController.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAawBgAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-27T10:06:57.714Z",
+              "WhenOpened": "2024-09-28T10:09:50.22Z",
               "EditorCaption": ""
             }
           ]

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj": {}
+    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj": {}
   },
   "projects": {
-    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj": {
+    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj",
+        "projectUniqueName": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj",
         "projectName": "BusinessObject",
-        "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj",
+        "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\obj\\",
+        "outputPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\BusinessObject\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,6 +45,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.25, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
@@ -68,6 +72,10 @@
             "Microsoft.Extensions.Configuration.Json": {
               "target": "Package",
               "version": "[6.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
             }
           },
           "imports": [
