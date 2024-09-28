@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace BusinessObject
 {
-    public enum User
+    public enum UserRole
     {
         None = 0,
         Customer,

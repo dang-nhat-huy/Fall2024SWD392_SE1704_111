@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "hJASZMMj0lucKudbRSLtSZNT0y9oY06qjZZG0yr3F7SRgyUC8ZjVEXzns54VuSy5Jt/oc4mY7ZjBJLBVN8rMKg==",
+  "dgSpecHash": "Tsqr05ttKmRl0/sqW/sbofUAPayljXzQrwx9DW2/NCCuYL4DkDD+jwZ6WW82zb+jV9PT3ECdtuVuAPbmwKCYeQ==",
   "success": true,
   "projectFilePath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\admin\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.25\\microsoft.aspnetcore.authentication.jwtbearer.6.0.25.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.data.sqlclient\\2.1.4\\microsoft.data.sqlclient.2.1.4.nupkg.sha512",

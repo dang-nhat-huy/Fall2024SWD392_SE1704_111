@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Fall2024__SWD392_SE1704_111")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a76d9c677c82e27c45c36b8d86f0aaaf93ac3255")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+42248c7b7d748d6fb0faddcb6d5b683d0daf90d4")]
 [assembly: System.Reflection.AssemblyProductAttribute("Fall2024__SWD392_SE1704_111")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Fall2024__SWD392_SE1704_111")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
