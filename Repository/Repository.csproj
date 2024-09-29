@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DAO\DAO.csproj" />
+    <ProjectReference Include="..\BusinessObject\BusinessObject.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="IRepository\" />
+    <Folder Include="Repository\" />
   </ItemGroup>
 
 </Project>

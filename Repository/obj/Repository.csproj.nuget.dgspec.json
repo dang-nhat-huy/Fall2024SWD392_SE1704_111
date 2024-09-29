@@ -90,70 +90,6 @@
         }
       }
     },
-    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\DAO.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\DAO.csproj",
-        "projectName": "DAO",
-        "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\DAO.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\obj\\",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net6.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
-            "projectReferences": {
-              "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj": {
-                "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        }
-      },
-      "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
     "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Repository\\Repository.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -178,8 +114,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\DAO.csproj": {
-                "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\DAO.csproj"
+              "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj": {
+                "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj"
               }
             }
           }

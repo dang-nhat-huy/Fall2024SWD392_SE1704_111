@@ -911,24 +911,11 @@
           "bin/placeholder/BusinessObject.dll": {}
         }
       },
-      "DAO/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
-        "dependencies": {
-          "BusinessObject": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/DAO.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/DAO.dll": {}
-        }
-      },
       "Repository/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
-          "DAO": "1.0.0"
+          "BusinessObject": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Repository.dll": {}
@@ -2315,11 +2302,6 @@
       "type": "project",
       "path": "../BusinessObject/BusinessObject.csproj",
       "msbuildProject": "../BusinessObject/BusinessObject.csproj"
-    },
-    "DAO/1.0.0": {
-      "type": "project",
-      "path": "../DAO/DAO.csproj",
-      "msbuildProject": "../DAO/DAO.csproj"
     },
     "Repository/1.0.0": {
       "type": "project",
