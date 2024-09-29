@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace BusinessObject.Model
 {
@@ -36,9 +37,19 @@ namespace BusinessObject.Model
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=(local);uid=sa;pwd=123456789;database=HairSalonBooking;TrustServerCertificate=True");
+                optionsBuilder.UseSqlServer(GetConnectionString());
             }
+        }
+
+        private string GetConnectionString()
+        {
+            IConfiguration config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", true, true)
+            .Build();
+            var strConn = config["ConnectionStrings:DB"];
+
+            return strConn;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -534,8 +545,6 @@ namespace BusinessObject.Model
                     .IsUnicode(false)
                     .HasColumnName("phone");
 
-                entity.Property(e => e.Role).HasColumnName("role");
-
                 entity.Property(e => e.Status).HasColumnName("status");
 
                 entity.Property(e => e.UpdateBy)
@@ -599,7 +608,7 @@ namespace BusinessObject.Model
             {
                 entity.ToTable("UserProfile");
 
-                entity.HasIndex(e => e.Email, "UQ__UserProf__AB6E61644617DFB3")
+                entity.HasIndex(e => e.Email, "UQ__UserProf__AB6E6164FCBF9C90")
                     .IsUnique();
 
                 entity.Property(e => e.UserProfileId).HasColumnName("userProfileID");

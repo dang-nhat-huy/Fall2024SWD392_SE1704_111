@@ -23,7 +23,6 @@ namespace BusinessObject.Model
         public string Password { get; set; } = null!;
         public string? Phone { get; set; }
         public int? Status { get; set; }
-        public int? Role { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
