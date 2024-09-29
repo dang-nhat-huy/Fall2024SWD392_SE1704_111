@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Service\\Service.csproj": {}
+    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Service\\Service.csproj": {}
   },
   "projects": {
-    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj": {
+    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj",
+        "projectUniqueName": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj",
         "projectName": "BusinessObject",
-        "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj",
+        "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\BusinessObject\\obj\\",
+        "outputPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,10 +45,6 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Microsoft.AspNetCore.Authentication.JwtBearer": {
-              "target": "Package",
-              "version": "[6.0.25, )"
-            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
@@ -72,10 +68,6 @@
             "Microsoft.Extensions.Configuration.Json": {
               "target": "Package",
               "version": "[6.0.0, )"
-            },
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.5.0, )"
             }
           },
           "imports": [
@@ -98,14 +90,14 @@
         }
       }
     },
-    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Repository\\Repository.csproj": {
+    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\DAO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Repository\\Repository.csproj",
-        "projectName": "Repository",
-        "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Repository\\Repository.csproj",
+        "projectUniqueName": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\DAO.csproj",
+        "projectName": "DAO",
+        "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\DAO.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Repository\\obj\\",
+        "outputPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -122,8 +114,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj": {
-                "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj"
+              "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj": {
+                "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\BusinessObject\\BusinessObject.csproj"
               }
             }
           }
@@ -162,14 +154,14 @@
         }
       }
     },
-    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Service\\Service.csproj": {
+    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Repository\\Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Service\\Service.csproj",
-        "projectName": "Service",
-        "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Service\\Service.csproj",
+        "projectUniqueName": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Repository\\Repository.csproj",
+        "projectName": "Repository",
+        "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Repository\\Repository.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Service\\obj\\",
+        "outputPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Repository\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -186,8 +178,72 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Repository\\Repository.csproj": {
-                "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Repository\\Repository.csproj"
+              "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\DAO.csproj": {
+                "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\DAO\\DAO.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Service\\Service.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Service\\Service.csproj",
+        "projectName": "Service",
+        "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Service\\Service.csproj",
+        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
+        "outputPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Service\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Repository\\Repository.csproj": {
+                "projectPath": "D:\\FPT\\Fall 2024\\SWD392\\Fall2024SWD392_SE1704_111\\Fall2024__SWD392_SE1704_111\\Repository\\Repository.csproj"
               }
             }
           }
