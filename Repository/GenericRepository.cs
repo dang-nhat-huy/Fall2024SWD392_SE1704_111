@@ -66,12 +66,12 @@ namespace Repository
             return true;
         }
 
-        public T GetById(long id)
+        public T GetById(int id)
         {
             return _dbSet.Find(id);
         }
 
-        public async Task<T> GetByIdAsync(long id)
+        public async Task<T> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
         }
