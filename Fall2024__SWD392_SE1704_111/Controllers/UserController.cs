@@ -1,6 +1,4 @@
-﻿using BadmintonRentingData;
-using BusinessObject;
-using BusinessObject.Model;
+﻿using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
 using Service.IService;
 using static BusinessObject.RequestDTO.RequestDTO;
@@ -33,26 +31,6 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequestDTO registerRequest)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var result = await _userService.Register(registerRequest);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }

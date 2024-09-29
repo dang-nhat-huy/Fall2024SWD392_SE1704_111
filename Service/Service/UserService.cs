@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Application.ErrorHandlers;
 using BadmintonRentingData;
 using BusinessObject;
 using BusinessObject.Model;
@@ -22,12 +22,10 @@ namespace Service.Service
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IConfiguration _config;
-        private readonly IMapper _mapper;
-        public UserService(UnitOfWork unitOfWork, IConfiguration config, IMapper mapper)
+        public UserService(UnitOfWork unitOfWork, IConfiguration config)
         {
             _unitOfWork = unitOfWork;
             _config = config;
-            _mapper = mapper;
         }
         public async Task<ResponseDTO> GetAll()
         {
@@ -37,7 +35,7 @@ namespace Service.Service
 
                 if (listUser == null)
                 {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "No users found.");
+                    throw new BadRequestException("Incorrect login credentials!");
                 }
                 else
                 {
@@ -72,7 +70,7 @@ namespace Service.Service
             }
         }
 
-        private string GenerateToken(User account)
+        private string GenerateToken(BusinessObject.Model.User account)
         {
             var tokenSecret = _config["Jwt:Key"];
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -95,26 +93,6 @@ namespace Service.Service
 
             var token = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
-        }
-
-        public async Task<ResponseDTO> Register(RegisterRequestDTO request)
-        {
-            try
-            {
-                //AutoMapper from RegisterRequestDTO => User
-                var user = _mapper.Map<User>(request);
-
-                user.CreateDate = DateTime.UtcNow; 
-                user.Status = UserStatus.Active; 
-                user.Role = UserRole.Customer; 
-
-                await _unitOfWork.UserRepository.CreateAsync(user);
-                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "User registered successfully", user);
-            }
-            catch (Exception ex)
-            {
-                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
-            }
         }
     }
 }

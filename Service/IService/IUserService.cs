@@ -13,6 +13,5 @@ namespace Service.IService
     {
         Task<ResponseDTO> GetAll();
         Task<ResponseDTO> Login(LoginRequestDTO request);
-        Task<ResponseDTO> Register(RegisterRequestDTO request);
     }
 }
