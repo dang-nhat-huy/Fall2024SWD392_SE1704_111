@@ -15,7 +15,7 @@ namespace BusinessObject.Model
         public string? UpdateBy { get; set; }
 
         public virtual Booking Booking { get; set; } = null!;
-        public virtual HairService Service { get; set; } = null!;
+        public virtual Service Service { get; set; } = null!;
         public virtual User Stylist { get; set; } = null!;
     }
 }

@@ -14,7 +14,7 @@ namespace BusinessObject.Model
             Feedbacks = new HashSet<Feedback>();
             Reports = new HashSet<Report>();
             ScheduleUsers = new HashSet<ScheduleUser>();
-            ServicesStylists = new HashSet<ServicesStylist>();
+            ServiceStylists = new HashSet<ServiceStylist>();
             UserProfiles = new HashSet<UserProfile>();
         }
 
@@ -36,7 +36,7 @@ namespace BusinessObject.Model
         public virtual ICollection<Feedback> Feedbacks { get; set; }
         public virtual ICollection<Report> Reports { get; set; }
         public virtual ICollection<ScheduleUser> ScheduleUsers { get; set; }
-        public virtual ICollection<ServicesStylist> ServicesStylists { get; set; }
+        public virtual ICollection<ServiceStylist> ServiceStylists { get; set; }
         public virtual ICollection<UserProfile> UserProfiles { get; set; }
     }
 }

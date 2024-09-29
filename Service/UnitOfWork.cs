@@ -1,13 +1,13 @@
+
 using BusinessObject.Model;
 using Repository.Repository;
 
 
-namespace Service
+namespace BadmintonRentingData
 {
     public class UnitOfWork
     {
-        private UserRepository _userRepository;
-        private HairServiceRepository _hairServiceRepository;
+        private UserRepository _userRepository;   
 
         private HairSalonBookingContext _context;
 
@@ -24,12 +24,6 @@ namespace Service
             }
         }
 
-        public HairServiceRepository HairServiceRepository
-        {
-            get
-            {
-                return _hairServiceRepository ??= new HairServiceRepository(_context);
-            }
-        }
+        
     }
 }

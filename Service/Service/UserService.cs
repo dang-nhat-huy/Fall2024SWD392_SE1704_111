@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BadmintonRentingData;
 using BusinessObject;
 using BusinessObject.Model;
 using BusinessObject.ResponseDTO;

@@ -1,3 +1,4 @@
+using BadmintonRentingData;
 using BusinessObject.Mapper;
 using BusinessObject.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -5,7 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repository.IRepository;
 using Repository.Repository;
-using Service;
 using Service.IService;
 using Service.Service;
 using System.Security.Claims;
@@ -81,21 +81,12 @@ builder.Services.AddCors(options =>
              .SetIsOriginAllowed(_ => true);
     });
 });
-
 builder.Services.AddScoped<UnitOfWork, UnitOfWork>();
-
-//Repository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IHairServiceRepository, HairServiceRepository>();
 
-//Service
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IHairServiceService, HairServiceService>();
 
-//Auto Mapper
 builder.Services.AddAutoMapper(typeof(UserMapping));
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
-﻿using BusinessObject.Model;
+﻿using BadmintonRentingData.Base;
+using BusinessObject.Model;
 using Microsoft.EntityFrameworkCore;
 using Repository.IRepository;
 using System;
