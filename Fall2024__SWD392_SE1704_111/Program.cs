@@ -82,7 +82,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddScoped<UnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 //Repository
 builder.Services.AddScoped<IUserRepository, UserRepository>();

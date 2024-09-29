@@ -19,10 +19,10 @@ namespace Service.Service
 {
     public class UserService : IUserService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
-        public UserService(UnitOfWork unitOfWork, IConfiguration config, IMapper mapper)
+        public UserService(IUnitOfWork unitOfWork, IConfiguration config, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _config = config;
@@ -53,9 +53,9 @@ namespace Service.Service
         {
             try
             {
-                var account =  _unitOfWork.UserRepository.GetAll()
-                    .FirstOrDefault(x => x.UserName!.Equals(request.userName, StringComparison.OrdinalIgnoreCase)
-                                      && x.Password.Equals(request.password));
+                var account = _unitOfWork.UserRepository.GetAll()
+                                .FirstOrDefault(x => x.UserName!.ToLower() == request.userName.ToLower()
+                                && x.Password == request.password);
 
                 if (account == null)
                 {

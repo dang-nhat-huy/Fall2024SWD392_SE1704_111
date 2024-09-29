@@ -1,22 +1,24 @@
 using BusinessObject.Model;
+using Repository.IRepository;
 using Repository.Repository;
 
 
 namespace Service
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        private UserRepository _userRepository;
-        private HairServiceRepository _hairServiceRepository;
+        private IUserRepository _userRepository;
+        private IHairServiceRepository _hairServiceRepository;
 
         private HairSalonBookingContext _context;
 
         public UnitOfWork()
         {
             _userRepository ??= new UserRepository();
+            _hairServiceRepository ??= new HairServiceRepository();
         }
 
-        public UserRepository UserRepository
+        public IUserRepository UserRepository
         {
             get
             {
@@ -24,12 +26,17 @@ namespace Service
             }
         }
 
-        public HairServiceRepository HairServiceRepository
+        public IHairServiceRepository HairServiceRepository
         {
             get
             {
                 return _hairServiceRepository ??= new HairServiceRepository(_context);
             }
+        }
+
+        public void Dispose()
+        {
+            _context.Dispose();
         }
     }
 }
