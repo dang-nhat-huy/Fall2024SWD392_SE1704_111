@@ -100,6 +100,11 @@ namespace Service.Service
         {
             try
             {
+                if (await _unitOfWork.UserRepository.ExistsByNameAsync(request.userName))
+                {
+                    return new ResponseDTO(Const.FAIL_CREATE_CODE, "The username is already taken. Please choose a different username.");
+                }
+
                 //AutoMapper from RegisterRequestDTO => User
                 var user = _mapper.Map<User>(request);
 
