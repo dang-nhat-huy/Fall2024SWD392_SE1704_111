@@ -14,5 +14,10 @@ namespace Repository.Repository
         public UserRepository() { }
 
         public UserRepository(HairSalonBookingContext context) => _context = context;
+
+        public async Task<bool> ExistsByNameAsync(string name)
+        {
+            return await _context.Users.AnyAsync(u => u.UserName.ToLower() == name.ToLower());
+        }
     }
 }
