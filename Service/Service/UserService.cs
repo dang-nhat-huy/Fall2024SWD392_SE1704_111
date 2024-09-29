@@ -113,7 +113,7 @@ namespace Service.Service
                 user.Role = UserRole.Customer; 
 
                 await _unitOfWork.UserRepository.CreateAsync(user);
-                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "User registered successfully", user);
+                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "User registered successfully", request);
             }
             catch (Exception ex)
             {

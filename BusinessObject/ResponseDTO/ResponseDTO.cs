@@ -38,6 +38,8 @@ namespace BusinessObject.ResponseDTO
         public double? Price { get; set; }
         public TimeSpan? EstimateTime { get; set; }
     }
+
+    
 }
 
 

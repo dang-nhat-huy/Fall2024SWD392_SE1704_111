@@ -17,10 +17,10 @@ namespace Service.Service
     public class HairServiceService : IHairServiceService
     {
         private readonly IHairServiceRepository _serviceRepository;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public HairServiceService(IHairServiceRepository serviceRepository, UnitOfWork unitOfWork, IMapper mapper)
+        public HairServiceService(IHairServiceRepository serviceRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _serviceRepository = serviceRepository;
             _unitOfWork = unitOfWork;
@@ -29,7 +29,7 @@ namespace Service.Service
 
         public async Task<PagedResult<HairService>> GetListServicesAsync(int pageNumber, int pageSize)
         {
-            var query = _serviceRepository.GetAll();
+            var query = _unitOfWork.HairServiceRepository.GetAll();
             return await Paging.GetPagedResultAsync(query.AsQueryable(), pageNumber, pageSize);
         }
 

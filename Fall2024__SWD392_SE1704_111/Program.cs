@@ -94,7 +94,7 @@ builder.Services.AddScoped<IHairServiceService, HairServiceService>();
 
 //Auto Mapper
 builder.Services.AddAutoMapper(typeof(UserMapping));
-
+builder.Services.AddAutoMapper(typeof(ServicesMapping));
 
 var app = builder.Build();
 
