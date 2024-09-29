@@ -2,6 +2,7 @@
 using BusinessObject;
 using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Service.IService;
@@ -100,6 +101,13 @@ namespace Service.Service
         {
             try
             {
+                var existingUser = await _unitOfWork.UserRepository.GetAll().FirstOrDefaultAsync(u => u.UserName.Equals(request.userName, StringComparison.OrdinalIgnoreCase));
+
+                if (existingUser != null)
+                {
+                    return new ResponseDTO(Const.FAIL_CREATE_CODE, "Username already exists.");
+                }
+
                 //AutoMapper from RegisterRequestDTO => User
                 var user = _mapper.Map<User>(request);
 
