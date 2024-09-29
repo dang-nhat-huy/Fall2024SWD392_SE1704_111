@@ -20,5 +20,12 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             var result = await _serviceManagementService.GetListServicesAsync(pageNumber, pageSize);
             return Ok(result);
         }
+
+        [HttpGet("getServices/{id}")]
+        public async Task<IActionResult> GetServiceById([FromRoute]int id)
+        {
+            var services = await _serviceManagementService.GetServiceByIdAsync(id);
+            return Ok(services);
+        }
     }
 }

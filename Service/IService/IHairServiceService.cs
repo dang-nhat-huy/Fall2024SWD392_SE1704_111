@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Model;
+using BusinessObject.ResponseDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,6 @@ namespace Service.IService
     public interface IHairServiceService
     {
         Task<PagedResult<HairService>> GetListServicesAsync(int pageNumber, int pageSize);
-
+        Task<ResponseDTO> GetServiceByIdAsync(int id);
     }
 }

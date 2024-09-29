@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObject.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,4 +29,15 @@ namespace BusinessObject.ResponseDTO
             public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
         }
     }
+
+    public class ServicesDTO
+    {
+        public string? ImageLink { get; set; }
+        public string? ServiceName { get; set; }
+        public string? Description { get; set; }
+        public double? Price { get; set; }
+        public TimeSpan? EstimateTime { get; set; }
+    }
 }
+
+

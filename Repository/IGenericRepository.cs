@@ -24,9 +24,9 @@ namespace Repository
 
         Task<bool> RemoveAsync(T entity);
 
-        T GetById(long id);
+        T GetById(int id);
 
-        Task<T> GetByIdAsync(long id);
+        Task<T> GetByIdAsync(int id);
 
         T GetByName(string name);
 
