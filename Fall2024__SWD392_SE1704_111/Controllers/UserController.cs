@@ -1,5 +1,4 @@
-﻿using BadmintonRentingData;
-using BusinessObject;
+﻿using BusinessObject;
 using BusinessObject.Model;
 using Microsoft.AspNetCore.Mvc;
 using Service.IService;

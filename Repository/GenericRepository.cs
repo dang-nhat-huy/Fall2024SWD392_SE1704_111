@@ -1,10 +1,10 @@
 ﻿using BusinessObject.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace BadmintonRentingData.Base
+namespace Repository
 {
 
-    public class GenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected HairSalonBookingContext _context;
         protected readonly DbSet<T> _dbSet;
@@ -15,9 +15,9 @@ namespace BadmintonRentingData.Base
             _dbSet = _context.Set<T>();
         }
 
-        public List<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            return _dbSet.ToList();
+            return _dbSet;
         }
 
         public async Task<List<T>> GetAllAsync()
@@ -71,7 +71,7 @@ namespace BadmintonRentingData.Base
             return _dbSet.Find(id);
         }
 
-        public async Task<T> GetByIdAsync(long? id)
+        public async Task<T> GetByIdAsync(long id)
         {
             return await _dbSet.FindAsync(id);
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BusinessObject.Model
 {
-    public partial class ServiceStylist
+    public partial class ServicesStylist
     {
         public int ServiceStylistId { get; set; }
         public int StylistId { get; set; }
@@ -13,7 +13,7 @@ namespace BusinessObject.Model
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
 
-        public virtual Service Service { get; set; } = null!;
+        public virtual HairService Service { get; set; } = null!;
         public virtual User Stylist { get; set; } = null!;
     }
 }

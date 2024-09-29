@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace BusinessObject.Model
 {
-    public partial class Service
+    public partial class HairService
     {
-        public Service()
+        public HairService()
         {
             BookingDetails = new HashSet<BookingDetail>();
-            ServiceStylists = new HashSet<ServiceStylist>();
+            ServicesStylists = new HashSet<ServicesStylist>();
         }
 
         public int ServiceId { get; set; }
@@ -23,6 +23,6 @@ namespace BusinessObject.Model
         public string? UpdateBy { get; set; }
 
         public virtual ICollection<BookingDetail> BookingDetails { get; set; }
-        public virtual ICollection<ServiceStylist> ServiceStylists { get; set; }
+        public virtual ICollection<ServicesStylist> ServicesStylists { get; set; }
     }
 }
