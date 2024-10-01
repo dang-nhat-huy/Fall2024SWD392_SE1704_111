@@ -10,6 +10,10 @@ namespace Repository
     {
         IQueryable<T> GetAll();
 
+        IEnumerable<T> GetAllWithInclude(string entity);
+
+        IEnumerable<T> GetAllWithTwoInclude(string entity1, string entity2);
+
         Task<List<T>> GetAllAsync();
 
         void Create(T entity);

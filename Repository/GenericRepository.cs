@@ -21,6 +21,16 @@ namespace Repository
             return _dbSet;
         }
 
+        public IEnumerable<T> GetAllWithInclude(string entity)
+        {
+            return _dbSet.Include(entity);
+        }
+
+        public IEnumerable<T> GetAllWithTwoInclude(string entity1, string entity2)
+        {
+            return _dbSet.Include(entity1).Include(entity2);
+        }
+
         public async Task<List<T>> GetAllAsync()
         {
             var list = await _dbSet.ToListAsync();
