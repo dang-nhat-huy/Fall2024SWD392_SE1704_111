@@ -13,7 +13,14 @@ namespace BusinessObject.Mapper
     {
         public ScheduleUserMapping()
         {
-            CreateMap<ScheduleUser, ScheduleUserDTO>().ReverseMap();
+            CreateMap<ScheduleUser, ScheduleUserDTO>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.User.Phone))
+                .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.Schedule.StartTime))
+                .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.Schedule.EndTime))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.Schedule.StartDate))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.Schedule.EndDate));
+                
         }
     }
 }

@@ -2,6 +2,7 @@
 using BusinessObject.Model;
 using BusinessObject.Paging;
 using BusinessObject.ResponseDTO;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Service.IService;
 using System;
@@ -28,11 +29,14 @@ namespace Service.Service
 
         public async Task<PagedResult<ScheduleUserDTO>> GetListScheduleUserAsync(int pageNumber, int pageSize)
         {
+            // Lấy IQueryable từ repository
             var query = _unitOfWork.scheduleUserRepository.GetAllWithTwoInclude("Schedule", "User");
 
-            var result = _mapper.Map<ScheduleUserDTO>(query);
+            // Sử dụng ProjectTo để ánh xạ thành IQueryable<ScheduleUserDTO>
+            var resultQuery = _mapper.ProjectTo<ScheduleUserDTO>(query);
 
-            return await Paging.PagedResultAsync(result, pageNumber, pageSize);
+            // Gọi hàm phân trang
+            return await Paging.GetPagedResultAsync(resultQuery, pageNumber, pageSize);
         }
     }
 }
