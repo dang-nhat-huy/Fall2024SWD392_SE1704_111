@@ -71,14 +71,11 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("MyPolicy", policy =>
+    options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:5021/")
-             .AllowAnyMethod()
-             .AllowAnyHeader()
-             .SetIsOriginAllowedToAllowWildcardSubdomains()
-             .AllowCredentials()
-             .SetIsOriginAllowed(_ => true);
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
