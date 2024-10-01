@@ -13,5 +13,6 @@ namespace Service
         IUserRepository UserRepository { get; }
         IHairServiceRepository HairServiceRepository { get; }
         IScheduleRepository ScheduleRepository { get; }
+        IScheduleUserRepository scheduleUserRepository { get; }
     }
 }

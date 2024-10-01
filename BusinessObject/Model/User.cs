@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BusinessObject.Model
 {
@@ -35,6 +36,7 @@ namespace BusinessObject.Model
         public virtual ICollection<Booking> BookingStaffs { get; set; }
         public virtual ICollection<Feedback> Feedbacks { get; set; }
         public virtual ICollection<Report> Reports { get; set; }
+        [JsonIgnore]
         public virtual ICollection<ScheduleUser> ScheduleUsers { get; set; }
         public virtual ICollection<ServicesStylist> ServicesStylists { get; set; }
         public virtual ICollection<UserProfile> UserProfiles { get; set; }
