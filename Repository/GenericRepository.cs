@@ -1,5 +1,6 @@
 ﻿using BusinessObject.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Repository
 {

@@ -87,14 +87,17 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Repository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IHairServiceRepository, HairServiceRepository>();
+builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>(); 
 
 //Service
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IHairServiceService, HairServiceService>();
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
 
 //Auto Mapper
 builder.Services.AddAutoMapper(typeof(UserMapping));
 builder.Services.AddAutoMapper(typeof(ServicesMapping));
+builder.Services.AddAutoMapper(typeof(ScheduleMapping));
 
 var app = builder.Build();
 
