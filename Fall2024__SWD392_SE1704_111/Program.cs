@@ -101,6 +101,7 @@ builder.Services.AddAutoMapper(typeof(UserMapping));
 builder.Services.AddAutoMapper(typeof(ServicesMapping));
 builder.Services.AddAutoMapper(typeof(ScheduleMapping));
 builder.Services.AddAutoMapper(typeof(ScheduleUserMapping));
+builder.Services.AddAutoMapper(typeof(BookingMapping));
 
 var app = builder.Build();
 
