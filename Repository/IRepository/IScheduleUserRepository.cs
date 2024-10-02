@@ -1,4 +1,5 @@
-﻿using BusinessObject.Model;
+﻿using BusinessObject;
+using BusinessObject.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace Repository.IRepository
 {
     public interface IScheduleUserRepository : IGenericRepository<ScheduleUser>
     {
+        
     }
 }

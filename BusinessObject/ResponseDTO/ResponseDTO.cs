@@ -41,6 +41,7 @@ namespace BusinessObject.ResponseDTO
 
     public class ScheduleUserDTO
     {
+        public int UserId { get; set; }
         public string UserName { get; set; } = null!;
         public string? Phone { get; set; }
         public TimeSpan? StartTime { get; set; }

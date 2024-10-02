@@ -1,4 +1,5 @@
-﻿using BusinessObject.Model;
+﻿using BusinessObject;
+using BusinessObject.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace Repository.IRepository
     public interface IUserRepository : IGenericRepository<User>
     {
         Task<bool> ExistsByNameAsync(string name);
+
+        Task<IQueryable<ScheduleUser>> GetUserByRoleAsync();
     }
 }

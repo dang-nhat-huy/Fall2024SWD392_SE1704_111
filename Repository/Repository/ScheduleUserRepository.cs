@@ -1,4 +1,6 @@
-﻿using BusinessObject.Model;
+﻿using BusinessObject;
+using BusinessObject.Model;
+using Microsoft.EntityFrameworkCore;
 using Repository.IRepository;
 using System;
 using System.Collections.Generic;

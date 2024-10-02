@@ -30,10 +30,10 @@ namespace Service.Service
         public async Task<PagedResult<ScheduleUserDTO>> GetListScheduleUserAsync(int pageNumber, int pageSize)
         {
             // Lấy IQueryable từ repository
-            var query = _unitOfWork.scheduleUserRepository.GetAllWithTwoInclude("Schedule", "User");
+            var listQuery =await _unitOfWork.UserRepository.GetUserByRoleAsync();
 
             // Sử dụng ProjectTo để ánh xạ thành IQueryable<ScheduleUserDTO>
-            var resultQuery = _mapper.ProjectTo<ScheduleUserDTO>(query);
+            var resultQuery = _mapper.ProjectTo<ScheduleUserDTO>((IQueryable)listQuery);
 
             // Gọi hàm phân trang
             return await Paging.GetPagedResultAsync(resultQuery, pageNumber, pageSize);
