@@ -1,4 +1,4 @@
-using BusinessObject.Mapper;
+﻿using BusinessObject.Mapper;
 using BusinessObject.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -120,3 +120,13 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Cấu hình Kestrel để lắng nghe trên toàn bộ các cổng
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(80); // HTTP
+    serverOptions.ListenAnyIP(443, listenOptions =>
+    {
+        listenOptions.UseHttps(); // HTTPS
+    });
+});
