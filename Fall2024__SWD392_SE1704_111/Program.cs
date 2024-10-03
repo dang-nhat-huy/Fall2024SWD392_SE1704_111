@@ -69,7 +69,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddCors(options =>
+/*builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyPolicy", policy =>
     {
@@ -78,7 +78,7 @@ builder.Services.AddCors(options =>
              .AllowAnyHeader()
              .AllowCredentials(); // Nếu bạn không cần credentials, bạn có thể bỏ dòng này
     });
-});
+});*/
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -94,14 +94,16 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IHairServiceService, HairServiceService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IScheduleUserService, ScheduleUserService>();
-
+//UserProfile
+builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddScoped<IUserProfileService,  UserProfileService>();
 //Auto Mapper
 builder.Services.AddAutoMapper(typeof(UserMapping));
 builder.Services.AddAutoMapper(typeof(ServicesMapping));
 builder.Services.AddAutoMapper(typeof(ScheduleMapping));
 builder.Services.AddAutoMapper(typeof(ScheduleUserMapping));
 builder.Services.AddAutoMapper(typeof(BookingMapping));
-
+builder.Services.AddAutoMapper(typeof(UserProfileMaping));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

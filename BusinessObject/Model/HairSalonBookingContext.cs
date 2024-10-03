@@ -47,7 +47,7 @@ namespace BusinessObject.Model
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", true, true)
             .Build();
-            var strConn = config["ConnectionStrings:DB"];
+            var strConn = config["ConnectionStrings"];
 
             return strConn;
         }
