@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace Repository.IRepository
 {
-    public interface IUserRepository : IGenericRepository<User>
+    public interface IScheduleUserRepository : IGenericRepository<ScheduleUser>
     {
-        Task<bool> ExistsByNameAsync(string name);
-
-        Task<IQueryable<ScheduleUser>> GetUserByRoleAsync();
+        
     }
 }

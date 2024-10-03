@@ -6,14 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace BusinessObject.Mapper
 {
-    public class ScheduleMapping : Profile
+    public class BookingMapping : Profile
     {
-        public ScheduleMapping()
+        public BookingMapping()
         {
-            //CreateMap<Schedule, ScheduleDTO>().ReverseMap();
+            CreateMap<Booking, AddToBookingDTO>().ReverseMap();
+
         }
     }
 }

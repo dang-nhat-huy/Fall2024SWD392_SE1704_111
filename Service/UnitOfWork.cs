@@ -10,6 +10,7 @@ namespace Service
         private IUserRepository _userRepository;
         private IHairServiceRepository _hairServiceRepository;
         private IScheduleRepository _scheduleRepository;
+        private IScheduleUserRepository _scheduleUserRepository;
 
         private HairSalonBookingContext _context;
 
@@ -40,6 +41,14 @@ namespace Service
             get
             {
                 return _scheduleRepository ??= new ScheduleRepository(_context);
+            }
+        }
+
+        public IScheduleUserRepository scheduleUserRepository
+        {
+            get
+            {
+                return _scheduleUserRepository ??= new ScheduleUserRepository(_context);
             }
         }
 

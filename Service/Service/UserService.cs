@@ -62,8 +62,13 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Invalid credentials.");
                 }
 
-                var jwt = GenerateToken(account);
-                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, jwt);
+                if (account.Status != UserStatus.Active)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Your account is not active. Please contact support.");
+                }
+                var loginResponse = _mapper.Map<LoginResponse>(account);
+                //var jwt = GenerateToken(account);
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, loginResponse);
             }
             catch (Exception ex)
             {
@@ -79,7 +84,7 @@ namespace Service.Service
 
             var claims = new List<Claim>
         {
-            new(ClaimTypes.Role, account.Status!.ToString()!.Trim()),
+            new(ClaimTypes.Role, account.Role!.ToString()!.Trim()),
         };
 
             var tokenDescriptor = new SecurityTokenDescriptor

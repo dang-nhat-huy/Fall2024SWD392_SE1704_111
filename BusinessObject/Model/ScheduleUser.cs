@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BusinessObject.Model
 {
@@ -13,7 +14,9 @@ namespace BusinessObject.Model
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
 
+        
         public virtual Schedule Schedule { get; set; } = null!;
+        
         public virtual User User { get; set; } = null!;
     }
 }

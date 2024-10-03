@@ -39,12 +39,25 @@ namespace BusinessObject.ResponseDTO
         public TimeSpan? EstimateTime { get; set; }
     }
 
-    public class ScheduleDTO
+    public class ScheduleUserDTO
     {
+        public int UserId { get; set; }
+        public string UserName { get; set; } = null!;
+        public string? Phone { get; set; }
         public TimeSpan? StartTime { get; set; }
         public TimeSpan? EndTime { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+    }
+
+    public class LoginResponse
+    {
+        public int UserId { get; set; }
+        public string UserName { get; set; } = null!;
+        public string Password { get; set; } = null!;
+        public string? Phone { get; set; }
+        public UserStatus Status { get; set; }
+        public UserRole Role { get; set; }
     }
 }
 

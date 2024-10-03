@@ -1,4 +1,4 @@
-using BusinessObject.Mapper;
+﻿using BusinessObject.Mapper;
 using BusinessObject.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -73,14 +73,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:3000/")
+        policy.WithOrigins("*")  // Cho phép mọi origin
              .AllowAnyMethod()
-             .AllowAnyHeader()
-             .SetIsOriginAllowedToAllowWildcardSubdomains()
-             .AllowCredentials()
-             .SetIsOriginAllowed(_ => true);
+             .AllowAnyHeader();
     });
 });
+
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -88,16 +86,20 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IHairServiceRepository, HairServiceRepository>();
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>(); 
+builder.Services.AddScoped<IScheduleUserRepository, ScheduleUserRepository>();
 
 //Service
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IHairServiceService, HairServiceService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<IScheduleUserService, ScheduleUserService>();
 
 //Auto Mapper
 builder.Services.AddAutoMapper(typeof(UserMapping));
 builder.Services.AddAutoMapper(typeof(ServicesMapping));
 builder.Services.AddAutoMapper(typeof(ScheduleMapping));
+builder.Services.AddAutoMapper(typeof(ScheduleUserMapping));
+builder.Services.AddAutoMapper(typeof(BookingMapping));
 
 var app = builder.Build();
 
@@ -109,10 +111,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Thêm dòng này để áp dụng chính sách CORS
 app.UseCors("MyPolicy");
+
 app.UseAuthorization();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
