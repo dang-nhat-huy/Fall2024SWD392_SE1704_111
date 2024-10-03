@@ -73,10 +73,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyPolicy", policy =>
     {
-        policy.AllowAnyOrigin()  // Cho phép bất kỳ nguồn gốc nào
+        policy.WithOrigins("*")  // Cho phép mọi origin
              .AllowAnyMethod()
-             .AllowAnyHeader()
-             .AllowCredentials(); // Nếu bạn không cần credentials, bạn có thể bỏ dòng này
+             .AllowAnyHeader();
     });
 });
 
