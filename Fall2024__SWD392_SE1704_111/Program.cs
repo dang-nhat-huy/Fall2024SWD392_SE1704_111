@@ -73,14 +73,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:3000/")
+        policy.AllowAnyOrigin()  // Cho phép bất kỳ nguồn gốc nào
              .AllowAnyMethod()
              .AllowAnyHeader()
-             .SetIsOriginAllowedToAllowWildcardSubdomains()
-             .AllowCredentials()
-             .SetIsOriginAllowed(_ => true);
+             .AllowCredentials(); // Nếu bạn không cần credentials, bạn có thể bỏ dòng này
     });
 });
+
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -121,12 +120,3 @@ app.MapControllers();
 
 app.Run();
 
-// Cấu hình Kestrel để lắng nghe trên toàn bộ các cổng
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(80); // HTTP
-    serverOptions.ListenAnyIP(443, listenOptions =>
-    {
-        listenOptions.UseHttps(); // HTTPS
-    });
-});
