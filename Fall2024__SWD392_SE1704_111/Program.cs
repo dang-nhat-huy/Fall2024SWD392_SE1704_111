@@ -113,6 +113,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Thêm dòng này để áp dụng chính sách CORS
+app.UseCors("MyPolicy");
+
 app.UseAuthorization();
 app.UseAuthorization();
 
