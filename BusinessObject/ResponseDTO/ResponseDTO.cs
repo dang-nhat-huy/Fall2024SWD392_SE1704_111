@@ -50,7 +50,7 @@ namespace BusinessObject.ResponseDTO
         public DateTime? EndDate { get; set; }
     }
 
-    public class  UserProfileDTO
+    public class UserProfileDTO
     {
         public int UserProfileId { get; set; }
         public int UserId { get; set; }
@@ -63,7 +63,16 @@ namespace BusinessObject.ResponseDTO
         public DateTime? RegistrationDate { get; set; }
 
 
+
+        public class LoginResponse
+        {
+            public int UserId { get; set; }
+            public string UserName { get; set; } = null!;
+            public string Password { get; set; } = null!;
+            public string? Phone { get; set; }
+            public UserStatus Status { get; set; }
+            public UserRole Role { get; set; }
+        }
     }
 }
-
 

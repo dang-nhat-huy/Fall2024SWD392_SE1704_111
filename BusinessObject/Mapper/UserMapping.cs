@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using static BusinessObject.RequestDTO.RequestDTO;
 using AutoMapper;
 using BusinessObject.ResponseDTO;
+using static BusinessObject.ResponseDTO.UserProfileDTO;
 
 namespace BusinessObject.Mapper
 {
@@ -18,8 +19,10 @@ namespace BusinessObject.Mapper
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.password))
                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.phone));
 
-            
+            CreateMap<User, LoginResponse>().ReverseMap();
+
         }
         
+
     }
 }
