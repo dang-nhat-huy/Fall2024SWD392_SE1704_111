@@ -49,6 +49,16 @@ namespace BusinessObject.ResponseDTO
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }
+
+    public class LoginResponse
+    {
+        public int UserId { get; set; }
+        public string UserName { get; set; } = null!;
+        public string Password { get; set; } = null!;
+        public string? Phone { get; set; }
+        public UserStatus Status { get; set; }
+        public UserRole Role { get; set; }
+    }
 }
 
 
