@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using static BusinessObject.RequestDTO.RequestDTO;
+using static BusinessObject.ResponseDTO.UserProfileDTO;
 
 
 namespace Service.Service
@@ -125,5 +126,61 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+
+        //public async Task<ResponseDTO> GetUserInfo(string token)
+        //{
+        //    try
+        //    {
+        //       var principal = ValidateToken(token);
+        //        if (principal == null)
+        //        {
+        //            return new ResponseDTO(Const.FAIL_READ_CODE, "Invalid token.");
+        //        }
+
+        //        var userNameClaim = principal.FindFirst(ClaimTypes.Name)?.Value;
+        //        var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        //        var account = await _unitOfWork.UserRepository.GetByIdAsync(int.Parse( userIdClaim));
+        //        if (account == null)
+        //        {
+        //            return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+
+        //        }
+        //        var userProfile = await _unitOfWork.userProfileRepository.GetByIdAsync(account.UserId);
+        //        var userInfoResponse = _mapper.Map<UserProfileDTO>(userProfile); 
+        //        return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, userInfoResponse);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+        //    }
+        //}
+
+        //private ClaimsPrincipal ValidateToken(string token)
+        //{
+        //    var tokenHandler = new JwtSecurityTokenHandler();
+        //    var tokenSecret = _config["Jwt:Key"];
+        //    var key = Encoding.UTF8.GetBytes(tokenSecret);
+
+        //    try
+        //    {
+        //        tokenHandler.ValidateToken(token, new TokenValidationParameters
+        //        {
+        //            ValidateIssuerSigningKey = true,
+        //            IssuerSigningKey = new SymmetricSecurityKey(key),
+        //            ValidateIssuer = true,
+        //            ValidateAudience = true,
+        //            ValidIssuer = _config["Jwt:Issuer"],
+        //            ValidAudience = _config["Jwt:Audience"],
+        //            ClockSkew = TimeSpan.Zero 
+        //        }, out SecurityToken validatedToken);
+
+        //        return null;//tokenHandler.ReadToken(token) as ClaimsPrincipal;
+        //    }
+        //    catch
+        //    {
+        //        return null; 
+        //    }
+        //}
     }
 }
