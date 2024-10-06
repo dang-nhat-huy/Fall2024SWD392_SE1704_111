@@ -69,7 +69,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-/*builder.Services.AddCors(options =>
+builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyPolicy", policy =>
     {
@@ -77,7 +77,7 @@ builder.Services.AddSwaggerGen(c =>
              .AllowAnyMethod()
              .AllowAnyHeader();
     });
-});*/
+});
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
