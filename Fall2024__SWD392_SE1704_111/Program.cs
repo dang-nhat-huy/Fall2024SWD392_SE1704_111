@@ -73,10 +73,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyPolicy", policy =>
     {
-        policy.AllowAnyOrigin()  // Cho phép bất kỳ nguồn gốc nào
+        policy.WithOrigins("*")  // Cho phép mọi origin
              .AllowAnyMethod()
-             .AllowAnyHeader()
-             .AllowCredentials(); // Nếu bạn không cần credentials, bạn có thể bỏ dòng này
+             .AllowAnyHeader();
     });
 });
 
@@ -94,14 +93,16 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IHairServiceService, HairServiceService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IScheduleUserService, ScheduleUserService>();
-
+//UserProfile
+builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddScoped<IUserProfileService,  UserProfileService>();
 //Auto Mapper
 builder.Services.AddAutoMapper(typeof(UserMapping));
 builder.Services.AddAutoMapper(typeof(ServicesMapping));
 builder.Services.AddAutoMapper(typeof(ScheduleMapping));
 builder.Services.AddAutoMapper(typeof(ScheduleUserMapping));
 builder.Services.AddAutoMapper(typeof(BookingMapping));
-
+builder.Services.AddAutoMapper(typeof(UserProfileMaping));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
