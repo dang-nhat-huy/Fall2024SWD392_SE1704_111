@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinessObject
 {
-    public enum Booking
+    public enum BookingStatus
     {
-        None = 0,
+        None,
         InQueue,
         InProgress,
         Delay,
