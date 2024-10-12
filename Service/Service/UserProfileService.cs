@@ -3,6 +3,7 @@ using BusinessObject;
 using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Service.Service
 {
@@ -70,9 +72,54 @@ namespace Service.Service
             }
         }
 
-        public Task<ResponseDTO> UpdateUserProfileAsync(int id, ResponseDTO responseDTO)
+        public async Task<ResponseDTO> UpdateUserProfileAsync(UpdateUserProfileDTO request)
         {
-            throw new NotImplementedException();
+            // Lấy token từ header Authorization
+            var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return new ResponseDTO(Const.FAIL_READ_CODE, "Token is missing.");
+            }
+
+            // Giải mã token để lấy thông tin người dùng
+            var claimsPrincipal = ValidateToken(token);
+
+            // Lấy UserId từ claims
+            var userIdClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return new ResponseDTO(Const.FAIL_READ_CODE, "User not found in token.");
+            }
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            // Lấy người dùng hiện tại
+            var user = await _unitOfWork.userProfileRepository.GetUserByCurrentId(userId);
+            if (user == null)
+            {
+                return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User not found !");
+            }
+
+            // Lấy hồ sơ người dùng để cập nhật
+            var userProfile = user.UserProfile;
+            if (userProfile == null)
+            {
+                return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User Profile not found !");
+            }
+
+            // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào userProfile
+            _mapper.Map(request, userProfile);
+
+            userProfile.RegistrationDate = DateTime.Now;
+            user.Phone = request.Phone;
+
+            // Lưu các thay đổi vào cơ sở dữ liệu
+            await _unitOfWork.userProfileRepository.UpdateAsync(userProfile);
+            await _unitOfWork.UserRepository.UpdateAsync(user);
+
+            return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Update Succeed");
+
         }
 
         public async Task<ResponseDTO> GetCurrentUserProfile()

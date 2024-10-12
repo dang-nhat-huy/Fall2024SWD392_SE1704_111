@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BusinessObject.RequestDTO.RequestDTO;
 using static BusinessObject.ResponseDTO.ResponseDTO;
 
 namespace Service.IService
@@ -13,7 +14,7 @@ namespace Service.IService
     {
         Task<ResponseDTO> GetAllUserProfile();
         Task<ResponseDTO> GetUserProfileByIdAsync(int id);
-        Task<ResponseDTO> UpdateUserProfileAsync(int id, ResponseDTO responseDTO);
+        Task<ResponseDTO> UpdateUserProfileAsync(UpdateUserProfileDTO request);
         Task<ResponseDTO> GetCurrentUserProfile();
     }
 }

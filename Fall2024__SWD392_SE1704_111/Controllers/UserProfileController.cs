@@ -1,10 +1,12 @@
 ﻿using BusinessObject;
 using BusinessObject.Model;
+using BusinessObject.ResponseDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.IService;
 using Service.Service;
 using System.IdentityModel.Tokens.Jwt;
+using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
@@ -50,6 +52,27 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             return Ok(userProfile);
+        }
+
+        [HttpPost("updateCurrentProfile")]
+        public async Task<IActionResult> UpdateUserProfile([FromBody] UpdateUserProfileDTO request)
+        {
+            // Kiểm tra xem request có hợp lệ không
+            if (request == null)
+            {
+                return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request."));
+            }
+
+            // Gọi service để cập nhật thông tin người dùng
+            var response = await _userProfileService.UpdateUserProfileAsync(request);
+
+            // Kiểm tra kết quả và trả về phản hồi phù hợp
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); // Trả về mã lỗi 400 với thông báo lỗi từ ResponseDTO
+            }
+
+            return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
         //[Authorize]

@@ -75,6 +75,20 @@ namespace BusinessObject.ResponseDTO
         public DateTime? RegistrationDate { get; set; }
     }
 
+    public class UserProfileUpdatedDTO
+    {
+        public int UserProfileId { get; set; }
+        public int UserId { get; set; }
+        public string? ImageLink { get; set; }
+        public string? FullName { get; set; }
+        public string? Email { get; set; }
+        public int? Gender { get; set; }
+        public string? Address { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public DateTime? RegistrationDate { get; set; }
+        public string? Phone { get; set; }
+    }
+
     public class LoginResponse
     {
         public int UserId { get; set; }

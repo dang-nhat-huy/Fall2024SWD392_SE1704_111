@@ -10,5 +10,7 @@ namespace Repository.IRepository
     public interface IUserProfileRepository :IGenericRepository<UserProfile>
     {
         Task<List<UserProfile>> getAllUserProfile();
+
+        Task<User?> GetUserByCurrentId(int userId);
     }
 }
