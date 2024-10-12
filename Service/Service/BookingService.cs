@@ -24,16 +24,6 @@ namespace Service.Service
             _mapper = mapper;
         }
 
-        public async Task<ResponseDTO> AddBooking(RequestDTO.AddToBookingDTO request)
-        {
-            try
-            {
-
-
-            }catch(Exception e)
-            {
-
-            }
-        }
+        
     }
 }

@@ -10,6 +10,6 @@ namespace Service.IService
 {
     public interface IBookingService
     {
-        Task<ResponseDTO> AddBooking(AddToBookingDTO request);
+        
     }
 }
