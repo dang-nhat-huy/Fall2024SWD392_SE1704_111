@@ -22,5 +22,7 @@ namespace Repository.Repository
             var result = await _context.UserProfiles.ToListAsync();
             return result;
         }
+
+
     }
 }

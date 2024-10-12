@@ -81,7 +81,7 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+builder.Services.AddHttpContextAccessor();
 //Repository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IHairServiceRepository, HairServiceRepository>();

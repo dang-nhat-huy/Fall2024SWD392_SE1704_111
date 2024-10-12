@@ -14,5 +14,6 @@ namespace Service.IService
         Task<ResponseDTO> GetAllUserProfile();
         Task<ResponseDTO> GetUserProfileByIdAsync(int id);
         Task<ResponseDTO> UpdateUserProfileAsync(int id, ResponseDTO responseDTO);
+        Task<ResponseDTO> GetCurrentUserProfile();
     }
 }
