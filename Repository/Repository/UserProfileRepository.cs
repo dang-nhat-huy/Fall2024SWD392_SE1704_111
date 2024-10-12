@@ -1,4 +1,4 @@
-﻿using BusinessObject.Model;
+﻿using BusinessObject.Models;
 using BusinessObject.ResponseDTO;
 using Microsoft.EntityFrameworkCore;
 using Repository.IRepository;

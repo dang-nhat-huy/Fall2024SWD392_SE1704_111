@@ -1,5 +1,5 @@
 ﻿using BusinessObject;
-using BusinessObject.Model;
+using BusinessObject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +12,6 @@ namespace Repository.IRepository
     {
         Task<bool> ExistsByNameAsync(string name);
 
-        Task<IQueryable<ScheduleUser>> GetUserByRoleAsync();
+        
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObject.Model
+namespace BusinessObject.Models
 {
     public partial class UserProfile
     {
@@ -11,7 +11,7 @@ namespace BusinessObject.Model
         }
 
         public int UserProfileId { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public string? ImageLink { get; set; }
         public string? FullName { get; set; }
         public string? Email { get; set; }

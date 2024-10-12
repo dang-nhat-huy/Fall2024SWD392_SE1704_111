@@ -17,7 +17,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         [HttpGet("list")]
         public async Task<IActionResult> GetListServices()
         {
-            var result = _serviceManagementService.GetListServices();
+            var result = await _serviceManagementService.GetListServicesAsync();
             return Ok(result);
         }
 

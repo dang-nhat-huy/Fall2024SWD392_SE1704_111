@@ -1,5 +1,5 @@
 ﻿using BusinessObject;
-using BusinessObject.Model;
+using BusinessObject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service.IService;
 using static BusinessObject.RequestDTO.RequestDTO;

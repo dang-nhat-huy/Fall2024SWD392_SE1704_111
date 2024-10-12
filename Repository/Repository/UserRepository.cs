@@ -1,5 +1,5 @@
 ﻿using BusinessObject;
-using BusinessObject.Model;
+using BusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using Repository.IRepository;
 using System;
@@ -22,11 +22,6 @@ namespace Repository.Repository
             return await _context.Users.AnyAsync(u => u.UserName.ToLower() == name.ToLower());
         }
 
-        public async Task<IQueryable<ScheduleUser>> GetUserByRoleAsync()
-        {
-            return _context.ScheduleUsers.Include(get => get.Schedule)
-                .Include(y => y.User)
-                .Where(u => u.User.Role == UserRole.Stylist);
-        }
+        
     }
 }
