@@ -81,18 +81,21 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+builder.Services.AddHttpContextAccessor();
 //Repository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IHairServiceRepository, HairServiceRepository>();
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>(); 
 builder.Services.AddScoped<IScheduleUserRepository, ScheduleUserRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 //Service
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IHairServiceService, HairServiceService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IScheduleUserService, ScheduleUserService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+
 //UserProfile
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 builder.Services.AddScoped<IUserProfileService,  UserProfileService>();

@@ -15,5 +15,12 @@ namespace Repository.Repository
         public ScheduleUserRepository() { }
 
         public ScheduleUserRepository(HairSalonBookingContext context) => _context = context;
+
+        public async Task<IQueryable<ScheduleUser>> GetUserByRoleAsync()
+        {
+            return _context.ScheduleUsers.Include(get => get.Schedule)
+                .Include(y => y.User)
+                .Where(u => u.User.Role == UserRole.Stylist);
+        }
     }
 }

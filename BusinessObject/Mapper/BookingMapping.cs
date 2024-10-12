@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace BusinessObject.Mapper
 {
@@ -21,6 +22,10 @@ namespace BusinessObject.Mapper
                 .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments))
                 .ForMember(dest => dest.BookingDetails, opt => opt.MapFrom(src => src.BookingDetails));
 
+            CreateMap<Booking, AddToBookingDTO>()
+                .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
+                .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
         }
     }
 }

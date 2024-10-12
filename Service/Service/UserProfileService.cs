@@ -2,13 +2,20 @@
 using BusinessObject;
 using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Service.IService;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Service.Service
 {
@@ -17,11 +24,13 @@ namespace Service.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
-        public UserProfileService(IUnitOfWork unitOfWork, IConfiguration config, IMapper mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserProfileService(IUnitOfWork unitOfWork, IConfiguration config, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _config = config;
             _mapper= mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<ResponseDTO> GetAllUserProfile()
         {
@@ -63,11 +72,111 @@ namespace Service.Service
             }
         }
 
-        public Task<ResponseDTO> UpdateUserProfileAsync(int id, ResponseDTO responseDTO)
+        public async Task<ResponseDTO> UpdateUserProfileAsync(UpdateUserProfileDTO request)
         {
-            throw new NotImplementedException();
-        }
-        
+            // Lấy token từ header Authorization
+            var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
+            if (string.IsNullOrEmpty(token))
+            {
+                return new ResponseDTO(Const.FAIL_READ_CODE, "Token is missing.");
+            }
+
+            // Giải mã token để lấy thông tin người dùng
+            var claimsPrincipal = ValidateToken(token);
+
+            // Lấy UserId từ claims
+            var userIdClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return new ResponseDTO(Const.FAIL_READ_CODE, "User not found in token.");
+            }
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            // Lấy người dùng hiện tại
+            var user = await _unitOfWork.userProfileRepository.GetUserByCurrentId(userId);
+            if (user == null)
+            {
+                return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User not found !");
+            }
+
+            // Lấy hồ sơ người dùng để cập nhật
+            var userProfile = user.UserProfile;
+            if (userProfile == null)
+            {
+                return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User Profile not found !");
+            }
+
+            // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào userProfile
+            _mapper.Map(request, userProfile);
+
+            userProfile.RegistrationDate = DateTime.Now;
+            user.Phone = request.Phone;
+
+            // Lưu các thay đổi vào cơ sở dữ liệu
+            await _unitOfWork.userProfileRepository.UpdateAsync(userProfile);
+            await _unitOfWork.UserRepository.UpdateAsync(user);
+
+            return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Update Succeed");
+
+        }
+
+        public async Task<ResponseDTO> GetCurrentUserProfile()
+        {
+            try
+            {
+                // Lấy token từ header Authorization
+                var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Token is missing.");
+                }
+
+                // Giải mã token để lấy thông tin người dùng
+                var claimsPrincipal = ValidateToken(token);
+
+                // Lấy UserId từ claims
+                var userIdClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found in token.");
+                }
+
+                int userId = int.Parse(userIdClaim.Value);
+
+                // Tìm người dùng trong cơ sở dữ liệu
+                var user = await _unitOfWork.UserRepository.GetUserByCurrentId(userId);
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                }
+
+                // Lấy hồ sơ người dùng và ánh xạ sang DTO
+                var userProfileDto = _mapper.Map<UserProfileDTO>(user.UserProfile);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, "User profile retrieved successfully.", userProfileDto);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        private ClaimsPrincipal ValidateToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"])),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero // Không cho phép chênh lệch thời gian
+            };
+
+            return tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace Service.IService
 {
     public interface IHairServiceService
     {
-        IQueryable<HairService> GetListServices();
+        Task<ResponseDTO> GetListServicesAsync();
         Task<ResponseDTO> GetServiceByIdAsync(int id);
     }
 }

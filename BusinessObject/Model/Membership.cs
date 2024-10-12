@@ -13,7 +13,7 @@ namespace BusinessObject.Model
         public int MembershipId { get; set; }
         public int? Level { get; set; }
         public string? Detail { get; set; }
-        public int Status { get; set; }
+        public int? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }

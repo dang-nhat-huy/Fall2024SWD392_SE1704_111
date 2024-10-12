@@ -54,7 +54,7 @@ namespace Service.Service
         {
             try
             {
-                var account =  _unitOfWork.UserRepository.GetAll()
+                var account = _unitOfWork.UserRepository.GetAll()
                                 .FirstOrDefault(x => x.UserName!.ToLower() == request.userName.ToLower()
                                 && x.Password == request.password);
 
@@ -67,9 +67,9 @@ namespace Service.Service
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Your account is not active. Please contact support.");
                 }
-                var loginResponse = _mapper.Map<LoginResponse>(account);
-                //var jwt = GenerateToken(account);
-                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, loginResponse);
+                //var loginResponse = _mapper.Map<LoginResponse>(account);
+                var jwt = GenerateToken(account);
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, jwt);
             }
             catch (Exception ex)
             {
@@ -84,9 +84,10 @@ namespace Service.Service
             var key = Encoding.UTF8.GetBytes(tokenSecret);
 
             var claims = new List<Claim>
-        {
-            new(ClaimTypes.Role, account.Role!.ToString()!.Trim()),
-        };
+            {
+                new Claim(ClaimTypes.NameIdentifier, account.UserId.ToString()), 
+                new Claim(ClaimTypes.Role, account.Role!.ToString()!.Trim())
+            };
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -114,9 +115,9 @@ namespace Service.Service
                 //AutoMapper from RegisterRequestDTO => User
                 var user = _mapper.Map<User>(request);
 
-                user.CreateDate = DateTime.UtcNow; 
-                user.Status = UserStatus.Active; 
-                user.Role = UserRole.Customer; 
+                user.CreateDate = DateTime.UtcNow;
+                user.Status = UserStatus.Active;
+                user.Role = UserRole.Customer;
 
                 await _unitOfWork.UserRepository.CreateAsync(user);
                 return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "User registered successfully", request);

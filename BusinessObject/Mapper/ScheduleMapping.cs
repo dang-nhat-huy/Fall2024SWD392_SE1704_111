@@ -13,7 +13,8 @@ namespace BusinessObject.Mapper
     {
         public ScheduleMapping()
         {
-            //CreateMap<Schedule, ScheduleDTO>().ReverseMap();
+            CreateMap<Schedule, ScheduleDTO>()
+                .ReverseMap();
         }
     }
 }

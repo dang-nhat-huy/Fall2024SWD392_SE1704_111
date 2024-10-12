@@ -22,11 +22,11 @@ namespace Repository.Repository
             return await _context.Users.AnyAsync(u => u.UserName.ToLower() == name.ToLower());
         }
 
-        public async Task<IQueryable<ScheduleUser>> GetUserByRoleAsync()
+        public async Task<User?> GetUserByCurrentId(int userId)
         {
-            return _context.ScheduleUsers.Include(get => get.Schedule)
-                .Include(y => y.User)
-                .Where(u => u.User.Role == UserRole.Stylist);
+            return await _context.Users
+                .Include(u => u.UserProfile)  // Include UserProfile
+                .FirstOrDefaultAsync(u => u.UserId == userId);  // Tìm user theo userId
         }
     }
 }

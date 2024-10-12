@@ -12,21 +12,24 @@ namespace BusinessObject.Model
         }
 
         public int BookingId { get; set; }
-        public double TotalPrice { get; set; }
+        public double? TotalPrice { get; set; }
         public int? VoucherId { get; set; }
-        public int ManagerId { get; set; }
-        public int CustomerId { get; set; }
-        public int StaffId { get; set; }
+        public int? ManagerId { get; set; }
+        public int? CustomerId { get; set; }
+        public int? StaffId { get; set; }
         public int? ReportId { get; set; }
+        public int? ScheduleId { get; set; }
+        public BookingStatus Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
 
-        public virtual User Customer { get; set; } = null!;
-        public virtual User Manager { get; set; } = null!;
+        public virtual User? Customer { get; set; }
+        public virtual User? Manager { get; set; }
         public virtual Report? Report { get; set; }
-        public virtual User Staff { get; set; } = null!;
+        public virtual Schedule? Schedule { get; set; }
+        public virtual User? Staff { get; set; }
         public virtual Voucher? Voucher { get; set; }
         public virtual ICollection<BookingDetail> BookingDetails { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }

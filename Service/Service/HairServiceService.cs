@@ -27,10 +27,25 @@ namespace Service.Service
             _mapper = mapper;
         }
 
-        public IQueryable<HairService> GetListServices()
+        public async Task<ResponseDTO> GetListServicesAsync()
         {
-            var query = _unitOfWork.HairServiceRepository.GetAll();
-            return query;
+            try
+            {
+                var services = await _unitOfWork.HairServiceRepository.GetAllAsync();
+
+                if (services == null || !services.Any())
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "Empty List");
+                }
+
+                var result = _mapper.Map<List<ServicesDTO>>(services);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception e)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, e.Message);
+            }
         }
 
         public async Task<ResponseDTO> GetServiceByIdAsync(int id)

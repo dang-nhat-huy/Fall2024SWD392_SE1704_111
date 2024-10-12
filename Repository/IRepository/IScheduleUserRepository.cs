@@ -10,6 +10,6 @@ namespace Repository.IRepository
 {
     public interface IScheduleUserRepository : IGenericRepository<ScheduleUser>
     {
-        
+        Task<IQueryable<ScheduleUser>> GetUserByRoleAsync();
     }
 }

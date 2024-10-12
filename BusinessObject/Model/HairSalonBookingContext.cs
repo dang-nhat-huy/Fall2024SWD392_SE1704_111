@@ -74,7 +74,11 @@ namespace BusinessObject.Model
 
                 entity.Property(e => e.ReportId).HasColumnName("reportID");
 
+                entity.Property(e => e.ScheduleId).HasColumnName("scheduleID");
+
                 entity.Property(e => e.StaffId).HasColumnName("staffID");
+
+                entity.Property(e => e.Status).HasColumnName("status");
 
                 entity.Property(e => e.TotalPrice).HasColumnName("totalPrice");
 
@@ -92,13 +96,11 @@ namespace BusinessObject.Model
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.BookingCustomers)
                     .HasForeignKey(d => d.CustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Booking_Customer");
 
                 entity.HasOne(d => d.Manager)
                     .WithMany(p => p.BookingManagers)
                     .HasForeignKey(d => d.ManagerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Booking_Stylist");
 
                 entity.HasOne(d => d.Report)
@@ -106,10 +108,14 @@ namespace BusinessObject.Model
                     .HasForeignKey(d => d.ReportId)
                     .HasConstraintName("FK_Booking_Report");
 
+                entity.HasOne(d => d.Schedule)
+                    .WithMany(p => p.Bookings)
+                    .HasForeignKey(d => d.ScheduleId)
+                    .HasConstraintName("FK_Booking_Schedule");
+
                 entity.HasOne(d => d.Staff)
                     .WithMany(p => p.BookingStaffs)
                     .HasForeignKey(d => d.StaffId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Booking_Admin");
 
                 entity.HasOne(d => d.Voucher)
@@ -151,19 +157,16 @@ namespace BusinessObject.Model
                 entity.HasOne(d => d.Booking)
                     .WithMany(p => p.BookingDetails)
                     .HasForeignKey(d => d.BookingId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BookingDetail_Booking");
 
                 entity.HasOne(d => d.Service)
                     .WithMany(p => p.BookingDetails)
                     .HasForeignKey(d => d.ServiceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BookingDetail_Service");
 
                 entity.HasOne(d => d.Stylist)
                     .WithMany(p => p.BookingDetails)
                     .HasForeignKey(d => d.StylistId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BookingDetail_User");
             });
 
@@ -186,6 +189,8 @@ namespace BusinessObject.Model
                     .HasMaxLength(500)
                     .HasColumnName("description");
 
+                entity.Property(e => e.Status).HasColumnName("status");
+
                 entity.Property(e => e.UpdateBy)
                     .HasMaxLength(255)
                     .HasColumnName("updateBy");
@@ -200,14 +205,13 @@ namespace BusinessObject.Model
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Feedbacks)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Feedback_User");
             });
 
             modelBuilder.Entity<HairService>(entity =>
             {
                 entity.HasKey(e => e.ServiceId)
-                    .HasName("PK__HairServ__4550733F9AE15EA9");
+                    .HasName("PK__HairServ__4550733F01F0CEF4");
 
                 entity.Property(e => e.ServiceId).HasColumnName("serviceID");
 
@@ -236,6 +240,8 @@ namespace BusinessObject.Model
                 entity.Property(e => e.ServiceName)
                     .HasMaxLength(255)
                     .HasColumnName("serviceName");
+
+                entity.Property(e => e.Status).HasColumnName("status");
 
                 entity.Property(e => e.UpdateBy)
                     .HasMaxLength(255)
@@ -319,13 +325,11 @@ namespace BusinessObject.Model
                 entity.HasOne(d => d.Booking)
                     .WithMany(p => p.Payments)
                     .HasForeignKey(d => d.BookingId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Payment_Booking");
 
                 entity.HasOne(d => d.PaymentType)
                     .WithMany(p => p.Payments)
                     .HasForeignKey(d => d.PaymentTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Payment_PaymentType");
             });
 
@@ -383,6 +387,8 @@ namespace BusinessObject.Model
                     .HasMaxLength(255)
                     .HasColumnName("reportName");
 
+                entity.Property(e => e.Status).HasColumnName("status");
+
                 entity.Property(e => e.StylistId).HasColumnName("stylistID");
 
                 entity.Property(e => e.UpdateBy)
@@ -397,7 +403,6 @@ namespace BusinessObject.Model
                 entity.HasOne(d => d.Stylist)
                     .WithMany(p => p.Reports)
                     .HasForeignKey(d => d.StylistId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Report_User");
             });
 
@@ -471,20 +476,18 @@ namespace BusinessObject.Model
                 entity.HasOne(d => d.Schedule)
                     .WithMany(p => p.ScheduleUsers)
                     .HasForeignKey(d => d.ScheduleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserSchedule_Schedule");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ScheduleUsers)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserSchedule_User");
             });
 
             modelBuilder.Entity<ServicesStylist>(entity =>
             {
                 entity.HasKey(e => e.ServiceStylistId)
-                    .HasName("PK__Services__9352A5DC13CF3FD1");
+                    .HasName("PK__Services__9352A5DC180239C6");
 
                 entity.ToTable("Services_Stylist");
 
@@ -515,13 +518,11 @@ namespace BusinessObject.Model
                 entity.HasOne(d => d.Service)
                     .WithMany(p => p.ServicesStylists)
                     .HasForeignKey(d => d.ServiceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ServiceStylist_Service");
 
                 entity.HasOne(d => d.Stylist)
                     .WithMany(p => p.ServicesStylists)
                     .HasForeignKey(d => d.StylistId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ServiceStylist_User");
             });
 
@@ -548,13 +549,9 @@ namespace BusinessObject.Model
                     .IsUnicode(false)
                     .HasColumnName("phone");
 
-                entity.Property(e => e.Role)
-                .HasColumnName("role")
-                .HasConversion<int>(); ;
+                entity.Property(e => e.Role).HasColumnName("role").HasConversion<int>();
 
-                entity.Property(e => e.Status)
-                .HasColumnName("status")
-                .HasConversion<int>(); ;
+                entity.Property(e => e.Status).HasColumnName("status").HasConversion<int>();
 
                 entity.Property(e => e.UpdateBy)
                     .HasMaxLength(255)
@@ -603,13 +600,11 @@ namespace BusinessObject.Model
                 entity.HasOne(d => d.Membership)
                     .WithMany(p => p.UserMemberships)
                     .HasForeignKey(d => d.MembershipId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserMembership_Membership");
 
                 entity.HasOne(d => d.UserProfile)
                     .WithMany(p => p.UserMemberships)
                     .HasForeignKey(d => d.UserProfileId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserMembership_UserProfile");
             });
 
@@ -617,7 +612,10 @@ namespace BusinessObject.Model
             {
                 entity.ToTable("UserProfile");
 
-                entity.HasIndex(e => e.Email, "UQ__UserProf__AB6E6164638CCD94")
+                entity.HasIndex(e => e.Email, "UQ__UserProf__AB6E616489731277")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.UserId, "UX_UserProfile_UserID")
                     .IsUnique();
 
                 entity.Property(e => e.UserProfileId).HasColumnName("userProfileID");
@@ -671,9 +669,9 @@ namespace BusinessObject.Model
                 entity.Property(e => e.UserId).HasColumnName("userID");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserProfiles)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .WithOne(p => p.UserProfile)
+                    .HasForeignKey<UserProfile>(d => d.UserId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_UserProfile_User");
             });
 

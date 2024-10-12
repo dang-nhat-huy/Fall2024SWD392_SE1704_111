@@ -7,10 +7,7 @@ using System.Threading.Tasks;
 
 namespace Repository.IRepository
 {
-    public interface IUserProfileRepository :IGenericRepository<UserProfile>
+    public interface IBookingRepository : IGenericRepository<Booking>
     {
-        Task<List<UserProfile>> getAllUserProfile();
-
-        Task<User?> GetUserByCurrentId(int userId);
     }
 }

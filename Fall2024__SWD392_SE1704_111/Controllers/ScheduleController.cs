@@ -17,7 +17,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         [HttpGet("scheduleList")]
         public async Task<IActionResult> GetListSchedule()
         {
-            var result =  _scheduleService.GetListSchedule();
+            var result = await _scheduleService.GetListScheduleAsync();
             return Ok(result);
         }
     }

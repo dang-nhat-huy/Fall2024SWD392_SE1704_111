@@ -8,7 +8,7 @@ namespace BusinessObject
 {
     public enum BookingStatus
     {
-        None,
+        None = 0,
         InQueue,
         InProgress,
         Delay,

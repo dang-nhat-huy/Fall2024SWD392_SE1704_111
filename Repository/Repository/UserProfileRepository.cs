@@ -22,5 +22,12 @@ namespace Repository.Repository
             var result = await _context.UserProfiles.ToListAsync();
             return result;
         }
+
+        public async Task<User?> GetUserByCurrentId(int userId)
+        {
+            return await _context.Users
+                .Include(u => u.UserProfile)  // Include UserProfile
+                .FirstOrDefaultAsync(u => u.UserId == userId);  // Tìm user theo userId
+        }
     }
 }

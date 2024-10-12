@@ -11,7 +11,7 @@ namespace BusinessObject.Model
         }
 
         public int UserProfileId { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public string? ImageLink { get; set; }
         public string? FullName { get; set; }
         public string? Email { get; set; }
@@ -24,7 +24,7 @@ namespace BusinessObject.Model
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
 
-        public virtual User User { get; set; } = null!;
+        public virtual User? User { get; set; }
         public virtual ICollection<UserMembership> UserMemberships { get; set; }
     }
 }

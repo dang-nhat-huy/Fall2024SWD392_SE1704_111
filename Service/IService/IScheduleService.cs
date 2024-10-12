@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Model;
+using BusinessObject.ResponseDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace Service.IService
 {
     public interface IScheduleService
     {
-        IQueryable<Schedule> GetListSchedule();
+        Task<ResponseDTO> GetListScheduleAsync();
     }
 }

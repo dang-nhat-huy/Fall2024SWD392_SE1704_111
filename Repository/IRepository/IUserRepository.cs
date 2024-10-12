@@ -12,6 +12,8 @@ namespace Repository.IRepository
     {
         Task<bool> ExistsByNameAsync(string name);
 
-        Task<IQueryable<ScheduleUser>> GetUserByRoleAsync();
+        Task<User?> GetUserByCurrentId(int userId);
+
+
     }
 }
