@@ -27,10 +27,10 @@ namespace Service.Service
             _mapper = mapper;
         }
 
-        public async Task<PagedResult<Schedule>> GetListScheduleAsync(int pageNumber, int pageSize)
+        public IQueryable<Schedule> GetListSchedule()
         {
             var query = _unitOfWork.ScheduleRepository.GetAll();
-            return await Paging.GetPagedResultAsync(query.AsQueryable(), pageNumber, pageSize);
+            return query;
         }
     }
 }

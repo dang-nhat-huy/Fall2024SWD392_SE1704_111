@@ -27,10 +27,10 @@ namespace Service.Service
             _mapper = mapper;
         }
 
-        public async Task<PagedResult<HairService>> GetListServicesAsync(int pageNumber, int pageSize)
+        public IQueryable<HairService> GetListServices()
         {
             var query = _unitOfWork.HairServiceRepository.GetAll();
-            return await Paging.GetPagedResultAsync(query.AsQueryable(), pageNumber, pageSize);
+            return query;
         }
 
         public async Task<ResponseDTO> GetServiceByIdAsync(int id)

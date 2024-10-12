@@ -15,9 +15,9 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         }
 
         [HttpGet("scheduleList")]
-        public async Task<IActionResult> GetListSchedule(int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> GetListSchedule()
         {
-            var result = await _scheduleService.GetListScheduleAsync(pageNumber, pageSize);
+            var result =  _scheduleService.GetListSchedule();
             return Ok(result);
         }
     }

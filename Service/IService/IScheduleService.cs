@@ -10,6 +10,6 @@ namespace Service.IService
 {
     public interface IScheduleService
     {
-        Task<PagedResult<Schedule>> GetListScheduleAsync(int pageNumber, int pageSize);
+        IQueryable<Schedule> GetListSchedule();
     }
 }

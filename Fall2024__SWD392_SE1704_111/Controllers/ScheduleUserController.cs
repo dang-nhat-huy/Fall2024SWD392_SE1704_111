@@ -4,6 +4,8 @@ using Service.Service;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
+    [Route("api/v1/users")]
+    [ApiController]
     public class ScheduleUserController : ControllerBase
     {
         private readonly IScheduleUserService _scheduleUserService;
@@ -13,10 +15,10 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             _scheduleUserService = scheduleUserService;
         }
 
-        [HttpGet("scheduleUserList")]
-        public async Task<IActionResult> GetListSchedule(int pageNumber = 1, int pageSize = 10)
+        [HttpGet("getAllStylistSchedules")]
+        public async Task<IActionResult> GetAllStylistSchedulesAsync()
         {
-            var result = await _scheduleUserService.GetListScheduleUserAsync(pageNumber, pageSize);
+            var result = await _scheduleUserService.GetListScheduleUserAsync();
             return Ok(result);
         }
     }
