@@ -21,6 +21,7 @@ namespace BusinessObject.Mapper
 
             CreateMap<User, LoginResponse>().ReverseMap();
 
+            CreateMap<User, ChangeStatusAccountDTO>().ReverseMap();
         }
         
 

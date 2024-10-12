@@ -2,6 +2,7 @@
 using BusinessObject;
 using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Service.IService;
@@ -23,11 +24,13 @@ namespace Service.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
-        public UserService(IUnitOfWork unitOfWork, IConfiguration config, IMapper mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserService(IUnitOfWork unitOfWork, IConfiguration config, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _config = config;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<ResponseDTO> GetAll()
         {
@@ -124,6 +127,46 @@ namespace Service.Service
             }
             catch (Exception ex)
             {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        private ClaimsPrincipal ValidateToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"])),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero // Không cho phép chênh lệch thời gian
+            };
+
+            return tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+        }
+
+        public async Task<ResponseDTO> ChangeStatusAccountById(ChangeStatusAccountDTO request, int userId)
+        {
+            try
+            {
+                // Lấy người dùng hiện tại
+                var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User not found !");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
+
+                user.Status=request.Status;
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.UserRepository.UpdateAsync(user);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Change Status Succeed");
+            }
+            catch (Exception ex) {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
