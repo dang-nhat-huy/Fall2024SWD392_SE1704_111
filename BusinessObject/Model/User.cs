@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObject.Models
+namespace BusinessObject.Model
 {
     public partial class User
     {
@@ -18,8 +18,8 @@ namespace BusinessObject.Models
         }
 
         public int UserId { get; set; }
-        public string? UserName { get; set; } = null!;
-        public string? Password { get; set; } = null!;
+        public string? UserName { get; set; }
+        public string? Password { get; set; }
         public string? Phone { get; set; }
         public UserStatus? Status { get; set; }
         public UserRole? Role { get; set; }

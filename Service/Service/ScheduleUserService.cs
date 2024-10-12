@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BusinessObject.Models;
+using BusinessObject.Model;
 using BusinessObject.Paging;
 using BusinessObject.ResponseDTO;
 using Microsoft.EntityFrameworkCore;

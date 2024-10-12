@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObject.Models
+namespace BusinessObject.Model
 {
     public partial class Membership
     {
@@ -13,7 +13,7 @@ namespace BusinessObject.Models
         public int MembershipId { get; set; }
         public int? Level { get; set; }
         public string? Detail { get; set; }
-        public int Status { get; set; }
+        public int? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }

@@ -1,5 +1,5 @@
 ﻿using BusinessObject;
-using BusinessObject.Models;
+using BusinessObject.Model;
 using Microsoft.EntityFrameworkCore;
 using Repository.IRepository;
 using System;

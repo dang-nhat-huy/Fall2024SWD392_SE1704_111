@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObject;
-using BusinessObject.Models;
+using BusinessObject.Model;
 using BusinessObject.Paging;
 using BusinessObject.ResponseDTO;
 using Repository.IRepository;

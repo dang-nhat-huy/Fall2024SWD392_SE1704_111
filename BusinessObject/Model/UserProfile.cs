@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObject.Models
+namespace BusinessObject.Model
 {
     public partial class UserProfile
     {
@@ -24,7 +24,7 @@ namespace BusinessObject.Models
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
 
-        public virtual User User { get; set; } = null!;
+        public virtual User? User { get; set; }
         public virtual ICollection<UserMembership> UserMemberships { get; set; }
     }
 }

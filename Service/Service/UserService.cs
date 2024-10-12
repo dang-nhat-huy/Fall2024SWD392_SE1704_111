@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObject;
-using BusinessObject.Models;
+using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

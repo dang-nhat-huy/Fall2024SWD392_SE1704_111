@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObject.Models
+namespace BusinessObject.Model
 {
     public partial class ServicesStylist
     {
@@ -13,7 +13,7 @@ namespace BusinessObject.Models
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
 
-        public virtual HairService Service { get; set; } = null!;
-        public virtual User Stylist { get; set; } = null!;
+        public virtual HairService? Service { get; set; }
+        public virtual User? Stylist { get; set; }
     }
 }
