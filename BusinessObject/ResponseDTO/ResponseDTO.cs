@@ -61,18 +61,26 @@ namespace BusinessObject.ResponseDTO
         public string? Address { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public DateTime? RegistrationDate { get; set; }
+    }
 
+    public class LoginResponse
+    {
+        public int UserId { get; set; }
+        public string UserName { get; set; } = null!;
+        public string Password { get; set; } = null!;
+        public string? Phone { get; set; }
+        public UserStatus Status { get; set; }
+        public UserRole Role { get; set; }
+    }
 
-
-        public class LoginResponse
-        {
-            public int UserId { get; set; }
-            public string UserName { get; set; } = null!;
-            public string Password { get; set; } = null!;
-            public string? Phone { get; set; }
-            public UserStatus Status { get; set; }
-            public UserRole Role { get; set; }
-        }
+    public class ViewBookingDTO
+    {
+        public int BookingId { get; set; }
+        public double TotalPrice { get; set; }
+        public User Customer { get; set; } = null!;
+        public Voucher? Voucher { get; set; }
+        public ICollection<Payment> Payments { get; set; }
+        public virtual ICollection<BookingDetail> BookingDetails { get; set; }
     }
 }
 
