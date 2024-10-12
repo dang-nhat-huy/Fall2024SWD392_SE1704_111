@@ -28,5 +28,10 @@ namespace Repository.Repository
                 .Include(u => u.UserProfile)  // Include UserProfile
                 .FirstOrDefaultAsync(u => u.UserId == userId);  // Tìm user theo userId
         }
+
+        public async Task<User?> GetUserByIdAsync(int userId)
+        {
+            return await GetByIdAsync(userId);
+        }
     }
 }

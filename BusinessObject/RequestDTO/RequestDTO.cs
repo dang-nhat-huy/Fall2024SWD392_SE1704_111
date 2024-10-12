@@ -57,5 +57,10 @@ namespace BusinessObject.RequestDTO
             [RegularExpression(@"^\d{10,15}$", ErrorMessage = "Phone number must be between 10 and 15 digits and only contain numbers.")]
             public string? Phone { get; set; }
         }
+
+        public class ChangeStatusAccountDTO
+        {
+            public UserStatus? Status { get; set; }
+        }
     }
 }

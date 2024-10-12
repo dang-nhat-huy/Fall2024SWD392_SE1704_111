@@ -14,6 +14,6 @@ namespace Repository.IRepository
 
         Task<User?> GetUserByCurrentId(int userId);
 
-
+        Task<User?> GetUserByIdAsync(int userId);
     }
 }
