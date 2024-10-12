@@ -14,9 +14,9 @@ namespace BusinessObject.Model
         public int BookingId { get; set; }
         public double TotalPrice { get; set; }
         public int? VoucherId { get; set; }
-        public int ManagerId { get; set; }
-        public int CustomerId { get; set; }
-        public int StaffId { get; set; }
+        public int? ManagerId { get; set; }
+        public int? CustomerId { get; set; }
+        public int? StaffId { get; set; }
         public int? ReportId { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }

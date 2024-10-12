@@ -30,7 +30,8 @@ namespace BusinessObject.RequestDTO
 
         public class AddToBookingDTO
         {
-            
+            public int? CustomerId { get; set; }
+            public int? VoucherId { get; set; }
         }
     }
 }
