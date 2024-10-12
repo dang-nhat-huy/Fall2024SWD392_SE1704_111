@@ -1,4 +1,5 @@
-﻿using BusinessObject.Model;
+﻿using BusinessObject;
+using BusinessObject.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.IService;
@@ -22,6 +23,20 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         {
             var result = await _userProfileService.GetAllUserProfile();
             return Ok(result);
+        }
+
+        // GET: api/userprofile/current
+        [HttpGet("current")]
+        public async Task<IActionResult> GetCurrentUserProfile()
+        {
+            var response = await _userProfileService.GetCurrentUserProfile();
+
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); 
+            }
+
+            return Ok(response); 
         }
 
         [HttpGet("{id}")]

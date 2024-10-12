@@ -22,6 +22,11 @@ namespace Repository.Repository
             return await _context.Users.AnyAsync(u => u.UserName.ToLower() == name.ToLower());
         }
 
-        
+        public async Task<User?> GetUserByCurrentId(int userId)
+        {
+            return await _context.Users
+                .Include(u => u.UserProfile)  // Include UserProfile
+                .FirstOrDefaultAsync(u => u.UserId == userId);  // Tìm user theo userId
+        }
     }
 }
