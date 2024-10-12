@@ -27,16 +27,15 @@ namespace Service.Service
             _mapper = mapper;
         }
 
-        public async Task<PagedResult<ScheduleUserDTO>> GetListScheduleUserAsync(int pageNumber, int pageSize)
+        public async Task<List<ScheduleUserDTO>> GetListScheduleUserAsync()
         {
             // Lấy IQueryable từ repository
-            var listQuery =await _unitOfWork.UserRepository.GetUserByRoleAsync();
+            var listQuery = await _unitOfWork.UserRepository.GetUserByRoleAsync();
 
-            // Sử dụng ProjectTo để ánh xạ thành IQueryable<ScheduleUserDTO>
-            var resultQuery = _mapper.ProjectTo<ScheduleUserDTO>((IQueryable)listQuery);
+            // Sử dụng ProjectTo để ánh xạ thành List<ScheduleUserDTO>
+            var resultList = await _mapper.ProjectTo<ScheduleUserDTO>(listQuery).ToListAsync();
 
-            // Gọi hàm phân trang
-            return await Paging.GetPagedResultAsync(resultQuery, pageNumber, pageSize);
+            return resultList; // Trả về danh sách ScheduleUserDTO
         }
     }
 }

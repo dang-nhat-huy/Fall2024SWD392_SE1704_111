@@ -12,6 +12,6 @@ namespace Service.IService
 {
     public interface IScheduleUserService
     {
-        Task<PagedResult<ScheduleUserDTO>> GetListScheduleUserAsync(int pageNumber, int pageSize);
+        Task<List<ScheduleUserDTO>> GetListScheduleUserAsync();
     }
 }
