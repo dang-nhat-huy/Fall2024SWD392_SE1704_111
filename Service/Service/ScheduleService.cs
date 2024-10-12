@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using BusinessObject;
-using BusinessObject.Model;
+using BusinessObject.Models;
 using BusinessObject.Paging;
 using BusinessObject.ResponseDTO;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Service.IService;
 using System;
@@ -31,6 +32,27 @@ namespace Service.Service
         {
             var query = _unitOfWork.ScheduleRepository.GetAll();
             return query;
+        }
+        public async Task<ResponseDTO> GetListScheduleAsync()
+        {
+            try
+            {
+                var query = await _unitOfWork.ScheduleRepository.GetAllWithTwoInclude("Bookings", "ScheduleUsers").ToListAsync();
+
+                if (query == null || !query.Any())
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "Empty List");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ danh sách
+                var result = _mapper.Map<List<ScheduleDTO>>(query);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception e)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, e.Message);
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObject.Model
+namespace BusinessObject.Models
 {
     public partial class Feedback
     {

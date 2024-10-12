@@ -1,4 +1,4 @@
-﻿using BusinessObject.Model;
+﻿using BusinessObject.Models;
 using BusinessObject.ResponseDTO;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace Service.IService
 {
     public interface IHairServiceService
     {
-        IQueryable<HairService> GetListServices();
+        Task<ResponseDTO> GetListServicesAsync();
         Task<ResponseDTO> GetServiceByIdAsync(int id);
     }
 }

@@ -1,4 +1,4 @@
-﻿using BusinessObject.Model;
+﻿using BusinessObject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.IService;
