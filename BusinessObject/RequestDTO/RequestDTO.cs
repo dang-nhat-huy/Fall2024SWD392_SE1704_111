@@ -62,5 +62,12 @@ namespace BusinessObject.RequestDTO
         {
             public UserStatus? Status { get; set; }
         }
+
+        public class CreateReportDTO {
+            [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+            public string? ReportName { get; set; }
+            [Url(ErrorMessage = "Invalid URL format.")]
+            public string? ReportLink { get; set; }
+        }
     }
 }

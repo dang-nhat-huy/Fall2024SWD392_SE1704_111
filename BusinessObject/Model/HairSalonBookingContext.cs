@@ -387,7 +387,7 @@ namespace BusinessObject.Model
                     .HasMaxLength(255)
                     .HasColumnName("reportName");
 
-                entity.Property(e => e.Status).HasColumnName("status");
+                entity.Property(e => e.Status).HasColumnName("status").HasConversion<int>();
 
                 entity.Property(e => e.StylistId).HasColumnName("stylistID");
 
