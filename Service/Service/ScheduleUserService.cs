@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BusinessObject.Model;
+using BusinessObject.Models;
 using BusinessObject.Paging;
 using BusinessObject.ResponseDTO;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +30,7 @@ namespace Service.Service
         public async Task<List<ScheduleUserDTO>> GetListScheduleUserAsync()
         {
             // Lấy IQueryable từ repository
-            var listQuery = await _unitOfWork.UserRepository.GetUserByRoleAsync();
+            var listQuery = await _unitOfWork.scheduleUserRepository.GetUserByRoleAsync();
 
             // Sử dụng ProjectTo để ánh xạ thành List<ScheduleUserDTO>
             var resultList = await _mapper.ProjectTo<ScheduleUserDTO>(listQuery).ToListAsync();

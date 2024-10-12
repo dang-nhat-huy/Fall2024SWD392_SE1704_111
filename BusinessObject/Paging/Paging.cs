@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BusinessObject.ResponseDTO;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static BusinessObject.ResponseDTO.ResponseDTO;
-
 namespace BusinessObject.Paging
 {
     public class Paging

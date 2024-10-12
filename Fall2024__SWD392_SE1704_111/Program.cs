@@ -1,5 +1,5 @@
 ﻿using BusinessObject.Mapper;
-using BusinessObject.Model;
+using BusinessObject.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;

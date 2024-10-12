@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObject.Model
+namespace BusinessObject.Models
 {
     public partial class UserMembership
     {
         public int UserMembershipId { get; set; }
-        public int UserProfileId { get; set; }
-        public int MembershipId { get; set; }
+        public int? UserProfileId { get; set; }
+        public int? MembershipId { get; set; }
         public int? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
