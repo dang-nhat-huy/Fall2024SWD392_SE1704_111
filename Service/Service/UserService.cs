@@ -54,7 +54,7 @@ namespace Service.Service
         {
             try
             {
-                var account = _unitOfWork.UserRepository.GetAll()
+                var account =  _unitOfWork.UserRepository.GetAll()
                                 .FirstOrDefault(x => x.UserName!.ToLower() == request.userName.ToLower()
                                 && x.Password == request.password);
 
