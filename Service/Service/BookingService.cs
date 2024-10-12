@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BusinessObject;
+using BusinessObject.Model;
 using BusinessObject.RequestDTO;
 using BusinessObject.ResponseDTO;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +26,38 @@ namespace Service.Service
             _mapper = mapper;
         }
 
-        
+        private async Task<bool> CheckExistService(int serviceId)
+        {
+                var service = await _unitOfWork.HairServiceRepository.GetByIdAsync(serviceId);
+                return service != null;
+        }
+
+        private async Task<bool> CheckExistStylist(int stylistId)
+        {
+            var stylist = await _unitOfWork.HairServiceRepository.GetByIdAsync(stylistId);
+            return stylist != null;
+        }
+
+        //public async Task<ResponseDTO> AddBooking(RequestDTO.AddToBookingDTO request)
+        //{
+        //    bool checkService =CheckExistService(request.)
+        //    if (CheckExistService == false && CheckExistStylist == null)
+        //    {
+        //        return new ResponseDTO(Const.FAIL_CREATE_CODE, "The username is already taken. Please choose a different username.");
+        //    }
+
+        //    try
+        //    {
+        //        var booking = _mapper.Map<Booking>(request);
+
+        //        booking.CreateDate = DateTime.UtcNow;
+
+        //        await _unitOfWork.bookingRepository.CreateAsync(booking);
+        //    }
+        //    catch (Exception ex)
+        //    {
+                
+        //    }
+        //}
     }
 }

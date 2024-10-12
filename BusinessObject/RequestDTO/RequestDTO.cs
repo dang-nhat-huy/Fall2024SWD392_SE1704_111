@@ -32,6 +32,7 @@ namespace BusinessObject.RequestDTO
         {
             public int? CustomerId { get; set; }
             public int? VoucherId { get; set; }
+            public int? Status { get; set; }
         }
     }
 }

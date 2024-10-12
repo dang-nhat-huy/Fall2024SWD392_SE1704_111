@@ -24,7 +24,8 @@ namespace BusinessObject.Mapper
 
             CreateMap<Booking, AddToBookingDTO>()
                 .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
-                .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId));
+                .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
         }
     }
 }
