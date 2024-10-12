@@ -49,8 +49,6 @@ namespace BusinessObject.ResponseDTO
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public int Status { get; set; }
-
-        public List<int> UserID { get; set; }
     }
 
     public class ScheduleUserDTO

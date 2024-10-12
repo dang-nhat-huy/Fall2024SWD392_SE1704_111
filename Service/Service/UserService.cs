@@ -67,9 +67,9 @@ namespace Service.Service
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Your account is not active. Please contact support.");
                 }
-                var loginResponse = _mapper.Map<LoginResponse>(account);
-                //var jwt = GenerateToken(account);
-                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, loginResponse);
+                //var loginResponse = _mapper.Map<LoginResponse>(account);
+                var jwt = GenerateToken(account);
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, jwt);
             }
             catch (Exception ex)
             {

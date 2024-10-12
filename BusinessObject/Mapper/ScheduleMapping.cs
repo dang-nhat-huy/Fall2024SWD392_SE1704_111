@@ -14,7 +14,6 @@ namespace BusinessObject.Mapper
         public ScheduleMapping()
         {
             CreateMap<Schedule, ScheduleDTO>()
-                .ForMember(dest => dest.UserID, opt => opt.MapFrom(src => src.Bookings.Select(b => b.CustomerId)))
                 .ReverseMap();
         }
     }
