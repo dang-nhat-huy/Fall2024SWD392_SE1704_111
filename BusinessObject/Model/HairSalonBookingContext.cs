@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 
-namespace BusinessObject.Models
+namespace BusinessObject.Model
 {
     public partial class HairSalonBookingContext : DbContext
     {
@@ -51,7 +51,6 @@ namespace BusinessObject.Models
 
             return strConn;
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Booking>(entity =>
@@ -74,8 +73,6 @@ namespace BusinessObject.Models
                 entity.Property(e => e.ManagerId).HasColumnName("managerID");
 
                 entity.Property(e => e.ReportId).HasColumnName("reportID");
-
-                entity.Property(e => e.ScheduleId).HasColumnName("scheduleID");
 
                 entity.Property(e => e.StaffId).HasColumnName("staffID");
 
@@ -108,11 +105,6 @@ namespace BusinessObject.Models
                     .WithMany(p => p.Bookings)
                     .HasForeignKey(d => d.ReportId)
                     .HasConstraintName("FK_Booking_Report");
-
-                entity.HasOne(d => d.Schedule)
-                    .WithMany(p => p.Bookings)
-                    .HasForeignKey(d => d.ScheduleId)
-                    .HasConstraintName("FK_Booking_Schedule");
 
                 entity.HasOne(d => d.Staff)
                     .WithMany(p => p.BookingStaffs)
@@ -215,7 +207,7 @@ namespace BusinessObject.Models
             modelBuilder.Entity<HairService>(entity =>
             {
                 entity.HasKey(e => e.ServiceId)
-                    .HasName("PK__HairServ__4550733F5659F18C");
+                    .HasName("PK__HairServ__4550733F9AE15EA9");
 
                 entity.Property(e => e.ServiceId).HasColumnName("serviceID");
 
@@ -492,7 +484,7 @@ namespace BusinessObject.Models
             modelBuilder.Entity<ServicesStylist>(entity =>
             {
                 entity.HasKey(e => e.ServiceStylistId)
-                    .HasName("PK__Services__9352A5DC47BF4CA0");
+                    .HasName("PK__Services__9352A5DC13CF3FD1");
 
                 entity.ToTable("Services_Stylist");
 
@@ -556,9 +548,13 @@ namespace BusinessObject.Models
                     .IsUnicode(false)
                     .HasColumnName("phone");
 
-                entity.Property(e => e.Role).HasColumnName("role").HasConversion<int>(); ;
+                entity.Property(e => e.Role)
+                .HasColumnName("role")
+                .HasConversion<int>(); ;
 
-                entity.Property(e => e.Status).HasColumnName("status").HasConversion<int>(); ;
+                entity.Property(e => e.Status)
+                .HasColumnName("status")
+                .HasConversion<int>(); ;
 
                 entity.Property(e => e.UpdateBy)
                     .HasMaxLength(255)
@@ -621,10 +617,7 @@ namespace BusinessObject.Models
             {
                 entity.ToTable("UserProfile");
 
-                entity.HasIndex(e => e.Email, "UQ__UserProf__AB6E6164A187966B")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.UserId, "UX_UserProfile_UserID")
+                entity.HasIndex(e => e.Email, "UQ__UserProf__AB6E6164638CCD94")
                     .IsUnique();
 
                 entity.Property(e => e.UserProfileId).HasColumnName("userProfileID");
@@ -678,8 +671,9 @@ namespace BusinessObject.Models
                 entity.Property(e => e.UserId).HasColumnName("userID");
 
                 entity.HasOne(d => d.User)
-                    .WithOne(p => p.UserProfile)
-                    .HasForeignKey<UserProfile>(d => d.UserId)
+                    .WithMany(p => p.UserProfiles)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserProfile_User");
             });
 

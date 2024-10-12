@@ -1,4 +1,4 @@
-﻿using BusinessObject.Models;
+﻿using BusinessObject.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,17 +19,15 @@ namespace BusinessObject.ResponseDTO
             Data = data;
         }
 
-        
-    }
+        public class PagedResult<T>
+        {
+            public List<T> Items { get; set; }
+            public int TotalCount { get; set; }
+            public int PageNumber { get; set; }
+            public int PageSize { get; set; }
 
-    public class PagedResult<T>
-    {
-        public List<T> Items { get; set; }
-        public int TotalCount { get; set; }
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
-
-        public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+            public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+        }
     }
 
     public class ServicesDTO
@@ -39,18 +37,6 @@ namespace BusinessObject.ResponseDTO
         public string? Description { get; set; }
         public double? Price { get; set; }
         public TimeSpan? EstimateTime { get; set; }
-    }
-
-    public class ScheduleDTO
-    {
-        public int ScheduleId { get; set; }
-        public TimeSpan? StartTime { get; set; }
-        public TimeSpan? EndTime { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public int Status { get; set; }
-
-        public List<int> UserID { get; set; }
     }
 
     public class ScheduleUserDTO

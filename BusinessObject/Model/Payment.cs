@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObject.Models
+namespace BusinessObject.Model
 {
     public partial class Payment
     {
         public int PaymentId { get; set; }
-        public double? Amount { get; set; }
+        public double Amount { get; set; }
         public DateTime? PaymentDate { get; set; }
-        public int? Status { get; set; }
-        public int? BookingId { get; set; }
-        public int? PaymentTypeId { get; set; }
+        public int Status { get; set; }
+        public int BookingId { get; set; }
+        public int PaymentTypeId { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }

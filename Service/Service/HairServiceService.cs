@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObject;
-using BusinessObject.Models;
+using BusinessObject.Model;
 using BusinessObject.Paging;
 using BusinessObject.ResponseDTO;
 using Repository.IRepository;
@@ -27,25 +27,10 @@ namespace Service.Service
             _mapper = mapper;
         }
 
-        public async Task<ResponseDTO> GetListServicesAsync()
+        public IQueryable<HairService> GetListServices()
         {
-            try
-            {
-                var services = await _unitOfWork.HairServiceRepository.GetAllAsync();
-
-                if (services == null || !services.Any())
-                {
-                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "Empty List");
-                }
-
-                var result = _mapper.Map<List<ServicesDTO>>(services);
-
-                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
-            }
-            catch (Exception e)
-            {
-                return new ResponseDTO(Const.ERROR_EXCEPTION, e.Message);
-            }
+            var query = _unitOfWork.HairServiceRepository.GetAll();
+            return query;
         }
 
         public async Task<ResponseDTO> GetServiceByIdAsync(int id)

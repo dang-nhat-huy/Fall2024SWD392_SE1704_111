@@ -1,5 +1,5 @@
 ﻿using BusinessObject;
-using BusinessObject.Models;
+using BusinessObject.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,6 @@ namespace Repository.IRepository
 {
     public interface IScheduleUserRepository : IGenericRepository<ScheduleUser>
     {
-        Task<IQueryable<ScheduleUser>> GetUserByRoleAsync();
+        
     }
 }

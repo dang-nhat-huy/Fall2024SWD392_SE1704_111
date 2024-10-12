@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BusinessObject.Models;
+using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
 using System;
 using System.Collections.Generic;
@@ -13,9 +13,7 @@ namespace BusinessObject.Mapper
     {
         public ScheduleMapping()
         {
-            CreateMap<Schedule, ScheduleDTO>()
-                .ForMember(dest => dest.UserID, opt => opt.MapFrom(src => src.Bookings.Select(b => b.CustomerId)))
-                .ReverseMap();
+            //CreateMap<Schedule, ScheduleDTO>().ReverseMap();
         }
     }
 }

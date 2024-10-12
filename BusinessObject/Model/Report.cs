@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObject.Models
+namespace BusinessObject.Model
 {
-    public partial class Voucher
+    public partial class Report
     {
-        public Voucher()
+        public Report()
         {
             Bookings = new HashSet<Booking>();
         }
 
-        public int VoucherId { get; set; }
-        public double? DiscountAmount { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public int? Status { get; set; }
+        public int ReportId { get; set; }
+        public string ReportName { get; set; } = null!;
+        public string ReportLink { get; set; } = null!;
+        public int StylistId { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
 
+        public virtual User Stylist { get; set; } = null!;
         public virtual ICollection<Booking> Bookings { get; set; }
     }
 }

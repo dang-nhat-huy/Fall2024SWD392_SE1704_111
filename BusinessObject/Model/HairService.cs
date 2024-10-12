@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace BusinessObject.Models
+namespace BusinessObject.Model
 {
     public partial class HairService
     {
@@ -22,7 +23,9 @@ namespace BusinessObject.Models
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<BookingDetail> BookingDetails { get; set; }
+        [JsonIgnore]
         public virtual ICollection<ServicesStylist> ServicesStylists { get; set; }
     }
 }

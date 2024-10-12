@@ -1,4 +1,4 @@
-﻿using BusinessObject.Models;
+﻿using BusinessObject.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

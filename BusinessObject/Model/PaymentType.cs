@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObject.Models
+namespace BusinessObject.Model
 {
     public partial class PaymentType
     {
@@ -11,7 +11,7 @@ namespace BusinessObject.Models
         }
 
         public int PaymentTypeId { get; set; }
-        public string? PaymentType1 { get; set; } = null!;
+        public string PaymentType1 { get; set; } = null!;
         public int? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }

@@ -1,4 +1,4 @@
-﻿using BusinessObject.Models;
+﻿using BusinessObject.Model;
 using BusinessObject.Paging;
 using Repository.IRepository;
 using System;
