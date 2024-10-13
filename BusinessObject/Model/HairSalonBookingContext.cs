@@ -40,7 +40,6 @@ namespace BusinessObject.Model
                 optionsBuilder.UseSqlServer(GetConnectionString());
             }
         }
-
         private string GetConnectionString()
         {
             IConfiguration config = new ConfigurationBuilder()
@@ -72,8 +71,6 @@ namespace BusinessObject.Model
 
                 entity.Property(e => e.ManagerId).HasColumnName("managerID");
 
-                entity.Property(e => e.ReportId).HasColumnName("reportID");
-
                 entity.Property(e => e.ScheduleId).HasColumnName("scheduleID");
 
                 entity.Property(e => e.StaffId).HasColumnName("staffID");
@@ -102,11 +99,6 @@ namespace BusinessObject.Model
                     .WithMany(p => p.BookingManagers)
                     .HasForeignKey(d => d.ManagerId)
                     .HasConstraintName("FK_Booking_Stylist");
-
-                entity.HasOne(d => d.Report)
-                    .WithMany(p => p.Bookings)
-                    .HasForeignKey(d => d.ReportId)
-                    .HasConstraintName("FK_Booking_Report");
 
                 entity.HasOne(d => d.Schedule)
                     .WithMany(p => p.Bookings)
@@ -211,7 +203,7 @@ namespace BusinessObject.Model
             modelBuilder.Entity<HairService>(entity =>
             {
                 entity.HasKey(e => e.ServiceId)
-                    .HasName("PK__HairServ__4550733F01F0CEF4");
+                    .HasName("PK__HairServ__4550733FDE5EDFD0");
 
                 entity.Property(e => e.ServiceId).HasColumnName("serviceID");
 
@@ -370,6 +362,8 @@ namespace BusinessObject.Model
 
                 entity.Property(e => e.ReportId).HasColumnName("reportID");
 
+                entity.Property(e => e.BookingId).HasColumnName("bookingID");
+
                 entity.Property(e => e.CreateBy)
                     .HasMaxLength(255)
                     .HasColumnName("createBy");
@@ -387,7 +381,7 @@ namespace BusinessObject.Model
                     .HasMaxLength(255)
                     .HasColumnName("reportName");
 
-                entity.Property(e => e.Status).HasColumnName("status").HasConversion<int>();
+                entity.Property(e => e.Status).HasColumnName("status").HasConversion<int>(); 
 
                 entity.Property(e => e.StylistId).HasColumnName("stylistID");
 
@@ -399,6 +393,11 @@ namespace BusinessObject.Model
                     .HasColumnType("datetime")
                     .HasColumnName("updateDate")
                     .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Booking)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(d => d.BookingId)
+                    .HasConstraintName("FK_Report_Booking");
 
                 entity.HasOne(d => d.Stylist)
                     .WithMany(p => p.Reports)
@@ -433,7 +432,7 @@ namespace BusinessObject.Model
 
                 entity.Property(e => e.StartTime).HasColumnName("startTime");
 
-                entity.Property(e => e.Status).HasColumnName("status");
+                entity.Property(e => e.Status).HasColumnName("status").HasConversion<int>(); 
 
                 entity.Property(e => e.UpdateBy)
                     .HasMaxLength(255)
@@ -487,7 +486,7 @@ namespace BusinessObject.Model
             modelBuilder.Entity<ServicesStylist>(entity =>
             {
                 entity.HasKey(e => e.ServiceStylistId)
-                    .HasName("PK__Services__9352A5DC180239C6");
+                    .HasName("PK__Services__9352A5DC09249035");
 
                 entity.ToTable("Services_Stylist");
 
@@ -549,9 +548,9 @@ namespace BusinessObject.Model
                     .IsUnicode(false)
                     .HasColumnName("phone");
 
-                entity.Property(e => e.Role).HasColumnName("role").HasConversion<int>();
+                entity.Property(e => e.Role).HasColumnName("role").HasConversion<int>(); 
 
-                entity.Property(e => e.Status).HasColumnName("status").HasConversion<int>();
+                entity.Property(e => e.Status).HasColumnName("status").HasConversion<int>(); 
 
                 entity.Property(e => e.UpdateBy)
                     .HasMaxLength(255)
@@ -612,7 +611,7 @@ namespace BusinessObject.Model
             {
                 entity.ToTable("UserProfile");
 
-                entity.HasIndex(e => e.Email, "UQ__UserProf__AB6E616489731277")
+                entity.HasIndex(e => e.Email, "UQ__UserProf__AB6E6164BBF1C64E")
                     .IsUnique();
 
                 entity.HasIndex(e => e.UserId, "UX_UserProfile_UserID")
