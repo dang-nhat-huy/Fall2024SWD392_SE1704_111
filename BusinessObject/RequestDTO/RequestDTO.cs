@@ -96,5 +96,33 @@ namespace BusinessObject.RequestDTO
             [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
             public string? UserName { get; set; }
         }
+
+        public class CreateServiceDTO
+        {
+            [Url(ErrorMessage = "Invalid URL format.")]
+            public string? ImageLink { get; set; }
+            [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+            public string? ServiceName { get; set; }
+            public string? description { get; set; }
+            public int? price { get; set; }
+            public TimeSpan? estimateTime { get; set; }
+           
+        }
+        public class UpdateServiceDTO
+        {
+            [Url(ErrorMessage = "Invalid URL format.")]
+            public string? ImageLink { get; set; }
+            [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+            public string? ServiceName { get; set; }
+            public string? description { get; set; }
+            public int? price { get; set; }
+            public TimeSpan? estimateTime { get; set; }
+        
+        }
+
+        public class RemoveServiceDTO
+        {
+            public ServiceEnum? Status { get; set; }
+        }
     }
 }
