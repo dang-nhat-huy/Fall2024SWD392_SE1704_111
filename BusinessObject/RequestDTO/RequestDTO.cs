@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BusinessObject.ReportEnum;
 using static BusinessObject.UserProfileEnum;
 
 namespace BusinessObject.RequestDTO
@@ -78,6 +79,11 @@ namespace BusinessObject.RequestDTO
             public string? ReportName { get; set; }
             [Url(ErrorMessage = "Invalid URL format.")]
             public string? ReportLink { get; set; }
+        }
+
+        public class RemoveReportDTO
+        {
+            public ReportStatusEnum? Status { get; set; }
         }
 
         public class ChangebookingStatusDTO

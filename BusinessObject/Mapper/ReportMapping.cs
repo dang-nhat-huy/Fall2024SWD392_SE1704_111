@@ -28,6 +28,8 @@ namespace BusinessObject.Mapper
                 .ForMember(dest => dest.UpdateDate, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdateBy, opt => opt.Ignore())
                 .ReverseMap();
+
+            CreateMap<RemoveReportDTO, Report>().ReverseMap();
         }
     }
 }
