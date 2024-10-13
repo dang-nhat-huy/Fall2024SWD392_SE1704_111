@@ -19,5 +19,14 @@ namespace Repository.Repository
                 .Include(u => u.UserProfile)  // Include UserProfile
                 .FirstOrDefaultAsync(u => u.UserId == userId);  // Tìm user theo userId
         }
+
+        public async Task<int> CreateReportAsync(Report entity)
+        {
+            
+                _context.Add(entity);
+                return await _context.SaveChangesAsync();
+            
+            
+        }
     }
 }

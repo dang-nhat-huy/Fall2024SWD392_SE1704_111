@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using static BusinessObject.ReportEnum;
 
 namespace BusinessObject.Model
@@ -16,8 +17,9 @@ namespace BusinessObject.Model
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
-
+        [JsonIgnore]
         public virtual Booking? Booking { get; set; }
+        [JsonIgnore]
         public virtual User? Stylist { get; set; }
     }
 }

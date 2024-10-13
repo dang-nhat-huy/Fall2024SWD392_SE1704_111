@@ -75,21 +75,20 @@ namespace Service.Service
                 // Sử dụng AutoMapper 
                 var report=_mapper.Map<Report>(request);
 
-                report.Status= ReportStatusEnum.Active;
                 report.StylistId=userId;
                 // Lưu các thay đổi vào cơ sở dữ liệu
-                var result = _unitOfWork.reportRepository.CreateAsync(report);
+                var result = await _unitOfWork.reportRepository.CreateReportAsync(report);
 
-                if(result == null)
-                {
-                    return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG, "Create Report Failed");
-                }
+                //if(result <= 0)
+                //{
+                //    return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG, "Create Report Failed");
+                //}
 
-                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Create Report Succeed");
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
             }
             catch (Exception ex)
             {
-                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message, ex);
             }
         }
     }
