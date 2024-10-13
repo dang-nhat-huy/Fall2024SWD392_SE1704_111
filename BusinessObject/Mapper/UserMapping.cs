@@ -24,6 +24,10 @@ namespace BusinessObject.Mapper
             CreateMap<User, ChangeStatusAccountDTO>().ReverseMap();
 
             CreateMap<User, UserListDTO>().ReverseMap();
+
+            CreateMap<User, SearchAccountByNameDTO>().ReverseMap();
+
+            
         }
         
 

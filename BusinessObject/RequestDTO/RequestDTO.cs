@@ -84,5 +84,11 @@ namespace BusinessObject.RequestDTO
         {
             public int? Status { get; set; }
         }
+
+        public class SearchAccountByNameDTO
+        {
+            [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+            public string? UserName { get; set; }
+        }
     }
 }
