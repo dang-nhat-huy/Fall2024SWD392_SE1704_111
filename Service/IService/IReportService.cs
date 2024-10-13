@@ -1,4 +1,5 @@
-﻿using BusinessObject.ResponseDTO;
+﻿using BusinessObject.Model;
+using BusinessObject.ResponseDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace Service.IService
     public interface IReportService
     {
         Task<ResponseDTO> CreateReportAsync(CreateReportDTO request);
+
+        Task<ResponseDTO> UpdateReportAsync(UpdateReportDTO request, int bookingId);
     }
 }

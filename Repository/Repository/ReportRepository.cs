@@ -13,6 +13,19 @@ namespace Repository.Repository
     {
         public ReportRepository() { }
         public ReportRepository(HairSalonBookingContext context) => _context = context;
+
+        public async Task<Booking?> GetBookingById(int bookingId)
+        {
+            return await _context.Bookings.FirstOrDefaultAsync(b =>b.BookingId == bookingId);
+        }
+
+        public async Task<Report?> GetReportById(int reportId)
+        {
+            return await _context.Reports
+                .Include(r => r.BookingId)
+                .FirstOrDefaultAsync(b => b.ReportId == reportId);
+        }
+
         public async Task<User?> GetUserByCurrentId(int userId)
         {
             return await _context.Users
