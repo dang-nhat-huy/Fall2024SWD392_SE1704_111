@@ -33,5 +33,12 @@ namespace Repository.Repository
         {
             return await GetByIdAsync(userId);
         }
+
+        public async Task<List<User?>> GetUserByNameAsync(string fullName)
+        {
+            return await _context.Users
+                .Where(u => u.UserName.ToLower().StartsWith(fullName.ToLower()))
+                .ToListAsync(); // Trả về danh sách
+        }
     }
 }

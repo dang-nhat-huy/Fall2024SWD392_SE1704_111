@@ -72,10 +72,18 @@ namespace Service.Service
 
                 int userId = int.Parse(userIdClaim.Value);
 
+                if (await _unitOfWork.bookingRepository.GetByIdAsync((int)request.BookingId) == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Booking not found");
+                }
+
                 // Sử dụng AutoMapper 
                 var report=_mapper.Map<Report>(request);
 
                 report.StylistId=userId;
+                report.CreateDate=DateTime.Now;
+                report.UpdateDate=DateTime.Now;
+
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 var result = await _unitOfWork.reportRepository.CreateReportAsync(report);
 
@@ -89,6 +97,59 @@ namespace Service.Service
             catch (Exception ex)
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message, ex);
+            }
+        }
+
+        public async Task<ResponseDTO> UpdateReportAsync(UpdateReportDTO request, int bookingId)
+        {
+            try
+            {
+                //// Lấy token từ header Authorization
+                //var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+                //if (string.IsNullOrEmpty(token))
+                //{
+                //    return new ResponseDTO(Const.FAIL_READ_CODE, "Token is missing.");
+                //}
+
+                //// Giải mã token để lấy thông tin người dùng
+                //var claimsPrincipal = ValidateToken(token);
+
+                //// Lấy UserId từ claims
+                //var userIdClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
+                //if (userIdClaim == null)
+                //{
+                //    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found in token.");
+                //}
+
+                //int userId = int.Parse(userIdClaim.Value);
+
+                if (await _unitOfWork.reportRepository.GetBookingById(bookingId) == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Booking not found");
+                }
+
+                // Sử dụng AutoMapper 
+                var report = _mapper.Map<Report>(request);
+
+                report.Status = ReportStatusEnum.Active;
+                report.StylistId = 1;
+                report.CreateDate = DateTime.Now;
+                report.UpdateDate = DateTime.Now;
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                var result = _unitOfWork.reportRepository.UpdateAsync(report);
+
+                if (result == null)
+                {
+                    return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG, "Update Report Failed");
+                }
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Update Report Succeed");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
     }

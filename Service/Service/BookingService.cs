@@ -26,6 +26,32 @@ namespace Service.Service
             _mapper = mapper;
         }
 
+        public async Task<ResponseDTO> ChangeBookingStatus(RequestDTO.ChangebookingStatusDTO request, int bookingId)
+        {
+            try
+            {
+                // Lấy người dùng hiện tại
+                var booking = await _unitOfWork.bookingRepository.GetBookingByIdAsync(bookingId);
+                if (booking == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "Booking not found !");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
+
+                booking.Status = request.Status;
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.bookingRepository.UpdateAsync(booking);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Change Status Succeed");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
         private async Task<bool> CheckExistService(int serviceId)
         {
                 var service = await _unitOfWork.HairServiceRepository.GetByIdAsync(serviceId);

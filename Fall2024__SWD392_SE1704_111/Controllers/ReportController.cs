@@ -36,5 +36,26 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
+
+        [HttpPost("updateReport/{bookingId}")]
+        public async Task<IActionResult> UpdateReport([FromBody] UpdateReportDTO request, [FromRoute] int bookingId)
+        {
+            // Kiểm tra xem request có hợp lệ không
+            if (request == null)
+            {
+                return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request."));
+            }
+
+            // Gọi service để tạo report
+            var response = await _reportService.UpdateReportAsync(request, bookingId);
+
+            // Kiểm tra kết quả và trả về phản hồi phù hợp
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); // Trả về mã lỗi 400 với thông báo lỗi từ ResponseDTO
+            }
+
+            return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
+        }
     }
 }

@@ -63,11 +63,32 @@ namespace BusinessObject.RequestDTO
             public UserStatus? Status { get; set; }
         }
 
-        public class CreateReportDTO {
+        public class CreateReportDTO
+        {
+            public int? BookingId { get; set; }
             [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
             public string? ReportName { get; set; }
             [Url(ErrorMessage = "Invalid URL format.")]
             public string? ReportLink { get; set; }
+        }
+
+        public class UpdateReportDTO
+        {
+            [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+            public string? ReportName { get; set; }
+            [Url(ErrorMessage = "Invalid URL format.")]
+            public string? ReportLink { get; set; }
+        }
+
+        public class ChangebookingStatusDTO
+        {
+            public int? Status { get; set; }
+        }
+
+        public class SearchAccountByNameDTO
+        {
+            [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+            public string? UserName { get; set; }
         }
     }
 }

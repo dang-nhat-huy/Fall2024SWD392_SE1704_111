@@ -3,6 +3,7 @@ using BusinessObject;
 using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Service.IService;
@@ -13,6 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static BusinessObject.RequestDTO.RequestDTO;
 using static BusinessObject.ResponseDTO.UserProfileDTO;
 
@@ -167,6 +169,52 @@ namespace Service.Service
                 return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Change Status Succeed");
             }
             catch (Exception ex) {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<ResponseDTO> GetListUsersAsync()
+        {
+            try
+            {
+                var users = await _unitOfWork.UserRepository.GetAllAsync();
+
+                if (users == null || !users.Any())
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "Empty List");
+                }
+
+                var result = _mapper.Map<List<UserListDTO>>(users);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception e)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, e.Message);
+            }
+        }
+
+        public async Task<ResponseDTO> GetUserByNameAsync(string fullName)
+        {
+            try
+            {
+                // Gọi repository để lấy danh sách người dùng theo tên
+                var users = await _unitOfWork.UserRepository.GetUserByNameAsync(fullName);
+
+                // Kiểm tra nếu danh sách rỗng
+                if (users == null || !users.Any())
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "No users found with the given name.");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ các entity sang DTO
+                var result = _mapper.Map<List<UserListDTO>>(users);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu xảy ra
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }

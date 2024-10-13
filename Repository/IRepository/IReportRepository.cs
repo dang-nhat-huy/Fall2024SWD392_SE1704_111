@@ -10,6 +10,10 @@ namespace Repository.IRepository
     public interface IReportRepository : IGenericRepository<Report>
     {
         Task<User?> GetUserByCurrentId(int userId);
+
+        Task<Booking?> GetBookingById(int bookingId);
+
+        Task<Report?> GetReportById(int reportId);
         Task<int> CreateReportAsync(Report entity);
     }
 }
