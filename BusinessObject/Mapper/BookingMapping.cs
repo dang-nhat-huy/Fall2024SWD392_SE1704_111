@@ -26,6 +26,8 @@ namespace BusinessObject.Mapper
                 .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
                 .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
+
+            CreateMap<Booking, ChangebookingStatusDTO>().ReverseMap();
         }
     }
 }
