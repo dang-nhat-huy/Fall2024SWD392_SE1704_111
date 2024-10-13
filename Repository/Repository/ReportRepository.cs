@@ -16,13 +16,12 @@ namespace Repository.Repository
 
         public async Task<Booking?> GetBookingById(int bookingId)
         {
-            return await _context.Bookings.FirstOrDefaultAsync(b =>b.BookingId == bookingId);
+            return await _context.Bookings.FirstOrDefaultAsync(b => b.BookingId == bookingId);
         }
 
         public async Task<Report?> GetReportById(int reportId)
         {
             return await _context.Reports
-                .Include(r => r.BookingId)
                 .FirstOrDefaultAsync(b => b.ReportId == reportId);
         }
 
@@ -35,11 +34,18 @@ namespace Repository.Repository
 
         public async Task<int> CreateReportAsync(Report entity)
         {
-            
-                _context.Add(entity);
-                return await _context.SaveChangesAsync();
-            
-            
+
+            _context.Add(entity);
+            return await _context.SaveChangesAsync();
+
+
+        }
+
+        public async Task<int> UpdateReportAsync(Report report)
+        {
+            var tracker = _context.Attach(report);
+            tracker.State = EntityState.Modified;
+            return  _context.SaveChanges();
         }
     }
 }

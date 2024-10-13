@@ -13,6 +13,6 @@ namespace Service.IService
     {
         Task<ResponseDTO> CreateReportAsync(CreateReportDTO request);
 
-        Task<ResponseDTO> UpdateReportAsync(UpdateReportDTO request, int bookingId);
+        Task<ResponseDTO> UpdateReportAsync(UpdateReportDTO request, int reportId);
     }
 }

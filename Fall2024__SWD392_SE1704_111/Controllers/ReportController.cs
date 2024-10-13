@@ -37,8 +37,8 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
-        [HttpPost("updateReport/{bookingId}")]
-        public async Task<IActionResult> UpdateReport([FromBody] UpdateReportDTO request, [FromRoute] int bookingId)
+        [HttpPost("updateReport/{reportId}")]
+        public async Task<IActionResult> UpdateReport([FromBody] UpdateReportDTO request, [FromRoute] int reportId)
         {
             // Kiểm tra xem request có hợp lệ không
             if (request == null)
@@ -47,7 +47,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             // Gọi service để tạo report
-            var response = await _reportService.UpdateReportAsync(request, bookingId);
+            var response = await _reportService.UpdateReportAsync(request, reportId);
 
             // Kiểm tra kết quả và trả về phản hồi phù hợp
             if (response.Status != Const.SUCCESS_READ_CODE)

@@ -22,7 +22,12 @@ namespace BusinessObject.Mapper
                 .ForMember(dest => dest.UpdateBy, opt => opt.Ignore())
                 .ReverseMap();
 
-            CreateMap<UpdateReportDTO, Report>().ReverseMap();
+            CreateMap<UpdateReportDTO, Report>()
+                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => DateTime.Now)) // Đặt ngày tạo mặc định
+                .ForMember(dest => dest.CreateBy, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdateDate, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdateBy, opt => opt.Ignore())
+                .ReverseMap();
         }
     }
 }

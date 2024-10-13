@@ -87,11 +87,6 @@ namespace Service.Service
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 var result = await _unitOfWork.reportRepository.CreateReportAsync(report);
 
-                //if(result <= 0)
-                //{
-                //    return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG, "Create Report Failed");
-                //}
-
                 return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
             }
             catch (Exception ex)
@@ -100,45 +95,47 @@ namespace Service.Service
             }
         }
 
-        public async Task<ResponseDTO> UpdateReportAsync(UpdateReportDTO request, int bookingId)
+        public async Task<ResponseDTO> UpdateReportAsync(UpdateReportDTO request, int reportId)
         {
             try
             {
-                //// Lấy token từ header Authorization
-                //var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                // Lấy token từ header Authorization
+                var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
-                //if (string.IsNullOrEmpty(token))
-                //{
-                //    return new ResponseDTO(Const.FAIL_READ_CODE, "Token is missing.");
-                //}
-
-                //// Giải mã token để lấy thông tin người dùng
-                //var claimsPrincipal = ValidateToken(token);
-
-                //// Lấy UserId từ claims
-                //var userIdClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
-                //if (userIdClaim == null)
-                //{
-                //    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found in token.");
-                //}
-
-                //int userId = int.Parse(userIdClaim.Value);
-
-                if (await _unitOfWork.reportRepository.GetBookingById(bookingId) == null)
+                if (string.IsNullOrEmpty(token))
                 {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "Booking not found");
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Token is missing.");
+                }
+
+                // Giải mã token để lấy thông tin người dùng
+                var claimsPrincipal = ValidateToken(token);
+
+                // Lấy UserId từ claims
+                var userIdClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found in token.");
+                }
+
+                int userId = int.Parse(userIdClaim.Value);
+
+                var report = await _unitOfWork.reportRepository.GetReportById(reportId);
+                if (report == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "report not found");
                 }
 
                 // Sử dụng AutoMapper 
-                var report = _mapper.Map<Report>(request);
+                //var report = _mapper.Map<Report>(request);
 
-                report.Status = ReportStatusEnum.Active;
-                report.StylistId = 1;
+                _mapper.Map(request, report);
+
+                report.StylistId = userId;
                 report.CreateDate = DateTime.Now;
                 report.UpdateDate = DateTime.Now;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
-                var result = _unitOfWork.reportRepository.UpdateAsync(report);
+                var result = _unitOfWork.reportRepository.UpdateReportAsync(report);
 
                 if (result == null)
                 {

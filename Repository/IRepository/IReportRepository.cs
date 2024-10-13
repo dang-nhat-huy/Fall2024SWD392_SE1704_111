@@ -15,5 +15,7 @@ namespace Repository.IRepository
 
         Task<Report?> GetReportById(int reportId);
         Task<int> CreateReportAsync(Report entity);
+
+        Task<int> UpdateReportAsync(Report report);
     }
 }
