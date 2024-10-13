@@ -78,5 +78,12 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
+
+        [HttpGet("usersList")]
+        public async Task<IActionResult> GetListServices()
+        {
+            var result = await _userService.GetListUsersAsync();
+            return Ok(result);
+        }
     }
 }

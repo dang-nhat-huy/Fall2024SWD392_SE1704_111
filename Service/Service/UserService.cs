@@ -171,6 +171,27 @@ namespace Service.Service
             }
         }
 
+        public async Task<ResponseDTO> GetListUsersAsync()
+        {
+            try
+            {
+                var users = await _unitOfWork.UserRepository.GetAllAsync();
+
+                if (users == null || !users.Any())
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "Empty List");
+                }
+
+                var result = _mapper.Map<List<UserListDTO>>(users);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception e)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, e.Message);
+            }
+        }
+
         //public async Task<ResponseDTO> GetUserInfo(string token)
         //{
         //    try

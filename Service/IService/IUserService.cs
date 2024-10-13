@@ -14,5 +14,6 @@ namespace Service.IService
         Task<ResponseDTO> Login(LoginRequestDTO request);
         Task<ResponseDTO> Register(RegisterRequestDTO request);
         Task<ResponseDTO> ChangeStatusAccountById(ChangeStatusAccountDTO request, int userId);
+        Task<ResponseDTO> GetListUsersAsync();
     }
 }
