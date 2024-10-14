@@ -9,5 +9,6 @@ namespace Repository.IRepository
 {
     public interface IScheduleRepository : IGenericRepository<Schedule>
     {
+        public  Task<int> CreateScheduleAsync(Schedule entity);
     }
 }

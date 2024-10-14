@@ -118,6 +118,7 @@ namespace BusinessObject.ResponseDTO
         public UserRole? Role { get; set; }
     }
 
+
     public class VoucherDTO
     {
         public int VoucherId { get; set; }
@@ -126,5 +127,6 @@ namespace BusinessObject.ResponseDTO
         public DateTime? EndDate { get; set; }
         public int? Status { get; set; }
     }
+
 }
 
