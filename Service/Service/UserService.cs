@@ -3,6 +3,7 @@ using BusinessObject;
 using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Service.IService;
@@ -13,6 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static BusinessObject.RequestDTO.RequestDTO;
 using static BusinessObject.ResponseDTO.UserProfileDTO;
 
@@ -171,60 +173,52 @@ namespace Service.Service
             }
         }
 
-        //public async Task<ResponseDTO> GetUserInfo(string token)
-        //{
-        //    try
-        //    {
-        //       var principal = ValidateToken(token);
-        //        if (principal == null)
-        //        {
-        //            return new ResponseDTO(Const.FAIL_READ_CODE, "Invalid token.");
-        //        }
+        public async Task<ResponseDTO> GetListUsersAsync()
+        {
+            try
+            {
+                var users = await _unitOfWork.UserRepository.GetAllAsync();
 
-        //        var userNameClaim = principal.FindFirst(ClaimTypes.Name)?.Value;
-        //        var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (users == null || !users.Any())
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "Empty List");
+                }
 
-        //        var account = await _unitOfWork.UserRepository.GetByIdAsync(int.Parse( userIdClaim));
-        //        if (account == null)
-        //        {
-        //            return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                var result = _mapper.Map<List<UserListDTO>>(users);
 
-        //        }
-        //        var userProfile = await _unitOfWork.userProfileRepository.GetByIdAsync(account.UserId);
-        //        var userInfoResponse = _mapper.Map<UserProfileDTO>(userProfile); 
-        //        return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, userInfoResponse);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
-        //    }
-        //}
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception e)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, e.Message);
+            }
+        }
 
-        //private ClaimsPrincipal ValidateToken(string token)
-        //{
-        //    var tokenHandler = new JwtSecurityTokenHandler();
-        //    var tokenSecret = _config["Jwt:Key"];
-        //    var key = Encoding.UTF8.GetBytes(tokenSecret);
+        public async Task<ResponseDTO> GetUserByNameAsync(string fullName)
+        {
+            try
+            {
+                // Gọi repository để lấy danh sách người dùng theo tên
+                var users = await _unitOfWork.UserRepository.GetUserByNameAsync(fullName);
 
-        //    try
-        //    {
-        //        tokenHandler.ValidateToken(token, new TokenValidationParameters
-        //        {
-        //            ValidateIssuerSigningKey = true,
-        //            IssuerSigningKey = new SymmetricSecurityKey(key),
-        //            ValidateIssuer = true,
-        //            ValidateAudience = true,
-        //            ValidIssuer = _config["Jwt:Issuer"],
-        //            ValidAudience = _config["Jwt:Audience"],
-        //            ClockSkew = TimeSpan.Zero 
-        //        }, out SecurityToken validatedToken);
+                // Kiểm tra nếu danh sách rỗng
+                if (users == null || !users.Any())
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "No users found with the given name.");
+                }
 
-        //        return null;//tokenHandler.ReadToken(token) as ClaimsPrincipal;
-        //    }
-        //    catch
-        //    {
-        //        return null; 
-        //    }
-        //}
+                // Sử dụng AutoMapper để ánh xạ các entity sang DTO
+                var result = _mapper.Map<List<UserListDTO>>(users);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu xảy ra
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        
     }
 }

@@ -16,5 +16,6 @@ namespace Service
         IScheduleUserRepository scheduleUserRepository { get; }
         IUserProfileRepository userProfileRepository { get; }
         IBookingRepository bookingRepository { get; }
+        IReportRepository reportRepository { get; }
     }
 }

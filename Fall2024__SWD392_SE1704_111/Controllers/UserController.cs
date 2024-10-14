@@ -78,5 +78,28 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
+
+        [HttpGet("usersList")]
+        public async Task<IActionResult> GetListServices()
+        {
+            var result = await _userService.GetListUsersAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("searchAccountByName/{fullName}")]
+        public async Task<IActionResult> GetUserByName([FromRoute] string fullName)
+        {
+            // Gọi service để lấy danh sách người dùng
+            var response = await _userService.GetUserByNameAsync(fullName);
+
+            // Trả về phản hồi
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
+        }
+
     }
 }

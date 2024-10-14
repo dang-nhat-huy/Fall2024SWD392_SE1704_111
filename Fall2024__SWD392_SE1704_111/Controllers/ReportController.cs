@@ -7,50 +7,17 @@ using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
-    [Route("api/v1/hairservice")]
-    [ApiController]
-    public class HairServiceController : ControllerBase
+    public class ReportController : ControllerBase
     {
-        private readonly IHairServiceService _serviceManagementService;
-       
+        private readonly IReportService _reportService;
 
-        public HairServiceController(IHairServiceService serviceManagementService)
+        public ReportController(IReportService reportService)
         {
-            _serviceManagementService = serviceManagementService;
+            this._reportService = reportService;
         }
 
-        [HttpGet("list")]
-        public async Task<IActionResult> GetListServices()
-        {
-            var result = await _serviceManagementService.GetListServicesAsync();
-            return Ok(result);
-        }
-
-        [HttpGet("getServices/{id}")]
-        public async Task<IActionResult> GetServiceById([FromRoute]int id)
-        {
-            var services = await _serviceManagementService.GetServiceByIdAsync(id);
-            return Ok(services);
-        }
-
-        [HttpGet("{serviceName}")]
-        public async Task<IActionResult> GetServiceByName([FromRoute] string serviceName)
-        {
-            // Gọi service để lấy danh sách người dùng
-            var response = await _serviceManagementService.GetServiceByNameAsync(serviceName);
-
-            // Trả về phản hồi
-            if (response.Status != Const.SUCCESS_READ_CODE)
-            {
-                return BadRequest(response); // Trả về mã lỗi nếu không thành công
-            }
-
-            return Ok(response); // Trả về mã 200 nếu thành công
-        }
-
-
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateService([FromBody] CreateServiceDTO request)
+        [HttpPost("createReport")]
+        public async Task<IActionResult> CreateReport([FromBody] CreateReportDTO request)
         {
             // Kiểm tra xem request có hợp lệ không
             if (request == null)
@@ -59,7 +26,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             // Gọi service để tạo report
-            var response = await _serviceManagementService.CreateReportAsync(request);
+            var response = await _reportService.CreateReportAsync(request);
 
             // Kiểm tra kết quả và trả về phản hồi phù hợp
             if (response.Status != Const.SUCCESS_READ_CODE)
@@ -70,8 +37,8 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
-        [HttpPost("update/{serviceId}")]
-        public async Task<IActionResult> UpdateReport([FromBody] UpdateServiceDTO request, [FromRoute] int serviceId)
+        [HttpPost("updateReport/{reportId}")]
+        public async Task<IActionResult> UpdateReport([FromBody] UpdateReportDTO request, [FromRoute] int reportId)
         {
             // Kiểm tra xem request có hợp lệ không
             if (request == null)
@@ -80,7 +47,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             // Gọi service để tạo report
-            var response = await _serviceManagementService.UpdateReportAsync(request, serviceId);
+            var response = await _reportService.UpdateReportAsync(request, reportId);
 
             // Kiểm tra kết quả và trả về phản hồi phù hợp
             if (response.Status != Const.SUCCESS_READ_CODE)
@@ -91,8 +58,8 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
-        [HttpPost("changeReportStatus/{serviceId}")]
-        public async Task<IActionResult> RemoveReport([FromRoute] int serviceId, [FromBody] RemoveServiceDTO request)
+        [HttpPost("changeReportStatus/{reportId}")]
+        public async Task<IActionResult> RemoveReport([FromRoute] int reportId, [FromBody] RemoveReportDTO request)
         {
             // Kiểm tra xem request có hợp lệ không
             if (request == null)
@@ -101,7 +68,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             // Gọi service để tạo report
-            var response = await _serviceManagementService.ChangeReportStatusAsync(request, serviceId);
+            var response = await _reportService.ChangeReportStatusAsync(request, reportId);
 
             // Kiểm tra kết quả và trả về phản hồi phù hợp
             if (response.Status != Const.SUCCESS_READ_CODE)
@@ -113,4 +80,3 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         }
     }
 }
-

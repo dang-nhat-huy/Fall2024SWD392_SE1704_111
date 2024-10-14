@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BusinessObject.ReportEnum;
 using static BusinessObject.UserProfileEnum;
 
 namespace BusinessObject.RequestDTO
@@ -61,6 +62,67 @@ namespace BusinessObject.RequestDTO
         public class ChangeStatusAccountDTO
         {
             public UserStatus? Status { get; set; }
+        }
+
+        public class CreateReportDTO
+        {
+            public int? BookingId { get; set; }
+            [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+            public string? ReportName { get; set; }
+            [Url(ErrorMessage = "Invalid URL format.")]
+            public string? ReportLink { get; set; }
+        }
+
+        public class UpdateReportDTO
+        {
+            [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+            public string? ReportName { get; set; }
+            [Url(ErrorMessage = "Invalid URL format.")]
+            public string? ReportLink { get; set; }
+        }
+
+        public class RemoveReportDTO
+        {
+            public ReportStatusEnum? Status { get; set; }
+        }
+
+        public class ChangebookingStatusDTO
+        {
+            public int? Status { get; set; }
+        }
+
+        public class SearchAccountByNameDTO
+        {
+            [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+            public string? UserName { get; set; }
+        }
+
+        public class CreateServiceDTO
+        {
+            [Url(ErrorMessage = "Invalid URL format.")]
+            public string? ImageLink { get; set; }
+            [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+            public string? ServiceName { get; set; }
+            public string? description { get; set; }
+            public int? price { get; set; }
+            public TimeSpan? estimateTime { get; set; }
+           
+        }
+        public class UpdateServiceDTO
+        {
+            [Url(ErrorMessage = "Invalid URL format.")]
+            public string? ImageLink { get; set; }
+            [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+            public string? ServiceName { get; set; }
+            public string? description { get; set; }
+            public int? price { get; set; }
+            public TimeSpan? estimateTime { get; set; }
+        
+        }
+
+        public class RemoveServiceDTO
+        {
+            public ServiceEnum? Status { get; set; }
         }
     }
 }

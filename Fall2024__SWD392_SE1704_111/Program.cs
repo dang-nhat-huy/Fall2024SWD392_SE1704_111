@@ -3,6 +3,7 @@ using BusinessObject.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Repository.IRepository;
 using Repository.Repository;
 using Service;
@@ -10,12 +11,15 @@ using Service.IService;
 using Service.Service;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers().AddNewtonsoftJson(o =>
+{
+    o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+});
 // Add services to the container.
-
-builder.Services.AddControllers();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -88,6 +92,7 @@ builder.Services.AddScoped<IHairServiceRepository, HairServiceRepository>();
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>(); 
 builder.Services.AddScoped<IScheduleUserRepository, ScheduleUserRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
 
 //Service
 builder.Services.AddScoped<IUserService, UserService>();
@@ -95,6 +100,7 @@ builder.Services.AddScoped<IHairServiceService, HairServiceService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IScheduleUserService, ScheduleUserService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 
 //UserProfile
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
@@ -106,6 +112,7 @@ builder.Services.AddAutoMapper(typeof(ScheduleMapping));
 builder.Services.AddAutoMapper(typeof(ScheduleUserMapping));
 builder.Services.AddAutoMapper(typeof(BookingMapping));
 builder.Services.AddAutoMapper(typeof(UserProfileMaping));
+builder.Services.AddAutoMapper(typeof(ReportMapping));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
