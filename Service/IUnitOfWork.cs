@@ -17,5 +17,6 @@ namespace Service
         IUserProfileRepository userProfileRepository { get; }
         IBookingRepository bookingRepository { get; }
         IReportRepository reportRepository { get; }
+        IVoucherRepository voucherRepository { get; }
     }
 }
