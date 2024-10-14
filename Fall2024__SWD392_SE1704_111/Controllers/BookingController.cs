@@ -39,5 +39,23 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
+
+        [HttpPost("createBooking")]
+        public async Task<IActionResult> Booking([FromBody] BookingRequestDTO request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request."));
+            }
+
+            var response = await _bookingService.CreateBooking(request);
+
+            if (response.Status != Const.SUCCESS_CREATE_CODE)
+            {
+                return BadRequest(response); 
+            }
+
+            return Ok(response); 
+        }
     }
 }

@@ -37,8 +37,6 @@ namespace Repository.Repository
 
             _context.Add(entity);
             return await _context.SaveChangesAsync();
-
-
         }
 
         public async Task<int> UpdateReportAsync(Report report)

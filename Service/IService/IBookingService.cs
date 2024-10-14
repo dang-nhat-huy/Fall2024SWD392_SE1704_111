@@ -13,5 +13,7 @@ namespace Service.IService
         //Task<ResponseDTO> AddBooking(AddToBookingDTO request);
 
         Task<ResponseDTO> ChangeBookingStatus(ChangebookingStatusDTO request, int bookingId);
+
+        Task<ResponseDTO> CreateBooking(BookingRequestDTO bookingRequest);
     }
 }

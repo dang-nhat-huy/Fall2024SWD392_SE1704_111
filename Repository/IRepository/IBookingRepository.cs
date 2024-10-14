@@ -10,5 +10,6 @@ namespace Repository.IRepository
     public interface IBookingRepository : IGenericRepository<Booking>
     {
         Task<Booking> GetBookingByIdAsync(int id);
+        Task<int> CreateBookingAsync(Booking entity);
     }
 }

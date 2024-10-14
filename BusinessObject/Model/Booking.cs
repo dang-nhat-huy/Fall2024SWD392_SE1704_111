@@ -20,7 +20,7 @@ namespace BusinessObject.Model
         public int? CustomerId { get; set; }
         public int? StaffId { get; set; }
         public int? ScheduleId { get; set; }
-        public int? Status { get; set; }
+        public BookingStatus? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
@@ -31,7 +31,9 @@ namespace BusinessObject.Model
         public virtual Schedule? Schedule { get; set; }
         public virtual User? Staff { get; set; }
         public virtual Voucher? Voucher { get; set; }
+        [JsonIgnore]
         public virtual ICollection<BookingDetail> BookingDetails { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Payment> Payments { get; set; }
         [JsonIgnore]
         public virtual ICollection<Report> Reports { get; set; }

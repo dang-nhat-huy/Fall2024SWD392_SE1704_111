@@ -7,6 +7,8 @@ using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
+    [Route("api/v1/report")]
+    [ApiController]
     public class ReportController : ControllerBase
     {
         private readonly IReportService _reportService;
