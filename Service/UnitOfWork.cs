@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Model;
+using Microsoft.EntityFrameworkCore;
 using Repository.IRepository;
 using Repository.Repository;
 
@@ -14,6 +15,7 @@ namespace Service
         private IUserProfileRepository _userProfileRepository;
         private IBookingRepository _bookingRepository;
         private IReportRepository _reportRepository;
+        private IVoucherRepository _voucherRepository;
 
         private HairSalonBookingContext _context;
 
@@ -58,8 +60,9 @@ namespace Service
 
         public IUserProfileRepository userProfileRepository
         {
-            get {
-                return _userProfileRepository ??= new UserProfileRepository (_context);
+            get
+            {
+                return _userProfileRepository ??= new UserProfileRepository(_context);
             }
         }
 
@@ -67,14 +70,23 @@ namespace Service
         {
             get
             {
-                return _bookingRepository??= new BookingRepository(_context);
+                return _bookingRepository ??= new BookingRepository(_context);
             }
         }
 
-        public IReportRepository reportRepository{
+        public IReportRepository reportRepository
+        {
             get
             {
                 return _reportRepository ??= new ReportRepository(_context);
+            }
+        }
+
+        public IVoucherRepository voucherRepository
+        {
+            get
+            {
+                return _voucherRepository ??= new VoucherRepository(_context);
             }
         }
 
