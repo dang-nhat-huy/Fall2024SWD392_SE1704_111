@@ -117,5 +117,7 @@ namespace BusinessObject.ResponseDTO
         public UserStatus? Status { get; set; }
         public UserRole? Role { get; set; }
     }
+
+
 }
 
