@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinessObject
 {
-    public class ReportEnum
+    public class ServiceEnum
     {
-        public enum ReportStatusEnum
+        public enum ServiceStatusEnum
         {
             None = 0,
             Active,
@@ -16,4 +16,3 @@ namespace BusinessObject
         }
     }
 }
-

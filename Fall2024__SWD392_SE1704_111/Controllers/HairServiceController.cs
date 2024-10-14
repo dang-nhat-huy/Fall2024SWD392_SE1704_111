@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessObject.ResponseDTO;
+using BusinessObject;
+using Microsoft.AspNetCore.Mvc;
 using Service.IService;
+using Service.Service;
+using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
@@ -8,6 +12,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
     public class HairServiceController : ControllerBase
     {
         private readonly IHairServiceService _serviceManagementService;
+       
 
         public HairServiceController(IHairServiceService serviceManagementService)
         {
@@ -27,5 +32,85 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             var services = await _serviceManagementService.GetServiceByIdAsync(id);
             return Ok(services);
         }
+
+        [HttpGet("{serviceName}")]
+        public async Task<IActionResult> GetServiceByName([FromRoute] string serviceName)
+        {
+            // Gọi service để lấy danh sách người dùng
+            var response = await _serviceManagementService.GetServiceByNameAsync(serviceName);
+
+            // Trả về phản hồi
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
+        }
+
+
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateService([FromBody] CreateServiceDTO request)
+        {
+            // Kiểm tra xem request có hợp lệ không
+            if (request == null)
+            {
+                return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request."));
+            }
+
+            // Gọi service để tạo report
+            var response = await _serviceManagementService.CreateReportAsync(request);
+
+            // Kiểm tra kết quả và trả về phản hồi phù hợp
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); // Trả về mã lỗi 400 với thông báo lỗi từ ResponseDTO
+            }
+
+            return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
+        }
+
+        [HttpPost("update/{serviceId}")]
+        public async Task<IActionResult> UpdateReport([FromBody] UpdateServiceDTO request, [FromRoute] int serviceId)
+        {
+            // Kiểm tra xem request có hợp lệ không
+            if (request == null)
+            {
+                return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request."));
+            }
+
+            // Gọi service để tạo report
+            var response = await _serviceManagementService.UpdateReportAsync(request, serviceId);
+
+            // Kiểm tra kết quả và trả về phản hồi phù hợp
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); // Trả về mã lỗi 400 với thông báo lỗi từ ResponseDTO
+            }
+
+            return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
+        }
+
+        [HttpPost("changeReportStatus/{serviceId}")]
+        public async Task<IActionResult> RemoveReport([FromRoute] int serviceId, [FromBody] RemoveServiceDTO request)
+        {
+            // Kiểm tra xem request có hợp lệ không
+            if (request == null)
+            {
+                return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request."));
+            }
+
+            // Gọi service để tạo report
+            var response = await _serviceManagementService.ChangeReportStatusAsync(request, serviceId);
+
+            // Kiểm tra kết quả và trả về phản hồi phù hợp
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); // Trả về mã lỗi 400 với thông báo lỗi từ ResponseDTO
+            }
+
+            return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
+        }
     }
 }
+
