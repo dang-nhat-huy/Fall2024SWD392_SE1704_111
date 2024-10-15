@@ -131,9 +131,9 @@ app.UseHttpsRedirection();
 // Thêm dòng này để áp dụng chính sách CORS
 app.UseCors("MyPolicy");
 
-app.UseAuthentication();
-
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapControllers();
 
