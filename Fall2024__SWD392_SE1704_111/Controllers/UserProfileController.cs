@@ -28,6 +28,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         }
 
         // GET: api/userprofile/current
+        [Authorize]
         [HttpGet("current")]
         public async Task<IActionResult> GetCurrentUserProfile()
         {
