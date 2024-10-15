@@ -59,7 +59,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             // Gọi service để tạo report
-            var response = await _serviceManagementService.CreateReportAsync(request);
+            var response = await _serviceManagementService.CreateServiceAsync(request);
 
             // Kiểm tra kết quả và trả về phản hồi phù hợp
             if (response.Status != Const.SUCCESS_READ_CODE)
@@ -80,7 +80,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             // Gọi service để tạo report
-            var response = await _serviceManagementService.UpdateReportAsync(request, serviceId);
+            var response = await _serviceManagementService.UpdateServiceAsync(request, serviceId);
 
             // Kiểm tra kết quả và trả về phản hồi phù hợp
             if (response.Status != Const.SUCCESS_READ_CODE)
@@ -91,7 +91,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
-        [HttpPost("changeReportStatus/{serviceId}")]
+        [HttpPost("remove/{serviceId}")]
         public async Task<IActionResult> RemoveReport([FromRoute] int serviceId, [FromBody] RemoveServiceDTO request)
         {
             // Kiểm tra xem request có hợp lệ không
@@ -101,7 +101,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             // Gọi service để tạo report
-            var response = await _serviceManagementService.ChangeReportStatusAsync(request, serviceId);
+            var response = await _serviceManagementService.ChangeServiceStatusAsync(request, serviceId);
 
             // Kiểm tra kết quả và trả về phản hồi phù hợp
             if (response.Status != Const.SUCCESS_READ_CODE)

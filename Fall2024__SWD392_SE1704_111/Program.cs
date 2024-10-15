@@ -93,6 +93,7 @@ builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
 builder.Services.AddScoped<IScheduleUserRepository, ScheduleUserRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 
 //Service
 builder.Services.AddScoped<IUserService, UserService>();
@@ -101,6 +102,7 @@ builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IScheduleUserService, ScheduleUserService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IVoucherService, VoucherService>();
 
 //UserProfile
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
@@ -113,6 +115,7 @@ builder.Services.AddAutoMapper(typeof(ScheduleUserMapping));
 builder.Services.AddAutoMapper(typeof(BookingMapping));
 builder.Services.AddAutoMapper(typeof(UserProfileMaping));
 builder.Services.AddAutoMapper(typeof(ReportMapping));
+builder.Services.AddAutoMapper(typeof(VoucherMapping));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

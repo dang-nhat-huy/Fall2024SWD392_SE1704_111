@@ -117,5 +117,16 @@ namespace BusinessObject.ResponseDTO
         public UserStatus? Status { get; set; }
         public UserRole? Role { get; set; }
     }
+
+
+    public class VoucherDTO
+    {
+        public int VoucherId { get; set; }
+        public double? DiscountAmount { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public int? Status { get; set; }
+    }
+
 }
 

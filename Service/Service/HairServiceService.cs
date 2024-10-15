@@ -82,7 +82,7 @@ namespace Service.Service
 
 
 
-        public async Task<ResponseDTO> CreateReportAsync(CreateServiceDTO request)
+        public async Task<ResponseDTO> CreateServiceAsync(CreateServiceDTO request)
         {
             try
             {
@@ -106,75 +106,72 @@ namespace Service.Service
             }
         }
 
-    
 
 
-    public async Task<ResponseDTO> UpdateReportAsync(RequestDTO.UpdateServiceDTO request, int serviceId)
-    {
+
+        public async Task<ResponseDTO> UpdateServiceAsync(RequestDTO.UpdateServiceDTO request, int serviceId)
+        {
             try
             {
                 var service = await _unitOfWork.HairServiceRepository.GetByIdAsync(serviceId);
                 if (service == null)
                 {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "report not found");
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Service not found");
                 }
-                // Sử dụng AutoMapper 
-                 _mapper.Map<HairService>(request);
+
+                // Map the updated values to the existing service object
+                _mapper.Map(request, service);
 
                 service.UpdateDate = DateTime.Now;
 
-                // Lưu các thay đổi vào cơ sở dữ liệu
+                // Save the changes to the database
                 var result = await _unitOfWork.HairServiceRepository.UpdateAsync(service);
                 if (result == null)
                 {
-                    return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG, "Update Report Failed");
+                    return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG, "Update Service Failed");
                 }
 
-                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Update Service status Succeed");
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Update Service status Succeeded");
             }
-
-
             catch (Exception ex)
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message, ex);
             }
         }
 
-    public async Task<ResponseDTO> ChangeReportStatusAsync(RequestDTO.RemoveServiceDTO request, int servicetId)
+        public async Task<ResponseDTO> ChangeServiceStatusAsync(RequestDTO.RemoveServiceDTO request, int servicetId)
         {
-            try { 
-            var service = await _unitOfWork.HairServiceRepository.GetByIdAsync(servicetId);
-            if (service == null)
+            try
             {
-                return new ResponseDTO(Const.FAIL_READ_CODE, "report not found");
+                
+                var service = await _unitOfWork.HairServiceRepository.GetByIdAsync(servicetId);
+                if (service == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "Hair service not found !");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
+
+                service.Status = request.Status;
+                service.UpdateDate = DateTime.Now;
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.HairServiceRepository.UpdateAsync(service);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Change Status Succeed");
             }
-
-            // Sử dụng AutoMapper 
-            _mapper.Map(request, service);
-            service.UpdateDate = DateTime.Now;
-
-            // Lưu các thay đổi vào cơ sở dữ liệu
-            var result = _unitOfWork.HairServiceRepository.UpdateAsync(service);
-
-            if (result == null)
-            {
-                return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG, "Update Service status Failed");
-            }
-
-            return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Update Service status Succeed");
-        }
             catch (Exception ex)
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
-    }
-}
+            }
+        }
 
         public async Task<ResponseDTO> GetServiceByNameAsync(string serviceName)
         {
             try
             {
                 
-                var services = await _unitOfWork.HairServiceRepository.GetByNameAsync(serviceName);
+                var services = await _unitOfWork.HairServiceRepository.GetServiceByNameAsync(serviceName);
 
                
                 if (services == null )
