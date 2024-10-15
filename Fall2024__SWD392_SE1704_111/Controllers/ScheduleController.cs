@@ -66,7 +66,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
-        [HttpPost("changeReportStatus/{scheduleId}")]
+        [HttpPost("remove/{scheduleId}")]
         public async Task<IActionResult> RemoveSchedule([FromRoute] int scheduleId, [FromBody] RemoveScheduleDTO request)
         {
             // Kiểm tra xem request có hợp lệ không
