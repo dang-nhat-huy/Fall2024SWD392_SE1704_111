@@ -32,7 +32,7 @@ namespace Service.Service
             try
             {
                 // Lấy người dùng hiện tại
-                var booking = await _unitOfWork.bookingRepository.GetBookingByIdAsync(bookingId);
+                var booking = await _unitOfWork.BookingRepository.GetBookingByIdAsync(bookingId);
                 if (booking == null)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "Booking not found !");
@@ -43,7 +43,7 @@ namespace Service.Service
                 booking.Status = request.Status;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
-                await _unitOfWork.bookingRepository.UpdateAsync(booking);
+                await _unitOfWork.BookingRepository.UpdateAsync(booking);
 
                 return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Change Status Succeed");
             }
@@ -58,26 +58,31 @@ namespace Service.Service
             try
             {
                 double? totalPrice = 0;
-                // kiểm tra Service và Stylist có tồn tại không
-                foreach (var serviceId in bookingRequest.ServiceId)
-                {
-                    var service = await _unitOfWork.HairServiceRepository.GetByIdAsync(serviceId);
-                    if (service == null)
+                if(bookingRequest.ServiceId != null) {
+                    // kiểm tra Service và Stylist có tồn tại không
+                    foreach (var serviceId in bookingRequest.ServiceId)
                     {
-                        return new ResponseDTO(400, $"Service with ID {serviceId} does not exist.");
-                    }
-                    totalPrice += service.Price;
-                }
-
-                foreach (var stylistId in bookingRequest.StylistId)
-                {
-                    var stylist = await _unitOfWork.UserRepository.GetByIdAsync(stylistId);
-                    if (stylist == null || stylist.Role != UserRole.Stylist)
-                    {
-                        return new ResponseDTO(400, $"Stylist with ID {stylistId} does not exist or not a stylist.");
+                        var service = await _unitOfWork.HairServiceRepository.GetByIdAsync(serviceId);
+                        if (service == null)
+                        {
+                            return new ResponseDTO(400, $"Service with ID {serviceId} does not exist.");
+                        }
+                        totalPrice += service.Price;
                     }
                 }
-
+                
+                if(bookingRequest.StylistId != null)
+                {
+                    foreach (var stylistId in bookingRequest.StylistId)
+                    {
+                        var stylist = await _unitOfWork.UserRepository.GetByIdAsync(stylistId);
+                        if (stylist == null || stylist.Role != UserRole.Stylist)
+                        {
+                            return new ResponseDTO(400, $"Stylist with ID {stylistId} does not exist or not a stylist.");
+                        }
+                    }
+                }
+                
                 var schedule = await _unitOfWork.UserRepository.GetByIdAsync(bookingRequest.ScheduleId);
                 if (schedule == null)
                 {
@@ -103,7 +108,7 @@ namespace Service.Service
                 }
 
                 // Lưu Booking vào database thông qua UnitOfWork
-                var checkUpdate = await _unitOfWork.bookingRepository.CreateBookingAsync(booking);
+                var checkUpdate = await _unitOfWork.BookingRepository.CreateBookingAsync(booking);
                 if (checkUpdate <= 0)
                 {
                     return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);

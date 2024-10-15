@@ -125,7 +125,7 @@ namespace Service.Service
 
                 // Save the changes to the database
                 var result = await _unitOfWork.ScheduleRepository.UpdateAsync(schedule);
-                if (result == null)
+                if (result <= 0)
                 {
                     return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG, "Update Service Failed");
                 }

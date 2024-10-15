@@ -38,7 +38,7 @@ namespace Service.Service
             try
             {
                 
-                var userProfile = await _unitOfWork.userProfileRepository.getAllUserProfile();
+                var userProfile = await _unitOfWork.UserProfileRepository.getAllUserProfile();
 
                     var data= _mapper.Map<List<UserProfileDTO>>(userProfile);
                     return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, data);
@@ -54,7 +54,7 @@ namespace Service.Service
         {
             try
             {
-                var userProfile = await _unitOfWork.userProfileRepository.GetByIdAsync(id);
+                var userProfile = await _unitOfWork.UserProfileRepository.GetByIdAsync(id);
 
                 var result = _mapper.Map<UserProfileDTO>(userProfile);
 
@@ -95,7 +95,7 @@ namespace Service.Service
             int userId = int.Parse(userIdClaim.Value);
 
             // Lấy người dùng hiện tại
-            var user = await _unitOfWork.userProfileRepository.GetUserByCurrentId(userId);
+            var user = await _unitOfWork.UserProfileRepository.GetUserByCurrentId(userId);
             if (user == null)
             {
                 return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User not found !");
@@ -115,7 +115,7 @@ namespace Service.Service
             user.Phone = request.Phone;
 
             // Lưu các thay đổi vào cơ sở dữ liệu
-            await _unitOfWork.userProfileRepository.UpdateAsync(userProfile);
+            await _unitOfWork.UserProfileRepository.UpdateAsync(userProfile);
             await _unitOfWork.UserRepository.UpdateAsync(user);
 
             return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Update Succeed");
