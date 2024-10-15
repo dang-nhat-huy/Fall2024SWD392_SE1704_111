@@ -16,8 +16,8 @@ namespace Service.IService
         Task<ResponseDTO> GetServiceByIdAsync(int id);
         Task<ResponseDTO> GetServiceByNameAsync(string name);
        
-        Task<ResponseDTO> CreateReportAsync(CreateServiceDTO request);
-        Task<ResponseDTO> ChangeReportStatusAsync(RemoveServiceDTO request, int servicetId);
-        Task<ResponseDTO> UpdateReportAsync(UpdateServiceDTO request, int serviceId);
+        Task<ResponseDTO> CreateServiceAsync(CreateServiceDTO request);
+        Task<ResponseDTO> ChangeServiceStatusAsync(RemoveServiceDTO request, int servicetId);
+        Task<ResponseDTO> UpdateServiceAsync(UpdateServiceDTO request, int serviceId);
     }
 }

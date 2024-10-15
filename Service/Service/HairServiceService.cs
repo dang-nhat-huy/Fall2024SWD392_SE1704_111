@@ -82,7 +82,7 @@ namespace Service.Service
 
 
 
-        public async Task<ResponseDTO> CreateReportAsync(CreateServiceDTO request)
+        public async Task<ResponseDTO> CreateServiceAsync(CreateServiceDTO request)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace Service.Service
 
 
 
-        public async Task<ResponseDTO> UpdateReportAsync(RequestDTO.UpdateServiceDTO request, int serviceId)
+        public async Task<ResponseDTO> UpdateServiceAsync(RequestDTO.UpdateServiceDTO request, int serviceId)
         {
             try
             {
@@ -139,7 +139,7 @@ namespace Service.Service
             }
         }
 
-        public async Task<ResponseDTO> ChangeReportStatusAsync(RequestDTO.RemoveServiceDTO request, int servicetId)
+        public async Task<ResponseDTO> ChangeServiceStatusAsync(RequestDTO.RemoveServiceDTO request, int servicetId)
         {
             try
             {
