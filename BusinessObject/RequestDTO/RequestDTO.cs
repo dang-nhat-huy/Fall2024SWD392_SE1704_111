@@ -128,7 +128,27 @@ namespace BusinessObject.RequestDTO
 
         public class RemoveServiceDTO
         {
-            public ServiceEnum? Status { get; set; }
+            public int? Status { get; set; }
+        }
+
+        public class CreateScheduleDTO
+        {
+            public TimeSpan? StartTime { get; set; }
+            public TimeSpan? EndTime { get; set; }
+            public DateTime? StartDate { get; set; }
+            public DateTime? EndDate { get; set; }
+        }
+        public class UpdateScheduleDTO
+        {
+            public TimeSpan? StartTime { get; set; }
+            public TimeSpan? EndTime { get; set; }
+            public DateTime? StartDate { get; set; }
+            public DateTime? EndDate { get; set; }
+        }
+
+        public class RemoveScheduleDTO
+        {
+           public int? Status { get; set; }
         }
     }
 }

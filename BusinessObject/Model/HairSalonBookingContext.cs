@@ -699,7 +699,7 @@ namespace BusinessObject.Model
                     .HasColumnType("datetime")
                     .HasColumnName("startDate");
 
-                entity.Property(e => e.Status).HasColumnName("status");
+                entity.Property(e => e.Status).HasColumnName("status").HasConversion<int>();
 
                 entity.Property(e => e.UpdateBy)
                     .HasMaxLength(255)

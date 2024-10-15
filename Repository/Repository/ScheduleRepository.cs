@@ -13,5 +13,14 @@ namespace Repository.Repository
         public ScheduleRepository() { }
 
         public ScheduleRepository(HairSalonBookingContext context) => _context = context;
+
+        public async Task<int> CreateScheduleAsync(Schedule entity)
+        {
+
+            _context.Add(entity);
+            return await _context.SaveChangesAsync();
+
+
+        }
     }
 }

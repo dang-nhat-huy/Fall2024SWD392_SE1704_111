@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static BusinessObject.VoucherEnum;
 
 namespace BusinessObject.Model
 {
@@ -14,7 +15,7 @@ namespace BusinessObject.Model
         public double? DiscountAmount { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public int? Status { get; set; }
+        public VoucherStatusEnum? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
