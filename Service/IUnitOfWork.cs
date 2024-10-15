@@ -13,10 +13,11 @@ namespace Service
         IUserRepository UserRepository { get; }
         IHairServiceRepository HairServiceRepository { get; }
         IScheduleRepository ScheduleRepository { get; }
-        IScheduleUserRepository scheduleUserRepository { get; }
-        IUserProfileRepository userProfileRepository { get; }
-        IBookingRepository bookingRepository { get; }
-        IReportRepository reportRepository { get; }
-        IVoucherRepository voucherRepository { get; }
+        IScheduleUserRepository ScheduleUserRepository { get; }
+        IUserProfileRepository UserProfileRepository { get; }
+        IBookingRepository BookingRepository { get; }
+        IReportRepository ReportRepository { get; }
+        IVoucherRepository VoucherRepository { get; }
+        IServicesStylistRepository ServicesStylistRepository { get; }
     }
 }

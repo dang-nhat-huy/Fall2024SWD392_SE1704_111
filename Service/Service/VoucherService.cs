@@ -32,7 +32,7 @@ namespace Service.Service
         {
             try
             {
-                var listVoucher = await _unitOfWork.voucherRepository.GetVocherByStatus(VoucherStatusEnum.Active);
+                var listVoucher = await _unitOfWork.VoucherRepository.GetVocherByStatus(VoucherStatusEnum.Active);
 
                 var voucherDto = _mapper.Map<List<VoucherDTO>>(listVoucher);
 

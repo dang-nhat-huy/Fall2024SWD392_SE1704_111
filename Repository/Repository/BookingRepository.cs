@@ -19,5 +19,12 @@ namespace Repository.Repository
         {
             return await _context.Bookings.FirstOrDefaultAsync(u => u.BookingId == id);
         }
+
+        public async Task<int> CreateBookingAsync(Booking entity)
+        {
+
+            _context.Add(entity);
+            return await _context.SaveChangesAsync();
+        }
     }
 }

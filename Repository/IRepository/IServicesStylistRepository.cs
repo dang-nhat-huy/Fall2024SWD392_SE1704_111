@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 
 namespace Repository.IRepository
 {
-    public interface IBookingRepository : IGenericRepository<Booking>
+    public interface IServicesStylistRepository : IGenericRepository<ServicesStylist>
     {
-        Task<Booking> GetBookingByIdAsync(int id);
-        Task<int> CreateBookingAsync(Booking entity);
     }
 }

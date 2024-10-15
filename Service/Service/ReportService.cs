@@ -72,7 +72,7 @@ namespace Service.Service
 
                 int userId = int.Parse(userIdClaim.Value);
 
-                if (await _unitOfWork.bookingRepository.GetByIdAsync((int)request.BookingId) == null)
+                if (await _unitOfWork.BookingRepository.GetByIdAsync((int)request.BookingId) == null)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Booking not found");
                 }
@@ -85,7 +85,7 @@ namespace Service.Service
                 report.UpdateDate = DateTime.Now;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
-                var result = await _unitOfWork.reportRepository.CreateReportAsync(report);
+                var result = await _unitOfWork.ReportRepository.CreateReportAsync(report);
 
                 return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
             }
@@ -119,7 +119,7 @@ namespace Service.Service
 
                 int userId = int.Parse(userIdClaim.Value);
 
-                var report = await _unitOfWork.reportRepository.GetReportById(reportId);
+                var report = await _unitOfWork.ReportRepository.GetReportById(reportId);
                 if (report == null)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "report not found");
@@ -135,7 +135,7 @@ namespace Service.Service
                 report.UpdateDate = DateTime.Now;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
-                var result = _unitOfWork.reportRepository.UpdateReportAsync(report);
+                var result = _unitOfWork.ReportRepository.UpdateReportAsync(report);
 
                 if (result == null)
                 {
@@ -174,7 +174,7 @@ namespace Service.Service
 
                 int userId = int.Parse(userIdClaim.Value);
 
-                var report = await _unitOfWork.reportRepository.GetReportById(reportId);
+                var report = await _unitOfWork.ReportRepository.GetReportById(reportId);
                 if (report == null)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "report not found");
@@ -185,7 +185,7 @@ namespace Service.Service
                 report.UpdateDate = DateTime.Now;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
-                var result = _unitOfWork.reportRepository.UpdateReportAsync(report);
+                var result = _unitOfWork.ReportRepository.UpdateReportAsync(report);
 
                 if (result == null)
                 {

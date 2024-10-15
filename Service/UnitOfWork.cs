@@ -16,6 +16,7 @@ namespace Service
         private IBookingRepository _bookingRepository;
         private IReportRepository _reportRepository;
         private IVoucherRepository _voucherRepository;
+        private IServicesStylistRepository _servicesStylistRepository;
 
         private HairSalonBookingContext _context;
 
@@ -24,6 +25,13 @@ namespace Service
             _userRepository ??= new UserRepository();
             _hairServiceRepository ??= new HairServiceRepository();
             _context ??= new HairSalonBookingContext();
+            _scheduleRepository ??= new ScheduleRepository();
+            _bookingRepository ??= new BookingRepository();
+            _reportRepository ??= new ReportRepository();
+            _servicesStylistRepository ??= new ServicesStylistRepository();
+            _voucherRepository ??= new VoucherRepository();
+            _userProfileRepository ??= new UserProfileRepository();
+            _scheduleUserRepository ??= new ScheduleUserRepository();
         }
 
         public IUserRepository UserRepository
@@ -50,7 +58,7 @@ namespace Service
             }
         }
 
-        public IScheduleUserRepository scheduleUserRepository
+        public IScheduleUserRepository ScheduleUserRepository
         {
             get
             {
@@ -58,7 +66,7 @@ namespace Service
             }
         }
 
-        public IUserProfileRepository userProfileRepository
+        public IUserProfileRepository UserProfileRepository
         {
             get
             {
@@ -66,7 +74,7 @@ namespace Service
             }
         }
 
-        public IBookingRepository bookingRepository
+        public IBookingRepository BookingRepository
         {
             get
             {
@@ -74,7 +82,7 @@ namespace Service
             }
         }
 
-        public IReportRepository reportRepository
+        public IReportRepository ReportRepository
         {
             get
             {
@@ -82,11 +90,19 @@ namespace Service
             }
         }
 
-        public IVoucherRepository voucherRepository
+        public IVoucherRepository VoucherRepository
         {
             get
             {
                 return _voucherRepository ??= new VoucherRepository(_context);
+            }
+        }
+
+        public IServicesStylistRepository ServicesStylistRepository
+        {
+            get
+            {
+                return _servicesStylistRepository ??= new ServicesStylistRepository(_context);
             }
         }
 

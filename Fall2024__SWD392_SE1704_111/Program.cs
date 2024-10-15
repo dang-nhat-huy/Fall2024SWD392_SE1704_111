@@ -94,6 +94,7 @@ builder.Services.AddScoped<IScheduleUserRepository, ScheduleUserRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
+builder.Services.AddScoped<IServicesStylistRepository, ServicesStylistRepository>();
 
 //Service
 builder.Services.AddScoped<IUserService, UserService>();
@@ -130,9 +131,9 @@ app.UseHttpsRedirection();
 // Thêm dòng này để áp dụng chính sách CORS
 app.UseCors("MyPolicy");
 
-app.UseAuthorization();
-
 app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

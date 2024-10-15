@@ -30,11 +30,17 @@ namespace BusinessObject.RequestDTO
             public string phone { get; set; }
         }
 
-        public class AddToBookingDTO
+        public class BookingRequestDTO
         {
-            public int? CustomerId { get; set; }
+            public int CustomerId { get; set; }
             public int? VoucherId { get; set; }
-            public int? Status { get; set; }
+            [Required]
+            public int ScheduleId { get; set; }
+            [Required]
+            public List<int>? ServiceId { get; set; }
+            [Required]
+            public List<int>? StylistId { get; set; }
+
         }
 
         public class UpdateUserProfileDTO
@@ -88,7 +94,7 @@ namespace BusinessObject.RequestDTO
 
         public class ChangebookingStatusDTO
         {
-            public int? Status { get; set; }
+            public BookingStatus Status { get; set; }
         }
 
         public class SearchAccountByNameDTO

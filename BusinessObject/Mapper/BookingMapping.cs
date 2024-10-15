@@ -22,10 +22,12 @@ namespace BusinessObject.Mapper
                 .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments))
                 .ForMember(dest => dest.BookingDetails, opt => opt.MapFrom(src => src.BookingDetails));
 
-            CreateMap<Booking, AddToBookingDTO>()
+            CreateMap<Booking, BookingRequestDTO>()
                 .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
                 .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
+                .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))
+                .ReverseMap();
+
 
             CreateMap<Booking, ChangebookingStatusDTO>().ReverseMap();
         }
