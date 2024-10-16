@@ -104,6 +104,7 @@ builder.Services.AddScoped<IScheduleUserService, ScheduleUserService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
+builder.Services.AddScoped<IServicesStylistServices, ServicesStylistServices>();
 
 //UserProfile
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();

@@ -34,11 +34,18 @@ namespace BusinessObject.ResponseDTO
 
     public class ServicesDTO
     {
+        public int ServiceId { get; set; }
         public string? ImageLink { get; set; }
         public string? ServiceName { get; set; }
         public string? Description { get; set; }
         public double? Price { get; set; }
         public TimeSpan? EstimateTime { get; set; }
+    }
+
+    public class StylistResponseDTO
+    {
+        public int StylistId { get; set; }
+        public string StylistName { get; set; }
     }
 
     public class ScheduleDTO
