@@ -10,6 +10,7 @@ namespace BusinessObject
     {
         None = 0,
         InQueue,
+        Accepted,
         InProgress,
         Delay,
         Complete,
