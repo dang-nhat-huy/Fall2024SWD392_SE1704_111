@@ -22,9 +22,8 @@ namespace BusinessObject.RequestDTO
             [Required]
             [StringLength(255, ErrorMessage = "Username cannot exceed 255 characters.")]
             public string userName { get; set; }
-            [Required]
             [StringLength(255, ErrorMessage = "Password cannot exceed 255 characters.")]
-            public string password { get; set; }
+            public string? password { get; set; }
             [Required]
             [RegularExpression(@"^\d{10,15}$", ErrorMessage = "Phone number must be between 10 and 15 digits and only contain numbers.")]
             public string phone { get; set; }
@@ -32,7 +31,8 @@ namespace BusinessObject.RequestDTO
 
         public class BookingRequestDTO
         {
-            public int CustomerId { get; set; }
+            public string? UserName { get; set; }
+            public string? Phone { get; set; }
             public int? VoucherId { get; set; }
             [Required]
             public int ScheduleId { get; set; }
