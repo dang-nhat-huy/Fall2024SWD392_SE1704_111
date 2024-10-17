@@ -59,6 +59,10 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         [HttpPost("updateCurrentProfile")]
         public async Task<IActionResult> UpdateUserProfile([FromBody] UpdateUserProfileDTO request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             // Kiểm tra xem request có hợp lệ không
             if (request == null)
             {

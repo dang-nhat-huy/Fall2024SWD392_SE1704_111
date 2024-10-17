@@ -1,20 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject;
-using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Service.IService;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Service.Service
@@ -72,31 +59,38 @@ namespace Service.Service
 
         public async Task<ResponseDTO> UpdateUserProfileAsync(UpdateUserProfileDTO request)
         {
-            // Lấy người dùng hiện tại
-            var user = await _jWTService.GetCurrentUserAsync();
-            if (user == null)
+            try 
             {
-                return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User not found !");
-            }
+                // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User not found !");
+                }
 
-            // Lấy hồ sơ người dùng để cập nhật
-            var userProfile = user.UserProfile;
-            if (userProfile == null)
+                // Lấy hồ sơ người dùng để cập nhật
+                var userProfile = user.UserProfile;
+                if (userProfile == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User Profile not found !");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào userProfile
+                _mapper.Map(request, userProfile);
+
+                userProfile.RegistrationDate = DateTime.Now;
+                user.Phone = request.Phone;
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.UserProfileRepository.UpdateAsync(userProfile);
+                await _unitOfWork.UserRepository.UpdateAsync(user);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG);
+            }
+            catch(Exception e)
             {
-                return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User Profile not found !");
+                return new ResponseDTO(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG);
             }
-
-            // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào userProfile
-            _mapper.Map(request, userProfile);
-
-            userProfile.RegistrationDate = DateTime.Now;
-            user.Phone = request.Phone;
-
-            // Lưu các thay đổi vào cơ sở dữ liệu
-            await _unitOfWork.UserProfileRepository.UpdateAsync(userProfile);
-            await _unitOfWork.UserRepository.UpdateAsync(user);
-
-            return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Update Succeed");
 
         }
 
