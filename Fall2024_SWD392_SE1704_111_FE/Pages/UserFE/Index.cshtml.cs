@@ -49,10 +49,15 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                     var role = HttpContext.Session.GetString("Role");
                     if (role == "Admin")
                     {
+
+
                         // Lấy danh sách người dùng từ API nếu token hợp lệ
                         string jsonResponse = await response.Content.ReadAsStringAsync();
-                        dto = JsonConvert.DeserializeObject<ResponseDTO>(jsonResponse)!;
-                        Users = (IList<UserListDTO>)dto.Data!;
+                        var dto = JsonConvert.DeserializeObject<ResponseDTO>(jsonResponse)!;
+
+                        // Deserialize `dto.Data` to `List<UserListDTO>`
+                        var usersListJson = JsonConvert.SerializeObject(dto.Data);
+                        Users = JsonConvert.DeserializeObject<IList<UserListDTO>>(usersListJson);
 
                         return Page();  // Trả về Razor Page với danh sách người dùng
                     }
