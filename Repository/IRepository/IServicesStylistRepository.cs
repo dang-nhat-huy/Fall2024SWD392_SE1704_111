@@ -9,5 +9,6 @@ namespace Repository.IRepository
 {
     public interface IServicesStylistRepository : IGenericRepository<ServicesStylist>
     {
+        Task<List<ServicesStylist>> GetStylistsByServiceIdAsync(int serviceId);
     }
 }

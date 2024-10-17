@@ -17,14 +17,14 @@ namespace Service.Service
     public class BookingService : IBookingService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IConfiguration _config;
         private readonly IMapper _mapper;
+        private readonly IJWTService _jWTService;
 
-        public BookingService(IUnitOfWork unitOfWork, IConfiguration config, IMapper mapper)
+        public BookingService(IUnitOfWork unitOfWork, IMapper mapper, IJWTService jWTService)
         {
             _unitOfWork = unitOfWork;
-            _config = config;
             _mapper = mapper;
+            _jWTService = jWTService;
         }
 
         public async Task<ResponseDTO> ChangeBookingStatus(RequestDTO.ChangebookingStatusDTO request, int bookingId)
@@ -54,12 +54,38 @@ namespace Service.Service
         }       
 
         public async Task<ResponseDTO> CreateBooking(BookingRequestDTO bookingRequest)
-        {
+        {           
             try
             {
+                int customerId;
+                // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+                if (user == null)
+                {
+                    //Nếu người dùng chưa đăng nhập
+                    RegisterRequestDTO registerRequestDTO = new RegisterRequestDTO();
+                    registerRequestDTO.userName = bookingRequest.UserName;
+                    registerRequestDTO.phone = bookingRequest.Phone;
+                    var registUser = _mapper.Map<User>(registerRequestDTO);
+
+                    //Tạo  mới người dùng với 2 field UserName và Password
+                    var createAccountResponse = await _unitOfWork.UserRepository.CreateAsync(registUser);
+                    if (createAccountResponse<=0)
+                    {
+                        return new ResponseDTO(Const.FAIL_CREATE_CODE,"Create Account Fail");
+                    }
+                    customerId = registUser.UserId; // Sử dụng UserId của người dùng mới
+                }
+                else
+                {
+                    // Nếu người dùng đã đăng nhập, sử dụng thông tin của họ
+                    customerId = user.UserId;
+                }
                 double? totalPrice = 0;
-                if(bookingRequest.ServiceId != null) {
-                    // kiểm tra Service và Stylist có tồn tại không
+
+                // kiểm tra Service có tồn tại không
+                if (bookingRequest.ServiceId != null) {
+                    
                     foreach (var serviceId in bookingRequest.ServiceId)
                     {
                         var service = await _unitOfWork.HairServiceRepository.GetByIdAsync(serviceId);
@@ -70,8 +96,9 @@ namespace Service.Service
                         totalPrice += service.Price;
                     }
                 }
-                
-                if(bookingRequest.StylistId != null)
+
+                // kiểm tra Stylist có tồn tại không
+                if (bookingRequest.StylistId != null)
                 {
                     foreach (var stylistId in bookingRequest.StylistId)
                     {
@@ -82,7 +109,8 @@ namespace Service.Service
                         }
                     }
                 }
-                
+
+                // kiểm tra schedule có tồn tại không
                 var schedule = await _unitOfWork.UserRepository.GetByIdAsync(bookingRequest.ScheduleId);
                 if (schedule == null)
                 {
@@ -91,6 +119,7 @@ namespace Service.Service
 
                 // Tạo một đối tượng Booking mới từ DTO
                 var booking = _mapper.Map<Booking>(bookingRequest);
+                booking.CustomerId = customerId;
                 booking.CreateDate = DateTime.Now;
                 booking.Status = BookingStatus.InProgress;
                 booking.TotalPrice = totalPrice;

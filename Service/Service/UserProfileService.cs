@@ -22,15 +22,13 @@ namespace Service.Service
     public class UserProfileService: IUserProfileService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IConfiguration _config;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public UserProfileService(IUnitOfWork unitOfWork, IConfiguration config, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        private readonly IJWTService _jWTService;
+        public UserProfileService(IUnitOfWork unitOfWork, IMapper mapper, IJWTService jWTService)
         {
             _unitOfWork = unitOfWork;
-            _config = config;
-            _mapper= mapper;
-            _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
+            _jWTService = jWTService;
         }
         public async Task<ResponseDTO> GetAllUserProfile()
         {
@@ -74,28 +72,8 @@ namespace Service.Service
 
         public async Task<ResponseDTO> UpdateUserProfileAsync(UpdateUserProfileDTO request)
         {
-            // Lấy token từ header Authorization
-            var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-
-            if (string.IsNullOrEmpty(token))
-            {
-                return new ResponseDTO(Const.FAIL_READ_CODE, "Token is missing.");
-            }
-
-            // Giải mã token để lấy thông tin người dùng
-            var claimsPrincipal = ValidateToken(token);
-
-            // Lấy UserId từ claims
-            var userIdClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-            {
-                return new ResponseDTO(Const.FAIL_READ_CODE, "User not found in token.");
-            }
-
-            int userId = int.Parse(userIdClaim.Value);
-
             // Lấy người dùng hiện tại
-            var user = await _unitOfWork.UserProfileRepository.GetUserByCurrentId(userId);
+            var user = await _jWTService.GetCurrentUserAsync();
             if (user == null)
             {
                 return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User not found !");
@@ -125,29 +103,8 @@ namespace Service.Service
         public async Task<ResponseDTO> GetCurrentUserProfile()
         {
             try
-            {
-                // Lấy token từ header Authorization
-                var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-
-                if (string.IsNullOrEmpty(token))
-                {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "Token is missing.");
-                }
-
-                // Giải mã token để lấy thông tin người dùng
-                var claimsPrincipal = ValidateToken(token);
-
-                // Lấy UserId từ claims
-                var userIdClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
-                if (userIdClaim == null)
-                {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found in token.");
-                }
-
-                int userId = int.Parse(userIdClaim.Value);
-
-                // Tìm người dùng trong cơ sở dữ liệu
-                var user = await _unitOfWork.UserRepository.GetUserByCurrentId(userId);
+            {               
+                var user = await _jWTService.GetCurrentUserAsync();
                 if (user == null)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
@@ -155,6 +112,7 @@ namespace Service.Service
 
                 // Lấy hồ sơ người dùng và ánh xạ sang DTO
                 var userProfileDto = _mapper.Map<UserProfileDTO>(user.UserProfile);
+                userProfileDto.Phone = user.Phone;
 
                 return new ResponseDTO(Const.SUCCESS_READ_CODE, "User profile retrieved successfully.", userProfileDto);
             }
@@ -162,21 +120,6 @@ namespace Service.Service
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
-        }
-
-        private ClaimsPrincipal ValidateToken(string token)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"])),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero // Không cho phép chênh lệch thời gian
-            };
-
-            return tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
         }
     }
 }

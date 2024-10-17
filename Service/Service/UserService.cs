@@ -24,15 +24,13 @@ namespace Service.Service
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IConfiguration _config;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public UserService(IUnitOfWork unitOfWork, IConfiguration config, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        private readonly IJWTService _jWTService;
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IJWTService jWTService)
         {
             _unitOfWork = unitOfWork;
-            _config = config;
             _mapper = mapper;
-            _httpContextAccessor = httpContextAccessor;
+            _jWTService = jWTService;
         }
         public async Task<ResponseDTO> GetAll()
         {
@@ -73,7 +71,7 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Your account is not active. Please contact support.");
                 }
                 //var loginResponse = _mapper.Map<LoginResponse>(account);
-                var jwt = GenerateToken(account);
+                var jwt = _jWTService.GenerateToken(account);
                 return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, jwt);
             }
             catch (Exception ex)
@@ -82,31 +80,7 @@ namespace Service.Service
             }
         }
 
-        private string GenerateToken(User account)
-        {
-            var tokenSecret = _config["Jwt:Key"];
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(tokenSecret);
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, account.UserId.ToString()), 
-                new Claim(ClaimTypes.Role, account.Role!.ToString()!.Trim())
-            };
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.Add(TimeSpan.FromMinutes(30)),
-                Issuer = _config["Jwt:Issuer"],
-                Audience = _config["Jwt:Audience"],
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature),
-            };
-
-            var token = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
+        
 
         public async Task<ResponseDTO> Register(RegisterRequestDTO request)
         {
@@ -133,20 +107,7 @@ namespace Service.Service
             }
         }
 
-        private ClaimsPrincipal ValidateToken(string token)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"])),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero // Không cho phép chênh lệch thời gian
-            };
-
-            return tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
-        }
+        
 
         public async Task<ResponseDTO> ChangeStatusAccountById(ChangeStatusAccountDTO request, int userId)
         {
