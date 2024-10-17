@@ -20,17 +20,23 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
 
         public ResponseDTO dto { get; set; } = null!;
 
+        [BindProperty(SupportsGet = true)]
+        public int Index { get; set; } = 1;
+        public double Count { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
-                
+                var top = 10;
+                var skip = (Index - 1) * top;
 
                 string url = "https://localhost:7211/api/v1/users/usersList";
 
                 string? jwt = Request.Cookies["jwt"]!.ToString();
-                if(jwt == null)
+                if (jwt == null)
                 {
+                    TempData["errorLogin"] = "You need to login to access this page";
                     return RedirectToPage("../Login");
                 }
                 string jsonProduct = JsonConvert.SerializeObject(Users);
@@ -49,7 +55,8 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                     var role = HttpContext.Session.GetString("Role");
                     if (role == "Admin")
                     {
-
+                        // Lấy thông tin ID của người dùng hiện tại từ token hoặc session
+                        var currentUserId = HttpContext.Session.GetString("UserId");
 
                         // Lấy danh sách người dùng từ API nếu token hợp lệ
                         string jsonResponse = await response.Content.ReadAsStringAsync();
@@ -57,8 +64,12 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
 
                         // Deserialize `dto.Data` to `List<UserListDTO>`
                         var usersListJson = JsonConvert.SerializeObject(dto.Data);
-                        Users = JsonConvert.DeserializeObject<IList<UserListDTO>>(usersListJson);
+                        var allUsers = JsonConvert.DeserializeObject<IList<UserListDTO>>(usersListJson);
 
+                        // Lọc danh sách để không bao gồm người dùng đang đăng nhập
+                        Users = allUsers.Where(u => u.UserId.ToString() != currentUserId).ToList();
+
+                        //Count = await CountMaxPage();
                         return Page();  // Trả về Razor Page với danh sách người dùng
                     }
                     else
@@ -74,9 +85,43 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                     return Page();
                 }
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 TempData["errorList"] = "An error occurred while processing your request. Please try again later";
                 return Page();
+            }
+        }
+
+        private async Task<double> CountMaxPage()
+        {
+            try
+            {
+                double count = 1;
+                string? jwt = Request.Cookies["jwt"]!.ToString();
+                string url = $"https://localhost:7211/api/v1/users/";
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Get
+                };
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    count = JsonConvert.DeserializeObject<double>(responseBody)!;
+                }
+                else
+                {
+                    count = 1;
+                }
+                return count;
+            }
+            catch (Exception)
+            {
+                return 1;
             }
         }
     }
