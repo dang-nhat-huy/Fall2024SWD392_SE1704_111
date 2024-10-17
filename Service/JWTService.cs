@@ -48,7 +48,20 @@ namespace Service
             };
 
             var token = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var jwt = tokenHandler.WriteToken(token);
+
+            // Lưu JWT vào cookie
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddMinutes(30),
+                Secure = true, // chỉ sử dụng với HTTPS
+                SameSite = SameSiteMode.Strict // ngăn chặn CSRF
+            };
+
+            _httpContextAccessor.HttpContext?.Response.Cookies.Append("jwt_token", jwt, cookieOptions);
+
+            return jwt;
         }
 
         public ClaimsPrincipal ValidateToken(string token)
@@ -68,8 +81,8 @@ namespace Service
 
         public async Task<User> GetCurrentUserAsync()
         {
-            // Lấy token từ header Authorization
-            var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            // Lấy token từ cookie thay vì từ header Authorization
+            var token = _httpContextAccessor.HttpContext?.Request.Cookies["jwt_token"];
 
             if (string.IsNullOrEmpty(token))
             {
@@ -97,6 +110,17 @@ namespace Service
             }
 
             return user;
+        }
+
+        public string GetTokenFromCookie()
+        {
+            var token = _httpContextAccessor.HttpContext?.Request.Cookies["jwt_token"];
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new Exception("Token not found in cookies");
+            }
+
+            return token;
         }
     }
 }
