@@ -1,0 +1,47 @@
+﻿@page
+@model RazorPage.Pages.LoginModel
+@{
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<h1>Login</h1>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="User.UserName" class="control-label"></label>
+                <input asp-for="User.UserName" class="form-control" id="signInUsername" required autocomplete="on"/>
+                <span asp-validation-for="User.UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Password" class="control-label"></label>
+                <input asp-for="User.Password" class="form-control" type="password" id="signInPassword" required autocomplete="on"/>
+                <span asp-validation-for="User.Password" class="text-danger"></span>
+            </div>
+            @if(TempData["errorLogin"] != null)
+            {
+                <div class="text-danger">
+                    @TempData["errorLogin"]
+                </div>
+                TempData.Clear();
+            }
+            @if(TempData["successLogin"] != null)
+            {
+                <div class="text-success">
+                    @TempData["successLogin"]
+                </div>
+                TempData.Clear();
+            }
+            <div class="form-group">
+                Don't have an account yet? <a asp-page="./SignUp">Sign Up</a>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
