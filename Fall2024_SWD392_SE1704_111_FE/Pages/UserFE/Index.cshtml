@@ -14,37 +14,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].UserName)
+                @Html.DisplayNameFor(model => model.Users[0].UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Password)
+                @Html.DisplayNameFor(model => model.Users[0].Password)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Phone)
+                @Html.DisplayNameFor(model => model.Users[0].Phone)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Status)
+                @Html.DisplayNameFor(model => model.Users[0].Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Role)
+                @Html.DisplayNameFor(model => model.Users[0].Role)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].CreateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].CreateBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].UpdateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].UpdateBy)
-            </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.User) {
+@foreach (var item in Model.Users) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
@@ -62,21 +50,9 @@
                 @Html.DisplayFor(modelItem => item.Role)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreateDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdateDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdateBy)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.UserId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.UserId">Delete</a>
+                <a asp-page="./Edit" asp-route-id="#">Edit</a> |
+                <a asp-page="./Details" asp-route-id="#">Details</a> |
+                <a asp-page="./Delete" asp-route-id="#">Delete</a>
             </td>
         </tr>
 }

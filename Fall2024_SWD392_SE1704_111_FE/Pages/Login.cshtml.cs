@@ -1,12 +1,15 @@
-using BusinessObject;
+﻿using BusinessObject;
 using BusinessObject.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Text;
+using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace RazorPage.Pages
 {
@@ -16,20 +19,6 @@ namespace RazorPage.Pages
         public User User { get; set; } = null!;
         public void OnGet()
         {
-            //var role = HttpContext.Session.GetString("Role");
-            //string? jwt = Request.Cookies["jwt"];
-            //if (role == null || jwt == null)
-            //{
-            //    return Page();
-            //}
-            //if (role.Equals("Admin"))
-            //{
-            //    return RedirectToPage("./UserFE/Index");
-            //}
-            //else
-            //{
-            //    return RedirectToPage("./UserFE/Index");
-            //}
             
         }
         public async Task<IActionResult> OnPostAsync()
@@ -38,13 +27,30 @@ namespace RazorPage.Pages
             {
                 var username = User.UserName;
                 var password = User.Password;
-                string url = $"https://localhost:7211/api/v1/users/Login?username={username}&password={password}";
+
+                // Tạo DTO với thông tin đăng nhập
+                var loginDto = new LoginRequestDTO
+                {
+                    userName = username,
+                    password = password
+                };
+
+                string url = "https://localhost:7211/api/v1/users/Login";
 
                 var client = new HttpClient();
+
+                // Chuyển đổi DTO thành JSON và đưa vào body
+                var content = new StringContent(
+                    JsonConvert.SerializeObject(loginDto), // Serialize DTO thành JSON
+                    Encoding.UTF8,
+                    "application/json" // Đặt Content-Type là application/json
+                );
+
                 HttpRequestMessage request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Post,
-                    RequestUri = new Uri(url)
+                    RequestUri = new Uri(url),
+                    Content = content // Truyền body là DTO JSON
                 };
                 HttpResponseMessage response = await client.SendAsync(request);
 
@@ -55,14 +61,14 @@ namespace RazorPage.Pages
                     var token = jwtHandler.ReadToken(jwt) as JwtSecurityToken;
                     var role = token!.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
 
-                    //// Set the cookie
-                    //var cookieOptions = new CookieOptions
-                    //{
-                    //    Expires = DateTime.UtcNow.AddHours(1),
-                    //    HttpOnly = true,
-                    //    Path = "/"
-                    //};
-                    //Response.Cookies.Append("jwt", jwt, cookieOptions);
+                    // Set the cookie
+                    var cookieOptions = new CookieOptions
+                    {
+                        Expires = DateTime.UtcNow.AddHours(1),
+                        HttpOnly = true,
+                        Path = "/"
+                    };
+                    Response.Cookies.Append("jwt", jwt, cookieOptions);
 
                     //Set Session
                     HttpContext.Session.SetString("Role", role);
