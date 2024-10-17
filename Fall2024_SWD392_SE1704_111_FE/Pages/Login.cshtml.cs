@@ -79,7 +79,8 @@ namespace RazorPage.Pages
                     }
                     else
                     {
-                        return RedirectToPage("./UserFE/Index");
+                        TempData["errorLogin"] = "Unauthorize for this user!";
+                        return Page();
                     }
                 }
                 else
