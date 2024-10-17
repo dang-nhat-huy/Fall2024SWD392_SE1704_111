@@ -1,0 +1,76 @@
+﻿@page
+@model Fall2024_SWD392_SE1704_111_FE.Pages.ReportFE.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Report</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Report.ReportName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Report.ReportName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Report.ReportLink)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Report.ReportLink)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Report.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Report.Status)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Report.CreateDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Report.CreateDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Report.CreateBy)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Report.CreateBy)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Report.UpdateDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Report.UpdateDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Report.UpdateBy)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Report.UpdateBy)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Report.Booking)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Report.Booking.BookingId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Report.Stylist)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Report.Stylist.UserId)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Report.ReportId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

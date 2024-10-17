@@ -80,6 +80,7 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("*")  // Cho phép mọi origin
              .AllowAnyMethod()
              .AllowAnyHeader();
+             //.AllowCredentials();
     });
 });
 

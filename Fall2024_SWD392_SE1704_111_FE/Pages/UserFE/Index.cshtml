@@ -1,0 +1,60 @@
+﻿@page
+@model Fall2024_SWD392_SE1704_111_FE.Pages.UserFE.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Users[0].UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users[0].Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users[0].Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users[0].Role)
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Users) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="#">Edit</a> |
+                <a asp-page="./Details" asp-route-id="#">Details</a> |
+                <a asp-page="./Delete" asp-route-id="#">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
