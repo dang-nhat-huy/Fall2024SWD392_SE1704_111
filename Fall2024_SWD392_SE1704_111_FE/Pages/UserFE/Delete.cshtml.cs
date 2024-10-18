@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject.Model;
 using Newtonsoft.Json;
+using BusinessObject.ResponseDTO;
+using System.Text;
+using BusinessObject;
 
 namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
 {
@@ -17,7 +20,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
         [BindProperty]
       public User User { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             try
             {
@@ -35,7 +38,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                 }
 
                 jwt = jwt.ToString();
-                string url = "https://localhost:7211/api/v1/users/GetUserById?id=" + id;
+                string url = "https://localhost:7211/api/v1/users/GetUserById/" + id;
                 var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
                 HttpRequestMessage request = new HttpRequestMessage
@@ -47,8 +50,12 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
 
                 if (response.IsSuccessStatusCode)
                 {
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    User = JsonConvert.DeserializeObject<User>(responseBody)!;
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var dto = JsonConvert.DeserializeObject<ResponseDTO>(jsonResponse)!;
+
+                    // Deserialize `dto.Data` to `List<UserListDTO>`
+                    var usersListJson = JsonConvert.SerializeObject(dto.Data);
+                    User = JsonConvert.DeserializeObject<User>(usersListJson);
                 }
                 else
                 {
@@ -63,7 +70,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
             }
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync()
         {
             try
             {
@@ -72,6 +79,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                 string url = "https://localhost:7211/api/v1/users/changeStatus/" + userId;
                 var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
+
                 HttpRequestMessage request = new HttpRequestMessage
                 {
                     RequestUri = new Uri(url),

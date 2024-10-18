@@ -59,16 +59,11 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         }
 
         [HttpPost("changeStatus/{id}")]
-        public async Task<IActionResult> ChangeStatusAccount([FromRoute] int id, [FromBody] ChangeStatusAccountDTO request)
+        public async Task<IActionResult> ChangeStatusAccount([FromRoute] int id)
         {
-            // Kiểm tra xem request có hợp lệ không
-            if (request == null)
-            {
-                return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request."));
-            }
 
             // Gọi service để cập nhật thông tin người dùng
-            var response = await _userService.ChangeStatusAccountById(request, id);
+            var response = await _userService.ChangeStatusAccountById(id);
 
             // Kiểm tra kết quả và trả về phản hồi phù hợp
             if (response.Status != Const.SUCCESS_READ_CODE)
@@ -109,6 +104,21 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             // Trả về phản hồi
             if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
+        }
+
+        [HttpGet("PagingUserList")]
+        public async Task<IActionResult> GetUserPaging([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+            // Gọi service để lấy danh sách người dùng
+            var response = await _userService.GetAllUserPagingAsync(pageNumber,pageSize);
+
+            // Trả về phản hồi
+            if (response == null)
             {
                 return BadRequest(response); // Trả về mã lỗi nếu không thành công
             }
