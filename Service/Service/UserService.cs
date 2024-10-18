@@ -180,6 +180,29 @@ namespace Service.Service
             }
         }
 
-        
+        public async Task<ResponseDTO> GetUserByIdAsync(int userId)
+        {
+            try
+            {
+                // Gọi repository để lấy danh sách người dùng theo tên
+                var users = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
+
+                // Kiểm tra nếu danh sách rỗng
+                if (users == null)
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "No users found with the ID");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ các entity sang DTO
+                var result = _mapper.Map<UserListDTO>(users);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu xảy ra
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
     }
 }

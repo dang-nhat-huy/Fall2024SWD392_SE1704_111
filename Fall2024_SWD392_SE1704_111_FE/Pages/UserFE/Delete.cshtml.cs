@@ -35,7 +35,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                 }
 
                 jwt = jwt.ToString();
-                string url = "https://localhost:7211/api/v1/users/GetById?id=" + id;
+                string url = "https://localhost:7211/api/v1/users/GetUserById?id=" + id;
                 var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
                 HttpRequestMessage request = new HttpRequestMessage
@@ -75,7 +75,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                 HttpRequestMessage request = new HttpRequestMessage
                 {
                     RequestUri = new Uri(url),
-                    Method = HttpMethod.Put
+                    Method = HttpMethod.Post
                 };
                 HttpResponseMessage response = await client.SendAsync(request);
 

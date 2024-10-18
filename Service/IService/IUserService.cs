@@ -16,5 +16,6 @@ namespace Service.IService
         Task<ResponseDTO> ChangeStatusAccountById(ChangeStatusAccountDTO request, int userId);
         Task<ResponseDTO> GetListUsersAsync();
         Task<ResponseDTO> GetUserByNameAsync(string fullName);
+        Task<ResponseDTO> GetUserByIdAsync(int userId);
     }
 }

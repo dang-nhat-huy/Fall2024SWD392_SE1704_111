@@ -59,7 +59,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         }
 
         [HttpPost("changeStatus/{id}")]
-        public async Task<IActionResult> ChangeStatusAccount([FromRoute] int id,[FromBody] ChangeStatusAccountDTO request)
+        public async Task<IActionResult> ChangeStatusAccount([FromRoute] int id, [FromBody] ChangeStatusAccountDTO request)
         {
             // Kiểm tra xem request có hợp lệ không
             if (request == null)
@@ -101,5 +101,19 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu thành công
         }
 
+        [HttpGet("GetUserById/{userId}")]
+        public async Task<IActionResult> GetUserById([FromRoute] int userId)
+        {
+            // Gọi service để lấy danh sách người dùng
+            var response = await _userService.GetUserByIdAsync(userId);
+
+            // Trả về phản hồi
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
+        }
     }
 }
