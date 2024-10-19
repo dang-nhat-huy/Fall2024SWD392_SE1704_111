@@ -72,6 +72,10 @@
                         <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a> <span> | </span>
                         <a asp-page="./Delete" asp-route-id="@item.UserId">Change Status</a>
                     }
+                    else if (role!.Equals("Manager"))
+                    {
+                        <a asp-page="./Delete" asp-route-id="@item.UserId">Change Status</a>
+                    }
             </td>
         </tr>
 }
