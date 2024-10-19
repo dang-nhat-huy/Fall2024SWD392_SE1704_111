@@ -150,5 +150,20 @@ namespace BusinessObject.RequestDTO
         {
            public int? Status { get; set; }
         }
+
+        public class CreateAccountDTO
+        {
+            [Required]
+            [StringLength(255, ErrorMessage = "Username cannot exceed 255 characters.")]
+            public string userName { get; set; }
+            [StringLength(255, ErrorMessage = "Password cannot exceed 255 characters.")]
+            public string? password { get; set; }
+            [Required]
+            [MinLength(8), MaxLength(20)]
+            [RegularExpression(@"^\d+$", ErrorMessage = "Phone Is Number Only")]
+            public string? Phone { get; set; }
+            [Required]
+            public UserRole? RoleId { get; set; }
+        }
     }
 }

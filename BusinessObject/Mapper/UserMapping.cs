@@ -27,7 +27,7 @@ namespace BusinessObject.Mapper
 
             CreateMap<User, SearchAccountByNameDTO>().ReverseMap();
 
-            
+            CreateMap<User, CreateAccountDTO>().ReverseMap();
         }
         
 
