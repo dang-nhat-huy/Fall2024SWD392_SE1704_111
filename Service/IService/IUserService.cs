@@ -19,7 +19,7 @@ namespace Service.IService
         Task<ResponseDTO> GetUserByNameAsync(string fullName);
         Task<ResponseDTO> GetUserByIdAsync(int userId);
         Task<PagedResult<User>> GetAllUserPagingAsync(int pageNumber, int pageSize);
-
         Task<ResponseDTO> CreateAccountAsync(CreateAccountDTO request);
+        Task<ResponseDTO> UpdateAccountById(int userId, UpdateAccountDTO request);
     }
 }
