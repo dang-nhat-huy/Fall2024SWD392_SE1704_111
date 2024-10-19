@@ -60,6 +60,8 @@ namespace RazorPage.Pages
                     var jwtHandler = new JwtSecurityTokenHandler();
                     var token = jwtHandler.ReadToken(jwt) as JwtSecurityToken;
                     var role = token!.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
+                    var userId = token!.Claims.FirstOrDefault(c => c.Type == "nameid")!.Value;
+                    //var currentUsername = token.Claims.FirstOrDefault(c => c.Type == "username")?.ToString;
 
                     // Set the cookie
                     var cookieOptions = new CookieOptions
@@ -72,6 +74,8 @@ namespace RazorPage.Pages
 
                     //Set Session
                     HttpContext.Session.SetString("Role", role);
+                    HttpContext.Session.SetString("UserId", userId);
+                    HttpContext.Session.SetString("CurrentUsername", username);
 
                     if (role.Equals("Admin"))
                     {

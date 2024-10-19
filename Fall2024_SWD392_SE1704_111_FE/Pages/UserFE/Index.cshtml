@@ -2,10 +2,21 @@
 @model Fall2024_SWD392_SE1704_111_FE.Pages.UserFE.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Hair Salon Management";
 }
 
-<h1>Index</h1>
+@{
+    // Lấy tên người dùng từ session
+    var currentUserName = HttpContext.Session.GetString("CurrentUsername");
+    var role = HttpContext.Session.GetString("Role");
+}
+
+@if (!string.IsNullOrEmpty(currentUserName))
+{
+    <h2>Welcome, @currentUserName!</h2>
+}
+
+<h2>Account Management</h2>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -56,11 +67,28 @@
                 @Html.DisplayFor(modelItem => item.Role)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="#">Edit</a> |
-                <a asp-page="./Details" asp-route-id="#">Details</a> |
-                <a asp-page="./Delete" asp-route-id="#">Delete</a>
+                    @if (role!.Equals("Admin"))
+                    {
+                        <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a> <span> | </span>
+                        <a asp-page="./Details" asp-route-id="@item.UserId">Details</a> <span> | </span>
+                        <a asp-page="./Delete" asp-route-id="@item.UserId">Change Status</a>
+                    }
+                    else
+                    {
+                        <a asp-page="./Details" asp-route-id="@item.UserId">Details</a> <span> | </span>
+                    }
             </td>
         </tr>
 }
     </tbody>
 </table>
+<div class="align-middle">
+    <ul class="pagination">
+        @for (int b = 1; b <= Model.Count; b++)
+        {
+            <li class="page-item @(b == Model.Index ? "active" : "")">
+                <a asp-page="./Index" asp-route-Index="@b" class="page-link">@b</a>
+            </li>
+        }
+    </ul>
+</div>

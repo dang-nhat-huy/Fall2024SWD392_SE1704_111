@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.Model;
+using BusinessObject.Paging;
 using BusinessObject.ResponseDTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using static BusinessObject.RequestDTO.RequestDTO;
 using static BusinessObject.ResponseDTO.UserProfileDTO;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace Service.Service
@@ -109,7 +111,7 @@ namespace Service.Service
 
         
 
-        public async Task<ResponseDTO> ChangeStatusAccountById(ChangeStatusAccountDTO request, int userId)
+        public async Task<ResponseDTO> ChangeStatusAccountById( int userId)
         {
             try
             {
@@ -122,7 +124,7 @@ namespace Service.Service
 
                 // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
 
-                user.Status=request.Status;
+                user.Status= user.Status==UserStatus.Active ? UserStatus.Banned : UserStatus.Active;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 await _unitOfWork.UserRepository.UpdateAsync(user);
@@ -180,6 +182,69 @@ namespace Service.Service
             }
         }
 
-        
+        public async Task<ResponseDTO> GetUserByIdAsync(int userId)
+        {
+            try
+            {
+                // Gọi repository để lấy danh sách người dùng theo tên
+                var users = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
+
+                // Kiểm tra nếu danh sách rỗng
+                if (users == null)
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "No users found with the ID");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ các entity sang DTO
+                var result = _mapper.Map<UserListDTO>(users);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu xảy ra
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        //public async Task<ResponseDTO> GetAllUserPagingAsync(int pageNumber, int pageSize)
+        //{
+        //    try
+        //    {
+        //        var listUser = _unitOfWork.UserRepository.GetAll();
+
+        //        if (listUser == null)
+        //        {
+        //            return new ResponseDTO(Const.FAIL_READ_CODE, "No users found.");
+        //        }
+        //        else
+        //        {
+        //            //var listQueryable = listUser.AsQueryable();
+        //            var paginatedList = await Paging.GetPagedResultAsync(listUser.AsQueryable(), pageNumber, pageSize);
+        //            return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, listUser);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+        //    }
+        //}
+
+        public async Task<PagedResult<User>> GetAllUserPagingAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var userList= _unitOfWork.UserRepository.GetAll();
+                if(userList == null)
+                {
+                    throw new Exception();
+                }
+                return await Paging.GetPagedResultAsync(userList.AsQueryable(), pageNumber, pageSize);
+            }
+            catch (Exception)
+            {
+                return new PagedResult<User>();
+            }
+        }
     }
 }
