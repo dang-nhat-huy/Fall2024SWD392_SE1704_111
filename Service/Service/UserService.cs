@@ -82,7 +82,7 @@ namespace Service.Service
             }
         }
 
-        
+
 
         public async Task<ResponseDTO> Register(RegisterRequestDTO request)
         {
@@ -109,9 +109,9 @@ namespace Service.Service
             }
         }
 
-        
 
-        public async Task<ResponseDTO> ChangeStatusAccountById( int userId)
+
+        public async Task<ResponseDTO> ChangeStatusAccountById(int userId)
         {
             try
             {
@@ -124,14 +124,15 @@ namespace Service.Service
 
                 // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
 
-                user.Status= user.Status==UserStatus.Active ? UserStatus.Banned : UserStatus.Active;
+                user.Status = user.Status == UserStatus.Active ? UserStatus.Banned : UserStatus.Active;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 await _unitOfWork.UserRepository.UpdateAsync(user);
 
                 return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Change Status Succeed");
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
@@ -207,35 +208,12 @@ namespace Service.Service
             }
         }
 
-        //public async Task<ResponseDTO> GetAllUserPagingAsync(int pageNumber, int pageSize)
-        //{
-        //    try
-        //    {
-        //        var listUser = _unitOfWork.UserRepository.GetAll();
-
-        //        if (listUser == null)
-        //        {
-        //            return new ResponseDTO(Const.FAIL_READ_CODE, "No users found.");
-        //        }
-        //        else
-        //        {
-        //            //var listQueryable = listUser.AsQueryable();
-        //            var paginatedList = await Paging.GetPagedResultAsync(listUser.AsQueryable(), pageNumber, pageSize);
-        //            return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, listUser);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
-        //    }
-        //}
-
         public async Task<PagedResult<User>> GetAllUserPagingAsync(int pageNumber, int pageSize)
         {
             try
             {
-                var userList= _unitOfWork.UserRepository.GetAll();
-                if(userList == null)
+                var userList = _unitOfWork.UserRepository.GetAll();
+                if (userList == null)
                 {
                     throw new Exception();
                 }
@@ -244,6 +222,56 @@ namespace Service.Service
             catch (Exception)
             {
                 return new PagedResult<User>();
+            }
+        }
+
+        public async Task<ResponseDTO> CreateAccountAsync(CreateAccountDTO request)
+        {
+            try
+            {
+                if (await _unitOfWork.UserRepository.ExistsByNameAsync(request.userName))
+                {
+                    return new ResponseDTO(Const.FAIL_CREATE_CODE, "The username is already taken. Please choose a different username.");
+                }
+
+                //AutoMapper from RegisterRequestDTO => User
+                var user = _mapper.Map<User>(request);
+
+                user.CreateDate = DateTime.UtcNow;
+                user.Status = UserStatus.Active;
+                user.Role = request.RoleId;
+
+                await _unitOfWork.UserRepository.CreateAsync(user);
+                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "User registered successfully", request);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<ResponseDTO> UpdateAccountById(int userId, UpdateAccountDTO request)
+        {
+            try
+            {
+                // Lấy người dùng hiện tại
+                var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User not found !");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
+                _mapper.Map(request, user);
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.UserRepository.UpdateAsync(user);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Change Status Succeed");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
     }

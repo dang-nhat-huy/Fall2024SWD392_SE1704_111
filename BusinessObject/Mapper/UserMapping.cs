@@ -27,7 +27,14 @@ namespace BusinessObject.Mapper
 
             CreateMap<User, SearchAccountByNameDTO>().ReverseMap();
 
-            
+            CreateMap<User, CreateAccountDTO>().ReverseMap();
+
+            CreateMap<User, UpdateAccountDTO>()
+                .ForMember(dest => dest.userName, opt => opt.MapFrom(src => src.UserName))
+                .ForMember(dest => dest.password, opt => opt.MapFrom(src => src.Password))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.Role))
+                .ReverseMap();
         }
         
 
