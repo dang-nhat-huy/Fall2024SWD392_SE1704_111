@@ -17,5 +17,7 @@ namespace Repository.IRepository
         Task<User?> GetUserByIdAsync(int userId);
 
         Task<List<User?>> GetUserByNameAsync(string fullName);
+
+        Task<User?> GetUserByUserNameAsync(string userName);
     }
 }

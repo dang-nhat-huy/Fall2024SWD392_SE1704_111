@@ -62,19 +62,29 @@ namespace Service.Service
                 var user = await _jWTService.GetCurrentUserAsync();
                 if (user == null)
                 {
-                    //Nếu người dùng chưa đăng nhập
-                    RegisterRequestDTO registerRequestDTO = new RegisterRequestDTO();
-                    registerRequestDTO.userName = bookingRequest.UserName;
-                    registerRequestDTO.phone = bookingRequest.Phone;
-                    var registUser = _mapper.Map<User>(registerRequestDTO);
-
-                    //Tạo  mới người dùng với 2 field UserName và Password
-                    var createAccountResponse = await _unitOfWork.UserRepository.CreateAsync(registUser);
-                    if (createAccountResponse<=0)
+                    // Kiểm tra xem UserName đã tồn tại hay chưa
+                    var existingUser = await _unitOfWork.UserRepository.GetUserByUserNameAsync(bookingRequest.UserName);
+                    if(existingUser != null)
                     {
-                        return new ResponseDTO(Const.FAIL_CREATE_CODE,"Create Account Fail");
+                        customerId = existingUser.UserId;
                     }
-                    customerId = registUser.UserId; // Sử dụng UserId của người dùng mới
+                    else
+                    {
+                        //Nếu người dùng chưa đăng nhập
+                        RegisterRequestDTO registerRequestDTO = new RegisterRequestDTO();
+                        registerRequestDTO.userName = bookingRequest.UserName;
+                        registerRequestDTO.phone = bookingRequest.Phone;
+                        var registUser = _mapper.Map<User>(registerRequestDTO);
+
+                        //Tạo  mới người dùng với 2 field UserName và Password
+                        var createAccountResponse = await _unitOfWork.UserRepository.CreateAsync(registUser);
+                        if (createAccountResponse <= 0)
+                        {
+                            return new ResponseDTO(Const.FAIL_CREATE_CODE, "Create Account Fail");
+                        }
+                        customerId = registUser.UserId; // Sử dụng UserId của người dùng mới
+                    }
+                    
                 }
                 else
                 {
@@ -83,30 +93,34 @@ namespace Service.Service
                 }
                 double? totalPrice = 0;
 
-                // kiểm tra Service có tồn tại không
-                if (bookingRequest.ServiceId != null) {
-                    
-                    foreach (var serviceId in bookingRequest.ServiceId)
-                    {
-                        var service = await _unitOfWork.HairServiceRepository.GetByIdAsync(serviceId);
-                        if (service == null)
-                        {
-                            return new ResponseDTO(400, $"Service with ID {serviceId} does not exist.");
-                        }
-                        totalPrice += service.Price;
-                    }
+                // Kiểm tra ServiceId
+                if (bookingRequest.ServiceId == null || !bookingRequest.ServiceId.Any())
+                {
+                    return new ResponseDTO(400, Const.FAIL_READ_MSG);
                 }
 
-                // kiểm tra Stylist có tồn tại không
-                if (bookingRequest.StylistId != null)
+                foreach (var serviceId in bookingRequest.ServiceId)
                 {
-                    foreach (var stylistId in bookingRequest.StylistId)
+                    var service = await _unitOfWork.HairServiceRepository.GetByIdAsync(serviceId);
+                    if (service == null)
                     {
-                        var stylist = await _unitOfWork.UserRepository.GetByIdAsync(stylistId);
-                        if (stylist == null || stylist.Role != UserRole.Stylist)
-                        {
-                            return new ResponseDTO(400, $"Stylist with ID {stylistId} does not exist or not a stylist.");
-                        }
+                        return new ResponseDTO(400, $"Service with ID {serviceId} does not exist.");
+                    }
+                    totalPrice += service.Price;
+                }
+
+                // Kiểm tra StylistId
+                if (bookingRequest.StylistId == null || !bookingRequest.StylistId.Any())
+                {
+                    return new ResponseDTO(400, Const.FAIL_READ_MSG);
+                }
+
+                foreach (var stylistId in bookingRequest.StylistId)
+                {
+                    var stylist = await _unitOfWork.UserRepository.GetByIdAsync(stylistId);
+                    if (stylist == null || stylist.Role != UserRole.Stylist)
+                    {
+                        return new ResponseDTO(400, $"Stylist with ID {stylistId} does not exist or is not a stylist.");
                     }
                 }
 
@@ -114,7 +128,7 @@ namespace Service.Service
                 var schedule = await _unitOfWork.UserRepository.GetByIdAsync(bookingRequest.ScheduleId);
                 if (schedule == null)
                 {
-                    return new ResponseDTO(400, $"Stylist with ID {bookingRequest.ScheduleId} does not exist or not a stylist.");
+                    return new ResponseDTO(400, $"Stylist with ID {bookingRequest.ScheduleId} does not exist.");
                 }
 
                 // Tạo một đối tượng Booking mới từ DTO

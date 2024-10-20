@@ -40,5 +40,10 @@ namespace Repository.Repository
                 .Where(u => u.UserName.ToLower().StartsWith(fullName.ToLower()))
                 .ToListAsync(); // Trả về danh sách
         }
+
+        public async Task<User?> GetUserByUserNameAsync(string userName)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+        }
     }
 }
