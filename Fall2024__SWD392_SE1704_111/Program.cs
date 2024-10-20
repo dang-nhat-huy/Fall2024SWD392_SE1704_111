@@ -96,6 +96,7 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 builder.Services.AddScoped<IServicesStylistRepository, ServicesStylistRepository>();
+builder.Services.AddScoped<IBookingDetailRepository, BookingDetailRepository>();
 
 //Service
 builder.Services.AddScoped<IUserService, UserService>();
@@ -107,6 +108,7 @@ builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
 builder.Services.AddScoped<IServicesStylistServices, ServicesStylistServices>();
 builder.Services.AddScoped<IJWTService, JWTService>();
+builder.Services.AddScoped<IBookingDetailService, BookingDetailService>();
 
 //UserProfile
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
