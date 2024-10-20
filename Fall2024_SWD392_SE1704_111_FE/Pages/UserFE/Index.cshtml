@@ -18,6 +18,11 @@
 
 <h2>Account Management</h2>
 
+<form method="post">
+    <input type="text" name="searchValue" value="@Model.searchValue" placeholder="Search by name" />
+    <button type="submit">Search</button>
+</form>
+
 <p>
     <a asp-page="Create">Create New</a>
 </p>

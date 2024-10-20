@@ -126,6 +126,21 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu thành công
         }
 
+        [HttpGet("GetUserByUsernamePaging/{userName}")]
+        public async Task<IActionResult> GetUserByUsernamePaging([FromRoute] string userName, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+            // Gọi service để lấy danh sách người dùng
+            var response = await _userService.GetUserPagingByNameAsync(userName, pageNumber, pageSize);
+
+            // Trả về phản hồi
+            if (response == null)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
+        }
+
         [HttpPost("CreateAccount")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateAccountDTO createRequest)
         {
