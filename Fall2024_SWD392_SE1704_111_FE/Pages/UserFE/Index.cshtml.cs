@@ -14,6 +14,7 @@ using Microsoft.DotNet.MSIdentity.Shared;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Principal;
 using System.Drawing;
+using System.Data;
 
 namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
 {
@@ -64,7 +65,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                 if (response.IsSuccessStatusCode)
                 {
                     var role = HttpContext.Session.GetString("Role");
-                    if (role == "Admin")
+                    if (role == "Admin" || role == "Manager")
                     {
                         // Lấy thông tin ID của người dùng hiện tại từ token hoặc session
                         var currentUserId = HttpContext.Session.GetString("UserId");
@@ -79,6 +80,11 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
 
                         // Lọc danh sách để không bao gồm người dùng đang đăng nhập
                         Users = Users.Where(u => u.UserId.ToString() != currentUserId).ToList();
+
+                        if(role == "Manager")
+                        {
+                            Users = Users.Where(u => u.UserId.ToString() != currentUserId && u.Role.ToString() != "Admin").ToList();
+                        }
 
                         //phân trang cho list
                         var countJson = JsonConvert.SerializeObject(dto.TotalCount);
@@ -147,6 +153,19 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                     // Deserialize `dto.Data` to `User`
                     var usersListJson = JsonConvert.SerializeObject(dto.Items);
                     Users = JsonConvert.DeserializeObject<IList<User>>(usersListJson)!;
+
+                    var role = HttpContext.Session.GetString("Role");
+
+                    // Lấy thông tin ID của người dùng hiện tại từ token hoặc session
+                    var currentUserId = HttpContext.Session.GetString("UserId");
+
+                    // Lọc danh sách để không bao gồm người dùng đang đăng nhập
+                    Users = Users.Where(u => u.UserId.ToString() != currentUserId).ToList();
+
+                    if (role == "Manager")
+                    {
+                        Users = Users.Where(u => u.UserId.ToString() != currentUserId && u.Role.ToString() != "Admin").ToList();
+                    }
 
                     //phân trang cho list
                     var countJson = JsonConvert.SerializeObject(dto.TotalCount);

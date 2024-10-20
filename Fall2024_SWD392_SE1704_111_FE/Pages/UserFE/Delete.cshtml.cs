@@ -36,6 +36,11 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                     TempData["error"] = "You are not authorized to access this page";
                     return RedirectToPage("../logout");
                 }
+                else if (role != null && !role.Equals("Manager"))
+                {
+                    TempData["error"] = "You are not authorized to access this page";
+                    return RedirectToPage("../logout");
+                }
 
                 jwt = jwt.ToString();
                 string url = "https://localhost:7211/api/v1/users/GetUserById/" + id;
