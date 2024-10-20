@@ -225,6 +225,33 @@ namespace Service.Service
             }
         }
 
+        public async Task<PagedResult<User>> GetUserPagingByNameAsync(string userName, int pageNumber, int pageSize)
+        {
+            try
+            {
+                // Gọi repository để lấy danh sách người dùng theo tên
+                var users =  _unitOfWork.UserRepository.GetListUserByUserName(userName);
+
+                // Kiểm tra nếu danh sách rỗng
+                if (users == null)
+                {
+                    throw new Exception();
+                }
+
+                //// Sử dụng AutoMapper để ánh xạ các entity sang DTO
+                //var result = _mapper.Map<List<UserListDTO>>(users);
+
+                var usersQuery = users.AsQueryable();
+
+                return await Paging.GetPagedResultAsync(usersQuery, pageNumber, pageSize);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu xảy ra
+                return new PagedResult<User>();
+            }
+        }
+
         public async Task<ResponseDTO> CreateAccountAsync(CreateAccountDTO request)
         {
             try

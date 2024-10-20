@@ -45,5 +45,11 @@ namespace Repository.Repository
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
         }
+
+        public IQueryable<User> GetListUserByUserName(string userName)
+        {
+            return _context.Users
+                .Where(u => u.UserName.ToLower().StartsWith(userName.ToLower()));
+        }
     }
 }
