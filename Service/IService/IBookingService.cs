@@ -15,5 +15,7 @@ namespace Service.IService
         Task<ResponseDTO> ChangeBookingStatus(ChangebookingStatusDTO request, int bookingId);
 
         Task<ResponseDTO> CreateBooking(BookingRequestDTO bookingRequest);
+
+        Task<ResponseDTO> GetBookingHistoryOfCurrentUser();
     }
 }

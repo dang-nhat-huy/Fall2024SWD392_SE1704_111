@@ -58,6 +58,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost("changeStatus/{id}")]
         public async Task<IActionResult> ChangeStatusAccount([FromRoute] int id)
         {
@@ -111,6 +112,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu thành công
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [HttpGet("PagingUserList")]
         public async Task<IActionResult> GetUserPaging([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
         {
@@ -126,6 +128,22 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu thành công
         }
 
+        [HttpGet("GetUserByUsernamePaging/{userName}")]
+        public async Task<IActionResult> GetUserByUsernamePaging([FromRoute] string userName, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+            // Gọi service để lấy danh sách người dùng
+            var response = await _userService.GetUserPagingByNameAsync(userName, pageNumber, pageSize);
+
+            // Trả về phản hồi
+            if (response == null)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpPost("CreateAccount")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateAccountDTO createRequest)
         {
@@ -146,6 +164,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("updateAccount/{id}")]
         public async Task<IActionResult> UpdateAccountAsync([FromBody] UpdateAccountDTO request, [FromRoute] int id)
         {

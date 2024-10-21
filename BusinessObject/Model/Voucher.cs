@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using static BusinessObject.VoucherEnum;
 
 namespace BusinessObject.Model
@@ -21,6 +22,7 @@ namespace BusinessObject.Model
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Booking> Bookings { get; set; }
     }
 }

@@ -21,5 +21,6 @@ namespace Service.IService
         Task<PagedResult<User>> GetAllUserPagingAsync(int pageNumber, int pageSize);
         Task<ResponseDTO> CreateAccountAsync(CreateAccountDTO request);
         Task<ResponseDTO> UpdateAccountById(int userId, UpdateAccountDTO request);
+        Task<PagedResult<User>> GetUserPagingByNameAsync(string fullName, int pageNumber, int pageSize);
     }
 }

@@ -18,8 +18,21 @@
 
 <h2>Account Management</h2>
 
+<form method="post">
+    <input type="text" name="searchValue" value="@Model.searchValue" placeholder="Search by name" />
+    <button type="submit">Search</button>
+</form>
+
 <p>
-    <a asp-page="Create">Create New</a>
+    
+    @if (role!.Equals("Admin"))
+    {
+        <a asp-page="Create">Create New</a>        
+    }
+    else if (role!.Equals("Manager"))
+    {
+
+    }
 </p>
 <table class="table">
     <thead>

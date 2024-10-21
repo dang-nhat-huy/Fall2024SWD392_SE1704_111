@@ -26,5 +26,17 @@ namespace Repository.Repository
             _context.Add(entity);
             return await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Booking>> GetBookingHistoryByCustomerIdAsync(int customerId)
+        {
+            return await _context.Bookings
+                .Where(b => b.CustomerId == customerId)
+                .Include(b => b.BookingDetails)
+                    .ThenInclude(bd => bd.Service)
+                .Include(b => b.BookingDetails)  
+                    .ThenInclude(bd => bd.Stylist)
+                .Include(b => b.Schedule)
+                .ToListAsync();
+        }
     }
 }

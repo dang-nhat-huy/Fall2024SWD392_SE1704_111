@@ -112,7 +112,7 @@ namespace BusinessObject.RequestDTO
             public string? description { get; set; }
             public int? price { get; set; }
             public TimeSpan? estimateTime { get; set; }
-           
+
         }
         public class UpdateServiceDTO
         {
@@ -123,7 +123,7 @@ namespace BusinessObject.RequestDTO
             public string? description { get; set; }
             public int? price { get; set; }
             public TimeSpan? estimateTime { get; set; }
-        
+
         }
 
         public class RemoveServiceDTO
@@ -148,7 +148,7 @@ namespace BusinessObject.RequestDTO
 
         public class RemoveScheduleDTO
         {
-           public int? Status { get; set; }
+            public int? Status { get; set; }
         }
 
         public class CreateAccountDTO
@@ -180,5 +180,91 @@ namespace BusinessObject.RequestDTO
             [Required]
             public UserRole? RoleId { get; set; }
         }
+
+        public class BookingHistoryDTO
+        {
+            public int ServiceId { get; set; }
+            public string ServiceName { get; set; }
+            public int UserId { get; set; }
+            public string Username { get; set; }
+            public int ScheduleId { get; set; }
+            public DateTime StartDate { get; set; }
+            public DateTime EndDate { get; set; }
+            public double TotalPrice { get; set; }
+        }
+
+        public class UpdateVoucherDTO
+        {
+            [Range(0, double.MaxValue, ErrorMessage = "Discount amount must be a positive value.")]
+            public double? DiscountAmount { get; set; }
+            [DataType(DataType.Date)]
+            [DateInFuture(ErrorMessage = "Start date must not be in the past.")]
+            public DateTime? StartDate { get; set; }
+            [DataType(DataType.Date)]
+            [DateInFuture(ErrorMessage = "End date must not be in the past.")]
+            [EndDateValidation("StartDate", ErrorMessage = "End date must be greater than start date.")]
+            public DateTime? EndDate { get; set; }
+        }
+
+        public class CreateVoucherDTO
+        {
+            [Range(0, double.MaxValue, ErrorMessage = "Discount amount must be a positive value.")]
+            public double? DiscountAmount { get; set; }
+            [DataType(DataType.Date)]
+            [DateInFuture(ErrorMessage = "Start date must not be in the past.")]
+            public DateTime? StartDate { get; set; }
+            [DataType(DataType.Date)]
+            [DateInFuture(ErrorMessage = "End date must not be in the past.")]
+            [EndDateValidation("StartDate", ErrorMessage = "End date must be greater than start date.")]
+            public DateTime? EndDate { get; set; }
+        }
+
+        public class DateInFuture : ValidationAttribute
+        {
+            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            {
+                if (value != null)
+                {
+                    var date = (DateTime)value;
+                    if (date < DateTime.Now)
+                    {
+                        return new ValidationResult(ErrorMessage);
+                    }
+                }
+                return ValidationResult.Success;
+            }
+        }
+
+        public class EndDateValidation : ValidationAttribute
+        {
+            private readonly string _comparisonProperty;
+
+            public EndDateValidation(string comparisonProperty)
+            {
+                _comparisonProperty = comparisonProperty;
+            }
+
+            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            {
+                // Lấy giá trị của StartDate từ đối tượng đang được kiểm tra
+                var startDateValue = validationContext.ObjectInstance.GetType()
+                                    .GetProperty(_comparisonProperty)
+                                    ?.GetValue(validationContext.ObjectInstance, null);
+
+                if (value != null && startDateValue != null)
+                {
+                    var endDate = (DateTime)value;
+                    var startDate = (DateTime)startDateValue;
+
+                    if (endDate <= startDate)
+                    {
+                        return new ValidationResult(ErrorMessage);
+                    }
+                }
+                return ValidationResult.Success;
+            }
+        }
+
+
     }
 }

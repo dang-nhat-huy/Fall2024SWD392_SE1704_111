@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BusinessObject.RequestDTO.RequestDTO;
 using static BusinessObject.VoucherEnum;
 
 namespace Service.Service
@@ -45,6 +46,76 @@ namespace Service.Service
                     return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, voucherDto);
                 }
 
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<ResponseDTO> ChangeStatusVoucherById(int voucherId)
+        {
+            try
+            {
+                // Lấy người dùng hiện tại
+                var voucher = await _unitOfWork.VoucherRepository.GetByIdAsync(voucherId);
+                if (voucher == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "Voucher not found !");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
+
+                voucher.Status = voucher.Status == VoucherStatusEnum.Active ? VoucherStatusEnum.Inactive : VoucherStatusEnum.Active;
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.VoucherRepository.UpdateAsync(voucher);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Change Voucher Status Succeed");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<ResponseDTO> UpdateVoucherById(int voucherId, UpdateVoucherDTO request)
+        {
+            try
+            {
+
+                var voucher = await _unitOfWork.VoucherRepository.GetByIdAsync(voucherId);
+                if (voucher == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "Voucher not found !");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
+                _mapper.Map(request, voucher);
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.VoucherRepository.UpdateAsync(voucher);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Change voucher Status Succeed");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<ResponseDTO> CreateVoucherAsync(CreateVoucherDTO request)
+        {
+            try
+            {
+                //AutoMapper from RegisterRequestDTO => User
+                var voucher = _mapper.Map<Voucher>(request);
+
+                voucher.CreateDate = DateTime.UtcNow;
+                voucher.Status = VoucherStatusEnum.Active;
+
+                await _unitOfWork.VoucherRepository.CreateAsync(voucher);
+                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "Voucher created successfully", request);
             }
             catch (Exception ex)
             {
