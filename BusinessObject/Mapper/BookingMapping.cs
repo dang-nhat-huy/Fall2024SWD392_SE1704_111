@@ -29,6 +29,17 @@ namespace BusinessObject.Mapper
 
 
             CreateMap<Booking, ChangebookingStatusDTO>().ReverseMap();
+
+            CreateMap<Booking, BookingHistoryDTO>()
+            .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
+            .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))
+            .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.Schedule.StartDate))
+            .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.Schedule.EndDate))
+            .ForMember(dest => dest.ServiceId, opt => opt.MapFrom(src => src.BookingDetails.FirstOrDefault().ServiceId))  
+            .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.BookingDetails.FirstOrDefault().Service.ServiceName))  
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.BookingDetails.FirstOrDefault().StylistId))  
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.BookingDetails.FirstOrDefault().Stylist.UserName))
+            .ReverseMap();  
         }
     }
 }

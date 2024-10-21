@@ -165,5 +165,33 @@ namespace Service.Service
             
         }
 
+        public async Task<ResponseDTO> GetBookingHistoryOfCurrentUser()
+        {
+            try
+            {
+                var user = await _jWTService.GetCurrentUserAsync();
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                }
+
+                // Lấy danh sách booking của user hiện tại từ repository
+                var bookings = await _unitOfWork.BookingRepository.GetBookingHistoryByCustomerIdAsync(user.UserId);
+
+                if (bookings == null || bookings.Count == 0)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "No booking history found.");
+                }
+
+                // Ánh xạ kết quả từ Booking sang BookingHistoryDTO
+                var bookingHistoryDto = _mapper.Map<List<BookingHistoryDTO>>(bookings);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, "Booking history retrieved successfully.", bookingHistoryDto);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
     }
 }

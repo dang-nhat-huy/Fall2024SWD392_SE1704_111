@@ -11,5 +11,7 @@ namespace Repository.IRepository
     {
         Task<Booking> GetBookingByIdAsync(int id);
         Task<int> CreateBookingAsync(Booking entity);
+
+        Task<List<Booking>> GetBookingHistoryByCustomerIdAsync(int customerId);
     }
 }
