@@ -15,6 +15,8 @@ namespace BusinessObject.Mapper
         public VoucherMapping() 
         {
             CreateMap<Voucher, VoucherDTO>().ReverseMap();
+            CreateMap<Voucher, UpdateVoucherDTO>().ReverseMap();
+            CreateMap<Voucher, CreateVoucherDTO>().ReverseMap();
         }
     }
 }
