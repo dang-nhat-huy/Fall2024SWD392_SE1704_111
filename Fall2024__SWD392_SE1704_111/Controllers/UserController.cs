@@ -58,7 +58,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost("changeStatus/{id}")]
         public async Task<IActionResult> ChangeStatusAccount([FromRoute] int id)
         {
@@ -112,7 +112,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu thành công
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Manager")]
         [HttpGet("PagingUserList")]
         public async Task<IActionResult> GetUserPaging([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
         {

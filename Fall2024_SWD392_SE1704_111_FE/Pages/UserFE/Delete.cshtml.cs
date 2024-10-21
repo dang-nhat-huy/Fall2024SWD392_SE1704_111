@@ -31,7 +31,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                     TempData["errorLogin"] = "You need to login to access this page";
                     return RedirectToPage("../Logout");
                 }
-                if (role != null && !role.Equals("Admin"))
+                if (role != null && !role.Equals("Admin") && !role.Equals("Manager"))
                 {
                     TempData["error"] = "You are not authorized to access this page";
                     return RedirectToPage("../logout");
