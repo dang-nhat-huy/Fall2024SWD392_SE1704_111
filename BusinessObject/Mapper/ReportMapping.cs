@@ -30,6 +30,8 @@ namespace BusinessObject.Mapper
                 .ReverseMap();
 
             CreateMap<RemoveReportDTO, Report>().ReverseMap();
+
+            CreateMap<ReportDTO, Report>().ReverseMap();
         }
     }
 }

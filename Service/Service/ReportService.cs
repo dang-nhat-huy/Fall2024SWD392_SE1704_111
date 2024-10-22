@@ -25,12 +25,14 @@ namespace Service.Service
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public ReportService(IUnitOfWork unitOfWork, IConfiguration config, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        private readonly IJWTService _jWTService;
+        public ReportService(IUnitOfWork unitOfWork, IConfiguration config, IMapper mapper, IHttpContextAccessor httpContextAccessor, IJWTService jWTService)
         {
             _unitOfWork = unitOfWork;
             _config = config;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _jWTService = jWTService;
         }
 
         private ClaimsPrincipal ValidateToken(string token)
@@ -46,6 +48,27 @@ namespace Service.Service
             };
 
             return tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+        }
+
+        public async Task<ResponseDTO> GetListReportAsync()
+        {
+            try
+            {
+                var report = await _unitOfWork.ReportRepository.GetAllAsync();
+
+                if (report == null || !report.Any())
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Empty List");
+                }
+
+                var result = _mapper.Map<List<ReportDTO>>(report);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception e)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, e.Message);
+            }
         }
 
         public async Task<ResponseDTO> CreateReportAsync(CreateReportDTO request)
@@ -77,11 +100,20 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Booking not found");
                 }
 
+                // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User not found !");
+                }
+
                 // Sử dụng AutoMapper 
                 var report = _mapper.Map<Report>(request);
 
                 report.StylistId = userId;
+                report.CreateBy = user.UserName;
                 report.CreateDate = DateTime.Now;
+                report.UpdateBy = user.UserName;
                 report.UpdateDate = DateTime.Now;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
@@ -125,14 +157,19 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "report not found");
                 }
 
-                // Sử dụng AutoMapper 
-                //var report = _mapper.Map<Report>(request);
+                // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User not found !");
+                }
 
                 _mapper.Map(request, report);
 
                 report.StylistId = userId;
                 report.CreateDate = DateTime.Now;
                 report.UpdateDate = DateTime.Now;
+                report.UpdateBy = user.UserName;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 var result = _unitOfWork.ReportRepository.UpdateReportAsync(report);
@@ -180,9 +217,17 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "report not found");
                 }
 
+                // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "User not found !");
+                }
+
                 // Sử dụng AutoMapper 
                 _mapper.Map(request, report);
                 report.UpdateDate = DateTime.Now;
+                report.UpdateBy = user.UserName;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 var result = _unitOfWork.ReportRepository.UpdateReportAsync(report);

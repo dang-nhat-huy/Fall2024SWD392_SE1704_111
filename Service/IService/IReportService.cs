@@ -16,5 +16,6 @@ namespace Service.IService
         Task<ResponseDTO> UpdateReportAsync(UpdateReportDTO request, int reportId);
 
         Task<ResponseDTO> ChangeReportStatusAsync(RemoveReportDTO request, int reportId);
+        Task<ResponseDTO> GetListReportAsync();
     }
 }

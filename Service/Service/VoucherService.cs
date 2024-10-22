@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.Model;
+using BusinessObject.Paging;
 using BusinessObject.ResponseDTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -49,6 +50,31 @@ namespace Service.Service
             }
             catch (Exception ex)
             {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<ResponseDTO> GetVoucherByIdAsync(int voucherId)
+        {
+            try
+            {
+                
+                var voucher = await _unitOfWork.VoucherRepository.GetVoucherById(voucherId);
+
+                // Kiểm tra nếu danh sách rỗng
+                if (voucher == null)
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "No vouchers found with the ID");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ các entity sang DTO
+                var result = _mapper.Map<VoucherDTO>(voucher);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu xảy ra
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
@@ -120,6 +146,23 @@ namespace Service.Service
             catch (Exception ex)
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<PagedResult<Voucher>> GetAllVoucherPagingAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var voucherList = _unitOfWork.VoucherRepository.GetAll();
+                if (voucherList == null)
+                {
+                    throw new Exception();
+                }
+                return await Paging.GetPagedResultAsync(voucherList.AsQueryable(), pageNumber, pageSize);
+            }
+            catch (Exception)
+            {
+                return new PagedResult<Voucher>();
             }
         }
     }

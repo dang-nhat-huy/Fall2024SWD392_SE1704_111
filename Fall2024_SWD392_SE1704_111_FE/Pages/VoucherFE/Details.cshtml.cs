@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject.Model;
 
-namespace Fall2024_SWD392_SE1704_111_FE.Pages.ReportFE
+namespace Fall2024_SWD392_SE1704_111_FE.Pages.VoucherFE
 {
     public class DetailsModel : PageModel
     {
@@ -18,23 +18,23 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.ReportFE
             _context = context;
         }
 
-      public Report Report { get; set; } = default!; 
+      public Voucher Voucher { get; set; } = default!; 
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Reports == null)
+            if (id == null || _context.Vouchers == null)
             {
                 return NotFound();
             }
 
-            var report = await _context.Reports.FirstOrDefaultAsync(m => m.ReportId == id);
-            if (report == null)
+            var voucher = await _context.Vouchers.FirstOrDefaultAsync(m => m.VoucherId == id);
+            if (voucher == null)
             {
                 return NotFound();
             }
             else 
             {
-                Report = report;
+                Voucher = voucher;
             }
             return Page();
         }
