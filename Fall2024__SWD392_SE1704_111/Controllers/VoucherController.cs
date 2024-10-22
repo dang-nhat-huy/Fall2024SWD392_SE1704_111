@@ -46,9 +46,9 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpPost("updateVoucher/{id}")]
-        public async Task<IActionResult> UpdateAccountAsync([FromBody] UpdateVoucherDTO request, [FromRoute] int id)
+        public async Task<IActionResult> UpdateVoucherAsync([FromBody] UpdateVoucherDTO request, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
