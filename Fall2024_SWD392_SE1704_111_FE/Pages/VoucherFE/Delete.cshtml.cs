@@ -6,57 +6,100 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject.Model;
+using BusinessObject.ResponseDTO;
+using Newtonsoft.Json;
 
 namespace Fall2024_SWD392_SE1704_111_FE.Pages.VoucherFE
 {
     public class DeleteModel : PageModel
     {
-        private readonly BusinessObject.Model.HairSalonBookingContext _context;
-
-        public DeleteModel(BusinessObject.Model.HairSalonBookingContext context)
-        {
-            _context = context;
-        }
 
         [BindProperty]
       public Voucher Voucher { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null || _context.Vouchers == null)
+            try
             {
-                return NotFound();
-            }
+                var role = HttpContext.Session.GetString("Role");
+                string? jwt = Request.Cookies["jwt"];
+                if (role == null || jwt == null)
+                {
+                    TempData["errorLogin"] = "You need to login to access this page";
+                    return RedirectToPage("../Logout");
+                }
+                if (role != null && !role.Equals("Admin") && !role.Equals("Manager"))
+                {
+                    TempData["error"] = "You are not authorized to access this page";
+                    return RedirectToPage("../logout");
+                }
 
-            var voucher = await _context.Vouchers.FirstOrDefaultAsync(m => m.VoucherId == id);
+                jwt = jwt.ToString();
+                string url = "https://localhost:7211/api/v1/voucher/GetVoucherById/" + id;
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Get
+                };
+                HttpResponseMessage response = await client.SendAsync(request);
 
-            if (voucher == null)
-            {
-                return NotFound();
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var dto = JsonConvert.DeserializeObject<ResponseDTO>(jsonResponse)!;
+
+                    // Deserialize `dto.Data` to `List<UserListDTO>`
+                    var usersListJson = JsonConvert.SerializeObject(dto.Data);
+                    Voucher = JsonConvert.DeserializeObject<Voucher>(usersListJson);
+                }
+                else
+                {
+                    TempData["error"] = "Error Getting Data";
+                }
+                return Page();
             }
-            else 
+            catch (Exception)
             {
-                Voucher = voucher;
+                TempData["error"] = "An error occurred while processing your request. Please try again later";
+                return Page();
             }
-            return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (id == null || _context.Vouchers == null)
+            try
             {
-                return NotFound();
-            }
-            var voucher = await _context.Vouchers.FindAsync(id);
+                var voucherId = Voucher.VoucherId;
+                string? jwt = Request.Cookies["jwt"]!.ToString();
+                string url = "https://localhost:7211/api/v1/voucher/changeVoucherStatus/" + voucherId;
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
 
-            if (voucher != null)
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Post
+                };
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["success"] = "Change Successfully";
+                    return RedirectToPage("./Index");
+                }
+                else
+                {
+                    TempData["error"] = "Error Getting Data";
+                }
+                return Page();
+            }
+            catch (Exception)
             {
-                Voucher = voucher;
-                _context.Vouchers.Remove(Voucher);
-                await _context.SaveChangesAsync();
+                TempData["error"] = "An error occurred while processing your request. Please try again later";
+                return Page();
             }
-
-            return RedirectToPage("./Index");
         }
     }
 }

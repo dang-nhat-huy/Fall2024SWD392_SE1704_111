@@ -92,15 +92,30 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpGet("PagingVoucherList")]
-        public async Task<IActionResult> GetUserPaging([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        public async Task<IActionResult> GetVoucherPaging([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
         {
             // Gọi service để lấy danh sách người dùng
             var response = await _voucherService.GetAllVoucherPagingAsync(pageNumber, pageSize);
 
             // Trả về phản hồi
             if (response == null)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
+        }
+
+        [HttpGet("GetVoucherById/{voucherId}")]
+        public async Task<IActionResult> GetVoucherById([FromRoute] int voucherId)
+        {
+            
+            var response = await _voucherService.GetVoucherByIdAsync(voucherId);
+
+            // Trả về phản hồi
+            if (response.Status != Const.SUCCESS_READ_CODE)
             {
                 return BadRequest(response); // Trả về mã lỗi nếu không thành công
             }

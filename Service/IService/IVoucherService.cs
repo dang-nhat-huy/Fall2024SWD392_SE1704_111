@@ -16,5 +16,6 @@ namespace Service.IService
         Task<ResponseDTO> UpdateVoucherById(int voucherId, UpdateVoucherDTO request);
         Task<ResponseDTO> CreateVoucherAsync(CreateVoucherDTO request);
         Task<PagedResult<Voucher>> GetAllVoucherPagingAsync(int pageNumber, int pageSize);
+        Task<ResponseDTO> GetVoucherByIdAsync(int voucherId);
     }
 }

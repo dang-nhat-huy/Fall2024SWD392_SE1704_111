@@ -238,17 +238,21 @@ namespace Service.Service
         {
             try
             {
+                // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+
                 // Gọi repository để lấy danh sách người dùng theo tên
-                var users =  _unitOfWork.UserRepository.GetListUserByUserName(userName);
+                var users =  _unitOfWork.UserRepository.GetUsersByNameExcludingCurrentUserAndRoleAsync(user.UserId, user.Role, userName);
 
                 // Kiểm tra nếu danh sách rỗng
                 if (users == null)
                 {
                     throw new Exception();
                 }
-
-                //// Sử dụng AutoMapper để ánh xạ các entity sang DTO
-                //var result = _mapper.Map<List<UserListDTO>>(users);
 
                 var usersQuery = users.AsQueryable();
 
