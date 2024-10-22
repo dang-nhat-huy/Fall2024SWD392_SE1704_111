@@ -20,5 +20,6 @@ namespace Repository.IRepository
 
         Task<User?> GetUserByUserNameAsync(string userName);
         IQueryable<User> GetListUserByUserName(string userName);
+        IQueryable<User> GetUsersExcludingCurrentUserAndRoleAsync(int currentUserId, UserRole? role);
     }
 }

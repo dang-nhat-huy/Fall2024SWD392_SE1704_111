@@ -51,5 +51,19 @@ namespace Repository.Repository
             return _context.Users
                 .Where(u => u.UserName.ToLower().StartsWith(userName.ToLower()));
         }
+
+        public IQueryable<User> GetUsersExcludingCurrentUserAndRoleAsync(int currentUserId, UserRole? role)
+        {
+            // Lấy danh sách người dùng và loại bỏ người dùng hiện tại
+            var users = _context.Users.Where(u => u.UserId != currentUserId);
+
+            // Nếu vai trò là "Manager", loại bỏ luôn những người dùng có vai trò "Admin"
+            if (role.HasValue && role.Value == UserRole.Manager)
+            {
+                users = users.Where(u => u.Role != UserRole.Admin); // Lọc ra những người không phải "Admin"
+            }
+
+            return users; // Trả về IQueryable<User>
+        }
     }
 }

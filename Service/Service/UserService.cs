@@ -212,12 +212,21 @@ namespace Service.Service
         {
             try
             {
-                var userList = _unitOfWork.UserRepository.GetAll();
+                // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+
+                var userList = _unitOfWork.UserRepository.GetUsersExcludingCurrentUserAndRoleAsync(user.UserId, user.Role);
                 if (userList == null)
                 {
                     throw new Exception();
                 }
-                return await Paging.GetPagedResultAsync(userList.AsQueryable(), pageNumber, pageSize);
+                var userQuery = userList.AsQueryable();
+
+                return await Paging.GetPagedResultAsync(userQuery, pageNumber, pageSize);
             }
             catch (Exception)
             {
