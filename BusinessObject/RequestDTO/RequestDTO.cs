@@ -193,6 +193,15 @@ namespace BusinessObject.RequestDTO
             public double TotalPrice { get; set; }
         }
 
+        public class VnPaymentRequestModel
+        {
+            public int BookingId { get; set; }
+            public string FullName { get; set; }
+            public string Description { get; set; }
+            public double? TotalPrice { get; set; }
+            public DateTime CreateDate { get; set; }
+        }
+
         public class UpdateVoucherDTO
         {
             [Range(0, double.MaxValue, ErrorMessage = "Discount amount must be a positive value.")]
