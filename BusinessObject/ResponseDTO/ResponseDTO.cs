@@ -136,6 +136,7 @@ namespace BusinessObject.ResponseDTO
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public int? Status { get; set; }
+        
     }
 
     public class ReportDTO
@@ -143,6 +144,8 @@ namespace BusinessObject.ResponseDTO
         public string? ReportName { get; set; }
         public string? ReportLink { get; set; }
         public ReportStatusEnum? Status { get; set; }
+        public string? CreateBy { get; set; }
+        public string? UpdateBy { get; set; }
     }
 }
 
