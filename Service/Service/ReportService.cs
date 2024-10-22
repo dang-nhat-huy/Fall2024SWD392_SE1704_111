@@ -48,6 +48,27 @@ namespace Service.Service
             return tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
         }
 
+        public async Task<ResponseDTO> GetListReportAsync()
+        {
+            try
+            {
+                var report = await _unitOfWork.ReportRepository.GetAllAsync();
+
+                if (report == null || !report.Any())
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Empty List");
+                }
+
+                var result = _mapper.Map<List<ReportDTO>>(report);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception e)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, e.Message);
+            }
+        }
+
         public async Task<ResponseDTO> CreateReportAsync(CreateReportDTO request)
         {
             try

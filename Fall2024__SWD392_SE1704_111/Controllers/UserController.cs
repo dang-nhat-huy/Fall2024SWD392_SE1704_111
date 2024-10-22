@@ -76,9 +76,14 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         }
 
         [HttpGet("usersList")]
-        public async Task<IActionResult> GetListServices()
+        public async Task<IActionResult> GetListUser()
         {
             var result = await _userService.GetListUsersAsync();
+            // Kiểm tra kết quả và trả về phản hồi phù hợp
+            if (result.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(result); // Trả về mã lỗi 400 với thông báo lỗi từ ResponseDTO
+            }
             return Ok(result);
         }
 

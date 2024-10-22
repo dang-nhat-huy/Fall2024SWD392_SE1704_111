@@ -1,4 +1,5 @@
-﻿using BusinessObject.ResponseDTO;
+﻿using BusinessObject.Model;
+using BusinessObject.ResponseDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace Service.IService
         Task<ResponseDTO> ChangeStatusVoucherById(int voucherId);
         Task<ResponseDTO> UpdateVoucherById(int voucherId, UpdateVoucherDTO request);
         Task<ResponseDTO> CreateVoucherAsync(CreateVoucherDTO request);
+        Task<PagedResult<Voucher>> GetAllVoucherPagingAsync(int pageNumber, int pageSize);
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BusinessObject.ReportEnum;
 
 namespace BusinessObject.ResponseDTO
 {
@@ -137,5 +138,11 @@ namespace BusinessObject.ResponseDTO
         public int? Status { get; set; }
     }
 
+    public class ReportDTO
+    {
+        public string? ReportName { get; set; }
+        public string? ReportLink { get; set; }
+        public ReportStatusEnum? Status { get; set; }
+    }
 }
 

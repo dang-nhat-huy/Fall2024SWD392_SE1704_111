@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.Model;
+using BusinessObject.Paging;
 using BusinessObject.ResponseDTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -120,6 +121,23 @@ namespace Service.Service
             catch (Exception ex)
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<PagedResult<Voucher>> GetAllVoucherPagingAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var voucherList = _unitOfWork.VoucherRepository.GetAll();
+                if (voucherList == null)
+                {
+                    throw new Exception();
+                }
+                return await Paging.GetPagedResultAsync(voucherList.AsQueryable(), pageNumber, pageSize);
+            }
+            catch (Exception)
+            {
+                return new PagedResult<Voucher>();
             }
         }
     }

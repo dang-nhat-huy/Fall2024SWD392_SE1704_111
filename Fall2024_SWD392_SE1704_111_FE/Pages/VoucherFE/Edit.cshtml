@@ -1,0 +1,70 @@
+﻿@page
+@model Fall2024_SWD392_SE1704_111_FE.Pages.VoucherFE.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Voucher</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Voucher.VoucherId" />
+            <div class="form-group">
+                <label asp-for="Voucher.DiscountAmount" class="control-label"></label>
+                <input asp-for="Voucher.DiscountAmount" class="form-control" />
+                <span asp-validation-for="Voucher.DiscountAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.StartDate" class="control-label"></label>
+                <input asp-for="Voucher.StartDate" class="form-control" />
+                <span asp-validation-for="Voucher.StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.EndDate" class="control-label"></label>
+                <input asp-for="Voucher.EndDate" class="form-control" />
+                <span asp-validation-for="Voucher.EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.Status" class="control-label"></label>
+                <input asp-for="Voucher.Status" class="form-control" />
+                <span asp-validation-for="Voucher.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.CreateDate" class="control-label"></label>
+                <input asp-for="Voucher.CreateDate" class="form-control" />
+                <span asp-validation-for="Voucher.CreateDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.CreateBy" class="control-label"></label>
+                <input asp-for="Voucher.CreateBy" class="form-control" />
+                <span asp-validation-for="Voucher.CreateBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.UpdateDate" class="control-label"></label>
+                <input asp-for="Voucher.UpdateDate" class="form-control" />
+                <span asp-validation-for="Voucher.UpdateDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.UpdateBy" class="control-label"></label>
+                <input asp-for="Voucher.UpdateBy" class="form-control" />
+                <span asp-validation-for="Voucher.UpdateBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

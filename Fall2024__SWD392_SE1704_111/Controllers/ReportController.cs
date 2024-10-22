@@ -84,5 +84,17 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
+
+        [HttpGet("reportList")]
+        public async Task<IActionResult> GetListUser()
+        {
+            var result = await _reportService.GetListReportAsync();
+            // Kiểm tra kết quả và trả về phản hồi phù hợp
+            if (result.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(result); // Trả về mã lỗi 400 với thông báo lỗi từ ResponseDTO
+            }
+            return Ok(result);
+        }
     }
 }
