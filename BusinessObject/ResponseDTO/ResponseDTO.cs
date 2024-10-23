@@ -136,7 +136,6 @@ namespace BusinessObject.ResponseDTO
         public DateTime? EndDate { get; set; }
         public int? Status { get; set; }
     }
-
     public class BookingDetailResponseDTO
     {
         public int BookingDetailID { get; set; }
@@ -146,11 +145,7 @@ namespace BusinessObject.ResponseDTO
         public DateTime? CreateDate { get; set; }
         public string CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
-        public string UpdateBy
-        {
-            get;
-            set;
-        }
+        public string UpdateBy {get; set;}
     }
 }
 
