@@ -156,7 +156,15 @@ namespace Service.Service
                 {
                     return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
                 }
-                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG, booking);
+                var checkoutRequest = new CheckoutRequestDTO
+                {
+                    TotalPrice = booking.TotalPrice,
+                    CreateDate = DateTime.Now,
+                    Description = $"{user.UserName} {user.Phone}",
+                    FullName = user.UserName,
+                    BookingId = booking.BookingId
+                };
+                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG, checkoutRequest);
             }
             catch (Exception ex)
             {

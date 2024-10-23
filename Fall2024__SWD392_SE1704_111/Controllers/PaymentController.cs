@@ -19,33 +19,33 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         }
 
         [HttpPost("checkout")]
-        public IActionResult CheckOut(Booking booking,string payment)
+        public IActionResult CheckOut([FromBody] CheckoutRequestDTO checkoutRequest, string payment)
         {
             if (payment == "VNPay")
             {
                 var vnPayModel = new VnPaymentRequestModel
                 {
-                    TotalPrice = booking.TotalPrice,
-                    CreateDate = DateTime.Now,
-                    Description = $"{booking.Customer.UserName} {booking.Customer.Phone}",
-                    FullName = booking.Customer.UserName,
-                    BookingId = booking.BookingId,
+                    TotalPrice = checkoutRequest.TotalPrice,
+                    CreateDate = checkoutRequest.CreateDate,
+                    Description = checkoutRequest.Description,
+                    FullName = checkoutRequest.FullName,
+                    BookingId = checkoutRequest.BookingId,
                 };
-                return Redirect(_paymentService.CreatePaymentUrl(HttpContext, vnPayModel));
+                return Ok(new { paymentUrl = _paymentService.CreatePaymentUrl(HttpContext, vnPayModel) });
             }
-            return BadRequest();
+            return BadRequest("Invalid payment method");
         }
 
-        [HttpGet("PaymentCallBack")]
+        [HttpPost("PaymentCallBack")]
         public IActionResult PaymentCallBack()
         {
             var response = _paymentService.PaymentExecute(Request.Query);
 
             if (response == null || response.VnPayResponseCode != "00")
             {
-                return BadRequest();
+                return BadRequest("Payment failed or was canceled");
             }
-            return Ok("Success");
+            return Ok("Payment succeeded");
         }
     }
 }
