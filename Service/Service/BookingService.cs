@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static BusinessObject.RequestDTO.RequestDTO;
+using static BusinessObject.VoucherEnum;
 
 namespace Service.Service
 {
@@ -109,6 +110,29 @@ namespace Service.Service
                     totalPrice += service.Price;
                 }
 
+                // Kiểm tra Voucher nếu có VoucherId
+                if (bookingRequest.VoucherId.HasValue)
+                {
+                    var voucher = await _unitOfWork.VoucherRepository.GetByIdAsync(bookingRequest.VoucherId.Value);
+                    if (voucher == null)
+                    {
+                        return new ResponseDTO(400, $"Voucher with ID {bookingRequest.VoucherId} does not exist.");
+                    }
+
+                    // Kiểm tra tính hợp lệ của voucher (ngày, trạng thái, v.v.)
+                    if (voucher.Status != VoucherStatusEnum.Active /*|| voucher.StartDate > DateTime.Now || voucher.EndDate < DateTime.Now*/)
+                    {
+                        return new ResponseDTO(400, "Voucher is not valid.");
+                    }
+
+                    // Giảm giá từ tổng giá nếu có DiscountAmount
+                    if (voucher.DiscountAmount.HasValue)
+                    {
+                        totalPrice -= voucher.DiscountAmount.Value;
+                        if (totalPrice < 0) totalPrice = 0; // Đảm bảo tổng giá không âm
+                    }
+                }
+
                 // Kiểm tra StylistId
                 if (bookingRequest.StylistId == null || !bookingRequest.StylistId.Any())
                 {
@@ -135,7 +159,7 @@ namespace Service.Service
                 var booking = _mapper.Map<Booking>(bookingRequest);
                 booking.CustomerId = customerId;
                 booking.CreateDate = DateTime.Now;
-                booking.Status = BookingStatus.InProgress;
+                booking.Status = BookingStatus.InQueue;
                 booking.TotalPrice = totalPrice;
                 // Thêm BookingDetails từ ServiceId và StylistId
                 booking.BookingDetails = new List<BookingDetail>();
@@ -160,8 +184,8 @@ namespace Service.Service
                 {
                     TotalPrice = booking.TotalPrice,
                     CreateDate = DateTime.Now,
-                    Description = $"{user.UserName} {user.Phone}",
-                    FullName = user.UserName,
+                    Description = $"{bookingRequest.UserName} {bookingRequest.Phone}",
+                    FullName = bookingRequest.UserName,
                     BookingId = booking.BookingId
                 };
                 return new ResponseDTO(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG, checkoutRequest);
