@@ -54,10 +54,10 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             if (response.Status != Const.SUCCESS_CREATE_CODE)
             {
-                return BadRequest(response); 
+                return BadRequest(response);
             }
 
-            return Ok(response); 
+            return Ok(response);
         }
 
         [Authorize]
@@ -70,15 +70,18 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
                 if (response.Status == Const.SUCCESS_READ_CODE)
                 {
-                    return Ok(response);  
+                    return Ok(response);
                 }
 
-                return BadRequest(response);  
+                return BadRequest(response);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = ex.Message });
             }
+            
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAllBookings(int page = 1, int pageSize = 10)
         {
@@ -86,5 +89,4 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(bookings);
         }
     }
-
 }

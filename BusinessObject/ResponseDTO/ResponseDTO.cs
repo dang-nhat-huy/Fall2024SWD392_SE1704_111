@@ -20,7 +20,7 @@ namespace BusinessObject.ResponseDTO
             Data = data;
         }
 
-        
+
     }
 
     public class PagedResult<T>
@@ -149,7 +149,7 @@ namespace BusinessObject.ResponseDTO
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public int? Status { get; set; }
-        
+
     }
 
     public class ReportDTO
@@ -159,16 +159,17 @@ namespace BusinessObject.ResponseDTO
         public ReportStatusEnum? Status { get; set; }
         public string? CreateBy { get; set; }
         public string? UpdateBy { get; set; }
-    public class BookingDetailResponseDTO
-    {
-        public int BookingDetailID { get; set; }
-        public int BookingID { get; set; }
-        public int StylistID { get; set; }
-        public int ServiceID { get; set; }
-        public DateTime? CreateDate { get; set; }
-        public string CreateBy { get; set; }
-        public DateTime? UpdateDate { get; set; }
-        public string UpdateBy {get; set;}
+        public class BookingDetailResponseDTO
+        {
+            public int BookingDetailID { get; set; }
+            public int BookingID { get; set; }
+            public int StylistID { get; set; }
+            public int ServiceID { get; set; }
+            public DateTime? CreateDate { get; set; }
+            public string CreateBy { get; set; }
+            public DateTime? UpdateDate { get; set; }
+            public string UpdateBy { get; set; }
+        }
     }
 }
 
