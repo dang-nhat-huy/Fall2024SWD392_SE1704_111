@@ -79,6 +79,12 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             {
                 return StatusCode(500, new { message = ex.Message });
             }
+        [HttpGet]
+        public async Task<IActionResult> GetAllBookings(int page = 1, int pageSize = 10)
+        {
+            var bookings = await _bookingService.GetAllBookingsAsync(page, pageSize);
+            return Ok(bookings);
         }
     }
+
 }
