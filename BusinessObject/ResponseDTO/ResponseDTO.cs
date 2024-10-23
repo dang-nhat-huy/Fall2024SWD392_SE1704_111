@@ -33,6 +33,19 @@ namespace BusinessObject.ResponseDTO
         public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
     }
 
+    public class VnPayResponseModel
+    {
+        public string VnPayResponseCode { get; set; }
+        public string Message { get; set; }
+        public string TransactionId { get; set; }
+        public string BookingId { get; set; }
+    }
+
+    public class PaymentType
+    {
+        public static string VNPAY = "VnPay";
+    }
+
     public class ServicesDTO
     {
         public int ServiceId { get; set; }

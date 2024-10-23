@@ -43,6 +43,15 @@ namespace BusinessObject.RequestDTO
 
         }
 
+        public class CheckoutRequestDTO
+        {
+            public double? TotalPrice { get; set; } // Tổng giá của booking
+            public DateTime CreateDate { get; set; } // Ngày tạo booking
+            public string Description { get; set; } // Mô tả booking
+            public string FullName { get; set; } // Tên khách hàng
+            public int BookingId { get; set; } // ID của booking
+        }
+
         public class UpdateUserProfileDTO
         {
             [Url(ErrorMessage = "Invalid URL format.")]
@@ -191,6 +200,15 @@ namespace BusinessObject.RequestDTO
             public DateTime StartDate { get; set; }
             public DateTime EndDate { get; set; }
             public double TotalPrice { get; set; }
+        }
+
+        public class VnPaymentRequestModel
+        {
+            public int BookingId { get; set; }
+            public string FullName { get; set; }
+            public string Description { get; set; }
+            public double? TotalPrice { get; set; }
+            public DateTime CreateDate { get; set; }
         }
 
         public class UpdateVoucherDTO

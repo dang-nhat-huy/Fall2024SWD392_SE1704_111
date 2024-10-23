@@ -25,11 +25,15 @@ namespace BusinessObject.Model
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
-
+        [JsonIgnore]
         public virtual User? Customer { get; set; }
+        [JsonIgnore]
         public virtual User? Manager { get; set; }
+        [JsonIgnore]
         public virtual Schedule? Schedule { get; set; }
+        [JsonIgnore]
         public virtual User? Staff { get; set; }
+        [JsonIgnore]
         public virtual Voucher? Voucher { get; set; }
         [JsonIgnore]
         public virtual ICollection<BookingDetail> BookingDetails { get; set; }

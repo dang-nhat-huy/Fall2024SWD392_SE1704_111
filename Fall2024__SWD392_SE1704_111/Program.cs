@@ -109,6 +109,7 @@ builder.Services.AddScoped<IVoucherService, VoucherService>();
 builder.Services.AddScoped<IServicesStylistServices, ServicesStylistServices>();
 builder.Services.AddScoped<IJWTService, JWTService>();
 builder.Services.AddScoped<IBookingDetailService, BookingDetailService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 //UserProfile
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
