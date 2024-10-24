@@ -196,12 +196,12 @@ namespace Service.Service
             }
             
         }
-        //public async Task<IEnumerable<ViewBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10)
-        //{
-        //    var bookings = await _unitOfWork.BookingRepository.GetAllAsync();
-        //    var pagedBookings = bookings.Skip((page - 1) * pageSize).Take(pageSize);
-        //    return _mapper.Map<IEnumerable<ViewBookingDTO>>(pagedBookings);
-        //}
+        public async Task<IEnumerable<ViewBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10)
+        {
+            var bookings = await _unitOfWork.BookingRepository.GetAllAsync();
+            var pagedBookings = bookings.Skip((page - 1) * pageSize).Take(pageSize);
+            return _mapper.Map<IEnumerable<ViewBookingDTO>>(pagedBookings);
+        }
 
         public async Task<ResponseDTO> GetBookingHistoryOfCurrentUser()
         {
@@ -231,11 +231,26 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
-        public async Task<IEnumerable<BookingResponseDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10)
+        public async Task<ResponseDTO> GetAllBookingsAsync()
         {
-            var bookings = await _unitOfWork.BookingRepository.GetAllAsync();
-            var pagedBookings = bookings.Skip((page - 1) * pageSize).Take(pageSize);
-            return _mapper.Map<IEnumerable<BookingResponseDTO>>(pagedBookings);
+            try
+            {
+                var listBooking = await _unitOfWork.BookingRepository.GetAllAsync();
+
+                if (listBooking == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "No Bookings found.");
+                }
+                else
+                {
+                    var result = _mapper.Map<List<BookingResponseDTO>>(listBooking);
+                    return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
         }
     }
 }

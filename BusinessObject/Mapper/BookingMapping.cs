@@ -20,7 +20,8 @@ namespace BusinessObject.Mapper
                 .ForMember(dest => dest.Voucher, opt => opt.MapFrom(src => src.Voucher))
                 .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
                 .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments))
-                .ForMember(dest => dest.BookingDetails, opt => opt.MapFrom(src => src.BookingDetails));
+                .ForMember(dest => dest.BookingDetails, opt => opt.MapFrom(src => src.BookingDetails))
+                .ReverseMap();
 
             CreateMap<Booking, BookingRequestDTO>()
                 .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId))
@@ -53,7 +54,8 @@ namespace BusinessObject.Mapper
                  .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate))
                  .ForMember(dest => dest.CreateBy, opt => opt.MapFrom(src => src.CreateBy))
                  .ForMember(dest => dest.UpdateBy, opt => opt.MapFrom(src => src.UpdateBy))
-                 .ForMember(dest => dest.UpdateDate, opt => opt.MapFrom(src => src.UpdateDate));
+                 .ForMember(dest => dest.UpdateDate, opt => opt.MapFrom(src => src.UpdateDate))
+                 .ReverseMap();
         }
     }
 }
