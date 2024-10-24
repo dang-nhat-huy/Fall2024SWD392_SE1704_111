@@ -231,5 +231,26 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+        public async Task<ResponseDTO> GetAllBookingsAsync()
+        {
+            try
+            {
+                var listBooking = await _unitOfWork.BookingRepository.GetAllAsync();
+
+                if (listBooking == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "No Bookings found.");
+                }
+                else
+                {
+                    var result = _mapper.Map<List<BookingResponseDTO>>(listBooking);
+                    return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
     }
 }

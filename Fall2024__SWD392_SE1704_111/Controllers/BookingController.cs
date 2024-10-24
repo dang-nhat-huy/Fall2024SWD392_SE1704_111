@@ -82,11 +82,24 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllBookings(int page = 1, int pageSize = 10)
+        [HttpGet("bookingList")]
+        public async Task<IActionResult> GetAllBookings()
         {
-            var bookings = await _bookingService.GetAllBookingsAsync(page, pageSize);
-            return Ok(bookings);
+            try
+            {
+                var response = await _bookingService.GetAllBookingsAsync();
+
+                if (response.Status == Const.SUCCESS_READ_CODE)
+                {
+                    return Ok(response);
+                }
+
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
     }
 }

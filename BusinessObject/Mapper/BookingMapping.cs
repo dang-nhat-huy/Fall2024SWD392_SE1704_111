@@ -20,7 +20,8 @@ namespace BusinessObject.Mapper
                 .ForMember(dest => dest.Voucher, opt => opt.MapFrom(src => src.Voucher))
                 .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
                 .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments))
-                .ForMember(dest => dest.BookingDetails, opt => opt.MapFrom(src => src.BookingDetails));
+                .ForMember(dest => dest.BookingDetails, opt => opt.MapFrom(src => src.BookingDetails))
+                .ReverseMap();
 
             CreateMap<Booking, BookingRequestDTO>()
                 .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId))
@@ -39,7 +40,22 @@ namespace BusinessObject.Mapper
             .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.BookingDetails.FirstOrDefault().Service.ServiceName))  
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.BookingDetails.FirstOrDefault().StylistId))  
             .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.BookingDetails.FirstOrDefault().Stylist.UserName))
-            .ReverseMap();  
+            .ReverseMap();
+
+            CreateMap<Booking, BookingResponseDTO>()
+                 .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.BookingId))
+                 .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
+                 .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId))
+                 .ForMember(dest => dest.ManagerId, opt => opt.MapFrom(src => src.ManagerId))
+                 .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
+                 .ForMember(dest => dest.StaffId, opt => opt.MapFrom(src => src.StaffId))
+                 .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))
+                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                 .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate))
+                 .ForMember(dest => dest.CreateBy, opt => opt.MapFrom(src => src.CreateBy))
+                 .ForMember(dest => dest.UpdateBy, opt => opt.MapFrom(src => src.UpdateBy))
+                 .ForMember(dest => dest.UpdateDate, opt => opt.MapFrom(src => src.UpdateDate))
+                 .ReverseMap();
         }
     }
 }
