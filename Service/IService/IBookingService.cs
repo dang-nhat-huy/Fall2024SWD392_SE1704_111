@@ -15,6 +15,9 @@ namespace Service.IService
         Task<ResponseDTO> ChangeBookingStatus(ChangebookingStatusDTO request, int bookingId);
 
         Task<ResponseDTO> CreateBooking(BookingRequestDTO bookingRequest);
-        Task<IEnumerable<ViewBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10);
+        //Task<IEnumerable<ViewBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10);
+
+        Task<ResponseDTO> GetBookingHistoryOfCurrentUser();
+        Task<IEnumerable<BookingResponseDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10);
     }
 }

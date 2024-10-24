@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using static BusinessObject.RequestDTO.RequestDTO;
 using Service.IService;
 using Service.Service;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
@@ -56,6 +57,27 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             return Ok(response); 
+        }
+
+        [Authorize]
+        [HttpGet("history")]
+        public async Task<IActionResult> GetBookingHistoryOfCurrentUser()
+        {
+            try
+            {
+                var response = await _bookingService.GetBookingHistoryOfCurrentUser();
+
+                if (response.Status == Const.SUCCESS_READ_CODE)
+                {
+                    return Ok(response);
+                }
+
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
         [HttpGet]
         public async Task<IActionResult> GetAllBookings(int page = 1, int pageSize = 10)

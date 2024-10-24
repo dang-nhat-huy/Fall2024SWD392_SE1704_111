@@ -1,4 +1,6 @@
-﻿using BusinessObject.Model;
+﻿
+using BusinessObject.Model;
+using Microsoft.EntityFrameworkCore;
 using Repository.IRepository;
 using System;
 using System.Collections.Generic;
@@ -13,5 +15,17 @@ namespace Repository.Repository
         public BookingDetailRepository() { }
 
         public BookingDetailRepository(HairSalonBookingContext context) => _context = context;
+
+        public async Task<BookingDetail?> GetBookingDetailAsync(int id)
+        {
+            return await _context.BookingDetails.FirstOrDefaultAsync(u => u.BookingId == id);
+        }
+
+        public async Task<BookingDetail?> GetBookingDetailByIdAsync(int id)
+        {
+            return await _context.BookingDetails.FirstOrDefaultAsync(u => u.BookingId == id);
+        }
+
+
     }
 }

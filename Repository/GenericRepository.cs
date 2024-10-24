@@ -10,7 +10,7 @@ namespace Repository
         protected HairSalonBookingContext _context;
         protected readonly DbSet<T> _dbSet;
 
-        public GenericRepository()
+        public GenericRepository(HairSalonBookingContext context)
         {
             _context = new HairSalonBookingContext();
             _dbSet = _context.Set<T>();
@@ -95,6 +95,11 @@ namespace Repository
         public async Task<T> GetByNameAsync(string name)
         {
             return await _dbSet.FindAsync(name);
+        }
+        public async Task<IEnumerable<T>> GetByConditionAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().Where(predicate).ToListAsync();
+
         }
     }
 }

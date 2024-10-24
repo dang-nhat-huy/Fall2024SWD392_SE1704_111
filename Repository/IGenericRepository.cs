@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,5 +36,6 @@ namespace Repository
         T GetByName(string name);
 
         Task<T> GetByNameAsync(string name);
+        Task<IEnumerable<T>> GetByConditionAsync(Expression<Func<T, bool>> predicate);
     }
 }

@@ -9,5 +9,7 @@ namespace Repository.IRepository
 {
     public interface IBookingDetailRepository : IGenericRepository<BookingDetail>
     {
+        Task<BookingDetail> GetBookingDetailByIdAsync(int id);
+        Task<BookingDetail> GetBookingDetailAsync(int id);
     }
 }
