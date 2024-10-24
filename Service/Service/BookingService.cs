@@ -196,12 +196,12 @@ namespace Service.Service
             }
             
         }
-        public async Task<IEnumerable<ViewBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10)
-        {
-            var bookings = await _unitOfWork.BookingRepository.GetAllAsync();
-            var pagedBookings = bookings.Skip((page - 1) * pageSize).Take(pageSize);
-            return _mapper.Map<IEnumerable<ViewBookingDTO>>(pagedBookings);
-        }
+        //public async Task<IEnumerable<ViewBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10)
+        //{
+        //    var bookings = await _unitOfWork.BookingRepository.GetAllAsync();
+        //    var pagedBookings = bookings.Skip((page - 1) * pageSize).Take(pageSize);
+        //    return _mapper.Map<IEnumerable<ViewBookingDTO>>(pagedBookings);
+        //}
 
         public async Task<ResponseDTO> GetBookingHistoryOfCurrentUser()
         {
@@ -230,6 +230,12 @@ namespace Service.Service
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
+        }
+        public async Task<IEnumerable<BookingResponseDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10)
+        {
+            var bookings = await _unitOfWork.BookingRepository.GetAllAsync();
+            var pagedBookings = bookings.Skip((page - 1) * pageSize).Take(pageSize);
+            return _mapper.Map<IEnumerable<BookingResponseDTO>>(pagedBookings);
         }
     }
 }
