@@ -18,6 +18,7 @@ namespace Service
         private IVoucherRepository _voucherRepository;
         private IServicesStylistRepository _servicesStylistRepository;
         private IBookingDetailRepository _bookingDetailRepository;
+        private IFeedbackRepository _feedbackRepository;
 
         private HairSalonBookingContext _context;
 
@@ -34,6 +35,7 @@ namespace Service
             _userProfileRepository ??= new UserProfileRepository();
             _scheduleUserRepository ??= new ScheduleUserRepository();
             _bookingDetailRepository ??= new BookingDetailRepository();
+            _feedbackRepository ??= new FeedbackRepository();
         }
 
         public IUserRepository UserRepository
@@ -113,6 +115,13 @@ namespace Service
             get
             {
                 return _bookingDetailRepository ??= new BookingDetailRepository(_context);
+            }
+        }
+        public IFeedbackRepository FeedbackRepository
+        {
+            get
+            {
+                return _feedbackRepository ??= new FeedbackRepository(_context);
             }
         }
 

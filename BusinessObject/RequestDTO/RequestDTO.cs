@@ -282,6 +282,16 @@ namespace BusinessObject.RequestDTO
                 return ValidationResult.Success;
             }
         }
+        public class FeedbackRequestDTO
+        {
+            public int? UserId { get; set; }
+            public string? Description { get; set; }
+            public int? Status { get; set; }
+        }
+        public class ChangefeedbackStatusDTO
+        {
+            public FeedbackStatusEnum Status { get; set; }
+        }
 
 
     }
