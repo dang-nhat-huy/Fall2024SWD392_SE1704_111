@@ -126,6 +126,7 @@ builder.Services.AddAutoMapper(typeof(UserProfileMaping));
 builder.Services.AddAutoMapper(typeof(ReportMapping));
 builder.Services.AddAutoMapper(typeof(VoucherMapping));
 builder.Services.AddAutoMapper(typeof(FeedbackMapping));
+builder.Services.AddAutoMapper(typeof(BookingDetailMapping));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

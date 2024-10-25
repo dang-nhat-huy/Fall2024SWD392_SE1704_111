@@ -29,7 +29,6 @@ namespace BusinessObject.Mapper
             CreateMap<Feedback, FeedbackRequestDTO>()
               .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
               .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-              .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
               .ReverseMap();
 
             CreateMap<Feedback, ChangefeedbackStatusDTO>().ReverseMap();
