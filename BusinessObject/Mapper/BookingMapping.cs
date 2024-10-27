@@ -36,10 +36,13 @@ namespace BusinessObject.Mapper
             .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))
             .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.Schedule.StartDate))
             .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.Schedule.EndDate))
-            .ForMember(dest => dest.ServiceId, opt => opt.MapFrom(src => src.BookingDetails.FirstOrDefault().ServiceId))  
-            .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.BookingDetails.FirstOrDefault().Service.ServiceName))  
-            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.BookingDetails.FirstOrDefault().StylistId))  
-            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.BookingDetails.FirstOrDefault().Stylist.UserName))
+            .ForMember(dest => dest.Services, opt => opt.MapFrom(src =>
+                        src.BookingDetails.Select(bookingDetail => new ServiceDetailDTO
+                        {
+                        ServiceId = bookingDetail.ServiceId ?? 0, 
+                        ServiceName = bookingDetail.Service.ServiceName, 
+                        StylistName = bookingDetail.Stylist.UserName 
+            }).ToList()))
             .ReverseMap();
 
             CreateMap<Booking, BookingResponseDTO>()

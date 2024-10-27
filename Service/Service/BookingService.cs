@@ -207,6 +207,7 @@ namespace Service.Service
         {
             try
             {
+                // Lấy người dùng hiện tại
                 var user = await _jWTService.GetCurrentUserAsync();
                 if (user == null)
                 {
@@ -231,6 +232,7 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+
         public async Task<ResponseDTO> GetAllBookingsAsync()
         {
             try
