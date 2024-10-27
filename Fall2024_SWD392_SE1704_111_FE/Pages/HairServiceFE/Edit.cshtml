@@ -1,0 +1,63 @@
+﻿@page
+@model Fall2024_SWD392_SE1704_111_FE.Pages.HairServiceFE.EditModel
+
+@{
+    ViewData["Title"] = "Edit Hair Service";
+}
+
+<h1>Edit Hair Service</h1>
+
+<h4>Hair Service</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="HairService.ServiceId" />
+
+            <div class="form-group">
+                <label asp-for="HairService.ImageLink" class="control-label"></label>
+                <input asp-for="HairService.ImageLink" class="form-control" />
+                <span asp-validation-for="HairService.ImageLink" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HairService.ServiceName" class="control-label"></label>
+                <input asp-for="HairService.ServiceName" class="form-control" />
+                <span asp-validation-for="HairService.ServiceName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HairService.Description" class="control-label"></label>
+                <textarea asp-for="HairService.Description" class="form-control"></textarea>
+                <span asp-validation-for="HairService.Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HairService.Price" class="control-label"></label>
+                <input asp-for="HairService.Price" class="form-control" type="number" step="0.01" />
+                <span asp-validation-for="HairService.Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HairService.EstimateTime" class="control-label"></label>
+                <input asp-for="HairService.EstimateTime" class="form-control" type="time" />
+                <span asp-validation-for="HairService.EstimateTime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
