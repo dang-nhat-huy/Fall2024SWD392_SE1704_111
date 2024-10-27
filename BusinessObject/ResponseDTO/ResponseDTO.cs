@@ -155,6 +155,7 @@ namespace BusinessObject.ResponseDTO
 
     public class ReportDTO
     {
+        public int ReportId { get; set; }
         public string? ReportName { get; set; }
         public string? ReportLink { get; set; }
         public ReportStatusEnum? Status { get; set; }
