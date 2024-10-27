@@ -192,17 +192,7 @@ namespace BusinessObject.RequestDTO
             public UserRole? RoleId { get; set; }
         }
 
-        public class BookingHistoryDTO
-        {
-            public int ServiceId { get; set; }
-            public string ServiceName { get; set; }
-            public int UserId { get; set; }
-            public string Username { get; set; }
-            public int ScheduleId { get; set; }
-            public DateTime StartDate { get; set; }
-            public DateTime EndDate { get; set; }
-            public double TotalPrice { get; set; }
-        }
+        
 
         public class VnPaymentRequestModel
         {
