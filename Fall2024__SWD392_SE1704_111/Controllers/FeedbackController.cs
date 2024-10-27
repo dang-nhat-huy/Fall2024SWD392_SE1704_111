@@ -12,7 +12,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
     public class FeedbackController : ControllerBase
     {
         private readonly IFeedbackService _feedbackService;
-        public FeedbackController (IFeedbackService feedbackService)
+        public FeedbackController(IFeedbackService feedbackService)
         {
             _feedbackService = feedbackService;
         }
@@ -22,7 +22,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             try
             {
                 var response = await _feedbackService.GetAllFeedbacksAsync();
-                if(response.Status == Const.SUCCESS_READ_CODE)
+                if (response.Status == Const.SUCCESS_READ_CODE)
                 {
                     return Ok(response);
                 }
@@ -36,17 +36,39 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         [HttpPost("CreateFeedback")]
         public async Task<IActionResult> Feedback([FromBody] FeedbackRequestDTO request)
         {
-            if(request == null)
+            if (request == null)
             {
                 return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request."));
             }
             var response = await _feedbackService.CreateFeedback(request);
-            if(response.Status != Const.SUCCESS_CREATE_CODE)
+            if (response.Status != Const.SUCCESS_CREATE_CODE)
             {
                 return BadRequest(response);
             }
             return Ok(response);
         }
+        [HttpDelete("DeleteFeedback")]
+        public async Task<IActionResult> DeleteFeedback(int feedbackId)
+        {
+            try
+            {
+                var result = await _feedbackService.DeleteFeedbackAsync(feedbackId);
+                if (result)
+                {
+                    return Ok(new { message = "Feedback Deleted." });
+                }
+                else
+                {
+                    return NotFound(new { message = "Feedback Not Found" });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Ghi log exception để debug
+                return StatusCode(500, $"Đã xảy ra lỗi: {ex.Message}");
+            }
+        }
+
 
 
     }

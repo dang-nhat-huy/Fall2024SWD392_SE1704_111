@@ -33,7 +33,11 @@ namespace Repository.Repository
         {
             throw new NotImplementedException();
         }
-
+        public async Task<bool> DeleteFeedbackAsync(Feedback entity)
+        {
+           _context.Remove(entity);
+            return true;
+        }
     
     }
 }

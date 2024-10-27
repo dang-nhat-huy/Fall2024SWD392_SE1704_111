@@ -16,5 +16,6 @@ namespace Service.IService
 
         Task<ResponseDTO> GetFeedbackHistoryOfCurrentUser();
         Task<ResponseDTO> GetAllFeedbacksAsync();
+        Task<bool> DeleteFeedbackAsync(int feedbackId);
     }
 }

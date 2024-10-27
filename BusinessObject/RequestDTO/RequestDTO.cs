@@ -292,6 +292,10 @@ namespace BusinessObject.RequestDTO
         {
             public FeedbackStatusEnum Status { get; set; }
         }
+        public class RemoveFeedbackDTO
+        {
+            public int? Status { get; set; }
+        }
 
 
     }

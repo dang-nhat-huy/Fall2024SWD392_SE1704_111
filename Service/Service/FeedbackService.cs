@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using static BusinessObject.RequestDTO.RequestDTO;
 using static BusinessObject.FeedbackStatusEnum;
 using BusinessObject.Model;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Service.Service
 {
@@ -19,11 +21,14 @@ namespace Service.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IJWTService _jWTService;
-        public FeedbackService(IUnitOfWork unitOfWork, IMapper mapper, IJWTService jWTService)
+        private readonly IConfiguration _config;
+        public FeedbackService(IUnitOfWork unitOfWork, IMapper mapper, IJWTService jWTService, IConfiguration config)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _jWTService = jWTService;
+            _config = config;
+
         }
         public Task<ResponseDTO> ChangeFeedbackStatus(RequestDTO.ChangefeedbackStatusDTO request, int feedbackId)
         {
@@ -63,6 +68,23 @@ namespace Service.Service
             {
                 return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG, ex);
             }
+        }
+
+        public async Task<bool> DeleteFeedbackAsync( int feedbackId)
+        {
+
+            try
+            {
+                var feedback = await _unitOfWork.FeedbackRepository.GetFeedbackByIdAsync(feedbackId);
+                if (feedback == null) return false;
+
+                return await _unitOfWork.FeedbackRepository.DeleteFeedbackAsync(feedback);
+            }
+            catch 
+            {
+                return false;
+            }
+            
         }
 
         public async Task<ResponseDTO> GetAllFeedbacksAsync()

@@ -13,5 +13,6 @@ namespace Repository.IRepository
         Task<int> CreateFeedbackAsync(Feedback entity);
         Task<List<Feedback>> GetFeedbackHistoryByCustomerIdAsync(int customerId);
         Task<List<Feedback>> GetAllFeedbackAsync();
+        Task<bool> DeleteFeedbackAsync(Feedback entity);
     }
 }
