@@ -180,12 +180,13 @@ namespace Service.Service
                 {
                     return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
                 }
+                var userInfo =  _unitOfWork.UserRepository.GetById(customerId);
                 var checkoutRequest = new CheckoutRequestDTO
                 {
                     TotalPrice = booking.TotalPrice,
                     CreateDate = DateTime.Now,
-                    Description = $"{bookingRequest.UserName} {bookingRequest.Phone}",
-                    FullName = bookingRequest.UserName,
+                    Description = $"{userInfo.UserName} {userInfo.Phone}",
+                    FullName = userInfo.UserName,
                     BookingId = booking.BookingId
                 };
                 return new ResponseDTO(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG, checkoutRequest);
