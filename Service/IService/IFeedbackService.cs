@@ -1,4 +1,5 @@
-﻿using BusinessObject.ResponseDTO;
+﻿using BusinessObject;
+using BusinessObject.ResponseDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,9 @@ namespace Service.IService
 {
     public interface IFeedbackService
     {
-        Task<ResponseDTO> ChangeFeedbackStatus(ChangefeedbackStatusDTO request, int feedbackId);
-
-        Task<ResponseDTO> CreateFeedback(FeedbackRequestDTO feedbackRequest);
-
-        Task<ResponseDTO> GetFeedbackHistoryOfCurrentUser();
-        Task<ResponseDTO> GetAllFeedbacksAsync();
-        Task<bool> DeleteFeedbackAsync(int feedbackId);
+        Task<ResponseDTO> GetFeedbackListAsync();
+        Task<ResponseDTO> CreateFeedbackAsync(FeedbackRequestDTO request);
+        Task<ResponseDTO> UpdateFeedbackAsync(FeedbackRequestDTO request, int feedbackId);
+        Task<ResponseDTO> ChangeFeedbackStatusAsync(int feedbackId, FeedbackStatusEnum status);
     }
 }

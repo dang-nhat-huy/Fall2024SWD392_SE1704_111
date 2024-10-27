@@ -286,7 +286,9 @@ namespace BusinessObject.RequestDTO
         {
             public int? UserId { get; set; }
             public string? Description { get; set; }
-            
+            public DateTime? CreateDate { get; set; }
+            public string? CreateBy { get; set; }
+
         }
         public class ChangefeedbackStatusDTO
         {

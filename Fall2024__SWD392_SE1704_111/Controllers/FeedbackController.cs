@@ -7,69 +7,83 @@ using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
-    [Route("api/v1/feedback")]
+
+
+    [Route("api/v1/feedbacks")]
     [ApiController]
     public class FeedbackController : ControllerBase
     {
         private readonly IFeedbackService _feedbackService;
+
         public FeedbackController(IFeedbackService feedbackService)
         {
             _feedbackService = feedbackService;
         }
-        [HttpGet("feedbackList")]
-        public async Task<IActionResult> GetAllFeedbacks()
-        {
-            try
-            {
-                var response = await _feedbackService.GetAllFeedbacksAsync();
-                if (response.Status == Const.SUCCESS_READ_CODE)
-                {
-                    return Ok(response);
-                }
-                return BadRequest(response);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
-        }
-        [HttpPost("CreateFeedback")]
-        public async Task<IActionResult> Feedback([FromBody] FeedbackRequestDTO request)
+
+        //[Authorize(Roles = "Customer, Manager")]
+        [HttpPost("createFeedback")]
+        public async Task<IActionResult> CreateFeedback([FromBody] FeedbackRequestDTO request)
         {
             if (request == null)
             {
                 return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request."));
             }
-            var response = await _feedbackService.CreateFeedback(request);
+
+            var response = await _feedbackService.CreateFeedbackAsync(request);
+
             if (response.Status != Const.SUCCESS_CREATE_CODE)
             {
                 return BadRequest(response);
             }
+
             return Ok(response);
         }
-        [HttpDelete("DeleteFeedback")]
-        public async Task<IActionResult> DeleteFeedback(int feedbackId)
+
+        //[Authorize(Roles = "Customer, Manager")]
+        [HttpPost("updateFeedback/{feedbackId}")]
+        public async Task<IActionResult> UpdateFeedback([FromBody] FeedbackRequestDTO request, [FromRoute] int feedbackId)
         {
-            try
+            if (request == null)
             {
-                var result = await _feedbackService.DeleteFeedbackAsync(feedbackId);
-                if (result)
-                {
-                    return Ok(new { message = "Feedback Deleted." });
-                }
-                else
-                {
-                    return NotFound(new { message = "Feedback Not Found" });
-                }
+                return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request."));
             }
-            catch (Exception ex)
+
+            var response = await _feedbackService.UpdateFeedbackAsync(request, feedbackId);
+
+            if (response.Status != Const.SUCCESS_UPDATE_CODE)
             {
-                // Ghi log exception để debug
-                return StatusCode(500, $"Đã xảy ra lỗi: {ex.Message}");
+                return BadRequest(response);
             }
+
+            return Ok(response);
         }
 
+        //[Authorize(Roles = "Manager")]
+        [HttpPost("changeFeedbackStatus/{feedbackId}")]
+        public async Task<IActionResult> ChangeFeedbackStatus([FromRoute] int feedbackId, [FromBody] FeedbackStatusEnum newStatus)
+        {
+            var response = await _feedbackService.ChangeFeedbackStatusAsync(feedbackId, newStatus);
 
+            if (response.Status != Const.SUCCESS_UPDATE_CODE)
+            {
+                return BadRequest(response);
+            }
 
+            return Ok(response);
+        }
+
+        //[Authorize(Roles = "Customer, Manager")]
+        [HttpGet("feedbackList")]
+        public async Task<IActionResult> GetFeedbackList()
+        {
+            var response = await _feedbackService.GetFeedbackListAsync();
+
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
     }
 }
