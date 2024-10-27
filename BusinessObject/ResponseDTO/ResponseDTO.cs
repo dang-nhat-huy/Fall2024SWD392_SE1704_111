@@ -1,6 +1,7 @@
 ﻿using BusinessObject.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -154,6 +155,7 @@ namespace BusinessObject.ResponseDTO
 
     public class ReportDTO
     {
+        public int ReportId { get; set; }
         public string? ReportName { get; set; }
         public string? ReportLink { get; set; }
         public ReportStatusEnum? Status { get; set; }
@@ -164,12 +166,15 @@ namespace BusinessObject.ResponseDTO
     {
         public int BookingDetailID { get; set; }
         public int BookingID { get; set; }
-        public int StylistID { get; set; }
-        public int ServiceID { get; set; }
+        [Required]
+        public List<int>? ServiceId { get; set; }
+        [Required]
+        public List<int>? StylistId { get; set; }
         public DateTime? CreateDate { get; set; }
         public string CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
         public string UpdateBy { get; set; }
+       
     }
     public class BookingResponseDTO
     {
@@ -188,5 +193,19 @@ namespace BusinessObject.ResponseDTO
 
 
     }
+    public class FeedbackResponseDTO
+    {
+        public int FeedbackId { get; set; }
+        public int? UserId { get; set; }
+        public string? Description { get; set; }
+        public int? Status { get; set; }
+        public DateTime? CreateDate { get; set; }
+        public string? CreateBy { get; set; }
+        public DateTime? UpdateDate { get; set; }
+        public string? UpdateBy { get; set; }
+
+        public virtual User? User { get; set; }
+    }
+
 }
 

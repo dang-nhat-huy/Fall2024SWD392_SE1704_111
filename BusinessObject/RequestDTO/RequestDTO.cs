@@ -13,7 +13,9 @@ namespace BusinessObject.RequestDTO
     {
         public class LoginRequestDTO
         {
+            [Required]
             public string userName { get; set; }
+            [Required]
             public string password { get; set; }
         }
 
@@ -282,7 +284,23 @@ namespace BusinessObject.RequestDTO
                 return ValidationResult.Success;
             }
         }
+        public class FeedbackRequestDTO
+        {
+            public int? UserId { get; set; }
+            public string? Description { get; set; }
+            
+        }
+        public class ChangefeedbackStatusDTO
+        {
+            public FeedbackStatusEnum Status { get; set; }
+        }
 
-
+        public class ResetPasswordRequest
+        {
+            [Required]
+            public string? UserName { get; set; }
+            [Required]
+            public string? Password { get; set; }
+        }
     }
 }

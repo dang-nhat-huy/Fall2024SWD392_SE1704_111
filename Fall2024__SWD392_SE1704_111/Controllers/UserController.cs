@@ -190,5 +190,33 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
+
+        [HttpPost("resetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest resetPasswordRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request data."));
+            }
+
+            var response = await _userService.ResetPasswordAsync(resetPasswordRequest);
+
+            if (response.Status == Const.SUCCESS_UPDATE_CODE)
+            {
+                return Ok(response);
+            }
+            else if (response.Status == Const.FAIL_READ_CODE)
+            {
+                return NotFound(response);
+            }
+            else if (response.Status == Const.FAIL_UPDATE_CODE)
+            {
+                return StatusCode(500, response);
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
     }
 }
