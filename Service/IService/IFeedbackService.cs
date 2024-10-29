@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,8 @@ namespace Service.IService
         Task<ResponseDTO> CreateFeedbackAsync(FeedbackRequestDTO request);
         Task<ResponseDTO> UpdateFeedbackAsync(FeedbackRequestDTO request, int feedbackId);
         Task<ResponseDTO> ChangeFeedbackStatusAsync(int feedbackId, FeedbackStatusEnum status);
+        Task<PagedResult<Feedback>> GetAllFeedbackPagingAsync(int pageNumber, int pageSize);
+        Task<ResponseDTO> GetFeedbackByIdAsync(int feedbackId);
+        Task<ResponseDTO> ChangeStatusFeedbackById(int feedbackId);
     }
 }

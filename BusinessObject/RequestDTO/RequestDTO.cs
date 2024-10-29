@@ -299,6 +299,23 @@ namespace BusinessObject.RequestDTO
             public int? Status { get; set; }
         }
 
+        public class UpdateFeedbackDTO
+        {
+            [MinLength(5, ErrorMessage = "The description must be at least 5 characters long.")]
+            public string? Description { get; set; }
+
+            [DataType(DataType.Date)]
+            public DateTime? CreateDate { get; set; }
+            
+        }
+        public class CreateFeedbackDTO
+        {
+            [MinLength(5, ErrorMessage = "The description must be at least 5 characters long.")]
+            public string? Description { get; set; }
+
+            [DataType(DataType.Date)]
+            public DateTime? CreateDate { get; set; }
+        }
 
     }
 }

@@ -1,8 +1,10 @@
 ﻿using BusinessObject;
 using BusinessObject.ResponseDTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository.IRepository;
 using Service.IService;
+using Service.Service;
 using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
@@ -58,11 +60,11 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response);
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost("changeFeedbackStatus/{feedbackId}")]
-        public async Task<IActionResult> ChangeFeedbackStatus([FromRoute] int feedbackId, [FromBody] FeedbackStatusEnum newStatus)
+        public async Task<IActionResult> ChangeFeedbackStatus([FromRoute] int feedbackId)
         {
-            var response = await _feedbackService.ChangeFeedbackStatusAsync(feedbackId, newStatus);
+            var response = await _feedbackService.ChangeStatusFeedbackById(feedbackId);
 
             if (response.Status != Const.SUCCESS_UPDATE_CODE)
             {
@@ -70,6 +72,21 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             return Ok(response);
+        }
+        [Authorize(Roles = "Manager")]
+        [HttpGet("PagingFeedbackList")]
+        public async Task<IActionResult> GetVoucherPaging([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+            // Gọi service để lấy danh sách người dùng
+            var response = await _feedbackService.GetAllFeedbackPagingAsync(pageNumber, pageSize);
+
+            // Trả về phản hồi
+            if (response == null)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
         }
 
         //[Authorize(Roles = "Customer, Manager")]
@@ -84,6 +101,20 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             return Ok(response);
+        }
+        [HttpGet("GetFeedbackById/{feedbackId}")]
+        public async Task<IActionResult> GetFeedbackById([FromRoute] int feedbackId)
+        {
+
+            var response = await _feedbackService.GetFeedbackByIdAsync(feedbackId);
+
+            // Trả về phản hồi
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
         }
     }
 }

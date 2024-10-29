@@ -6,57 +6,101 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject.Model;
+using BusinessObject.ResponseDTO;
+using Newtonsoft.Json;
 
 namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
 {
     public class DeleteModel : PageModel
     {
-        private readonly BusinessObject.Model.HairSalonBookingContext _context;
-
-        public DeleteModel(BusinessObject.Model.HairSalonBookingContext context)
-        {
-            _context = context;
-        }
+        
 
         [BindProperty]
       public Feedback Feedback { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Feedbacks == null)
+            try
             {
-                return NotFound();
-            }
+                var role = HttpContext.Session.GetString("Role");
+                string? jwt = Request.Cookies["jwt"];
+                if (role == null || jwt == null)
+                {
+                    TempData["errorLogin"] = "You need to login to access this page";
+                    return RedirectToPage("../Logout");
+                }
+                if (role != null && !role.Equals("Admin") && !role.Equals("Manager"))
+                {
+                    TempData["error"] = "You are not authorized to access this page";
+                    return RedirectToPage("../logout");
+                }
 
-            var feedback = await _context.Feedbacks.FirstOrDefaultAsync(m => m.FeedbackId == id);
+                jwt = jwt.ToString();
+                string url = "https://localhost:7211/api/v1/feedbacks/GetFeedbackById/" + id;
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Get
+                };
+                HttpResponseMessage response = await client.SendAsync(request);
 
-            if (feedback == null)
-            {
-                return NotFound();
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var dto = JsonConvert.DeserializeObject<ResponseDTO>(jsonResponse)!;
+
+                    // Deserialize `dto.Data` to `List<UserListDTO>`
+                    var usersListJson = JsonConvert.SerializeObject(dto.Data);
+                    Feedback = JsonConvert.DeserializeObject<Feedback>(usersListJson);
+                }
+                else
+                {
+                    TempData["error"] = "Error Getting Data";
+                }
+                return Page();
             }
-            else 
+            catch (Exception)
             {
-                Feedback = feedback;
+                TempData["error"] = "An error occurred while processing your request. Please try again later";
+                return Page();
             }
-            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.Feedbacks == null)
+            try
             {
-                return NotFound();
-            }
-            var feedback = await _context.Feedbacks.FindAsync(id);
+                var feedbackId = Feedback.FeedbackId;
+                string? jwt = Request.Cookies["jwt"]!.ToString();
+                string url = "https://localhost:7211/api/v1/feedbacks/changeFeedbackStatus/" + feedbackId;
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
 
-            if (feedback != null)
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Post
+                };
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["success"] = "Change Successfully";
+                    return RedirectToPage("./Index");
+                }
+                else
+                {
+                    TempData["error"] = "Error Getting Data";
+                }
+                return Page();
+            }
+            catch (Exception)
             {
-                Feedback = feedback;
-                _context.Feedbacks.Remove(Feedback);
-                await _context.SaveChangesAsync();
+                TempData["error"] = "An error occurred while processing your request. Please try again later";
+                return Page();
             }
-
-            return RedirectToPage("./Index");
         }
     }
 }

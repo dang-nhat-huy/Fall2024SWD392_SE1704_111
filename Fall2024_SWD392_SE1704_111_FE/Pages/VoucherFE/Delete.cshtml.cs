@@ -13,11 +13,12 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.VoucherFE
 {
     public class DeleteModel : PageModel
     {
+        
 
         [BindProperty]
       public Voucher Voucher { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int id)
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
             try
             {

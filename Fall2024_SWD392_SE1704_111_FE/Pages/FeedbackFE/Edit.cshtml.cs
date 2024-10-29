@@ -7,71 +7,130 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject.Model;
+using static BusinessObject.RequestDTO.RequestDTO;
+using BusinessObject.ResponseDTO;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
 {
     public class EditModel : PageModel
     {
-        private readonly BusinessObject.Model.HairSalonBookingContext _context;
-
-        public EditModel(BusinessObject.Model.HairSalonBookingContext context)
-        {
-            _context = context;
-        }
+   
 
         [BindProperty]
         public Feedback Feedback { get; set; } = default!;
+        [BindProperty]
+        public UpdateFeedbackDTO updateDto { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Feedbacks == null)
+            try
             {
-                return NotFound();
-            }
+                var role = HttpContext.Session.GetString("Role");
+                string? jwt = Request.Cookies["jwt"];
+                if (role == null || jwt == null)
+                {
+                    TempData["errorLogin"] = "You need to login to access this page";
+                    return RedirectToPage("../Logout");
+                }
+                if (role != null && !role.Equals("Manager"))
+                {
+                    TempData["error"] = "You are not authorized to access this page";
+                    return RedirectToPage("../logout");
+                }
 
-            var feedback =  await _context.Feedbacks.FirstOrDefaultAsync(m => m.FeedbackId == id);
-            if (feedback == null)
-            {
-                return NotFound();
+                jwt = jwt.ToString();
+                string url = "https://localhost:7211/api/v1/feedbacks/GetFeedbackById/" + id;
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Get
+                };
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var dto = JsonConvert.DeserializeObject<ResponseDTO>(jsonResponse)!;
+
+                    // Deserialize `dto.Data` to `List<UserListDTO>`
+                    var feedbackListJson = JsonConvert.SerializeObject(dto.Data);
+                    Feedback = JsonConvert.DeserializeObject<Feedback>(feedbackListJson);
+                }
+                else
+                {
+                    TempData["error"] = "Error Getting Data";
+                }
+                return Page();
             }
-            Feedback = feedback;
-           ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
-            return Page();
+            catch (Exception)
+            {
+                TempData["error"] = "An error occurred while processing your request. Please try again later";
+                return Page();
+            }
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(Feedback).State = EntityState.Modified;
+            var feedbackId = Feedback.FeedbackId;
 
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FeedbackExists(Feedback.FeedbackId))
+                // Kiểm tra ModelState có hợp lệ không
+                if (!ModelState.IsValid)
                 {
-                    return NotFound();
+                    TempData["error"] = "Invalid Input";
+                    return Page();
+                }
+
+                // Lấy JWT token từ cookie
+                string? jwt = Request.Cookies["jwt"];
+                if (string.IsNullOrEmpty(jwt))
+                {
+                    TempData["errorLogin"] = "You need to login to access this page";
+                    return RedirectToPage("../Login");
+                }
+
+                // Serialize CreateAccountDTO thành JSON
+                string jsonRequest = JsonConvert.SerializeObject(updateDto);
+                string url = "https://localhost:7211/api/v1/feedbacks/updateFeedback/" + feedbackId; // Đường dẫn đến API
+
+                // Tạo HttpClient để gửi yêu cầu
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
+
+                // Tạo yêu cầu HTTP POST với JSON content
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Post,
+                    Content = new StringContent(jsonRequest, Encoding.UTF8, "application/json")
+                };
+
+                // Gửi yêu cầu đến API
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["success"] = "Change Successfully";
+                    return RedirectToPage("./Index");
                 }
                 else
                 {
-                    throw;
+                    TempData["error"] = "Error Getting Data";
                 }
+                return Page();
             }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool FeedbackExists(int id)
-        {
-          return (_context.Feedbacks?.Any(e => e.FeedbackId == id)).GetValueOrDefault();
+            catch (Exception)
+            {
+                TempData["error"] = "An error occurred while processing your request. Please try again later";
+                return Page();
+            }
         }
     }
 }

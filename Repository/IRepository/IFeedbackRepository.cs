@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Repository.IRepository
 {
-    public interface IFeedbackRepository
+    public interface IFeedbackRepository : IGenericRepository<Feedback>
     {
         Task<IEnumerable<Feedback>> GetAllAsync();
         Task<User?> GetUserByIdAsync(int userId);

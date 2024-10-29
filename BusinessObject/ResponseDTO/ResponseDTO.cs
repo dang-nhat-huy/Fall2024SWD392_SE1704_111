@@ -206,5 +206,7 @@ namespace BusinessObject.ResponseDTO
         public virtual User? User { get; set; }
     }
 
+
+
 }
 

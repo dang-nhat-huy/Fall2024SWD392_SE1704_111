@@ -13,7 +13,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
 {
     public class IndexModel : PageModel
     {
-        public IList<Feedback> Feedback { get; set; } = new List<Feedback>();
+        public IList<Feedback> Feedback { get; set; } = null!;
 
         public PagedResult<Feedback> dto { get; set; } = null!;
 
@@ -28,7 +28,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
             try
             {
                 var size = 5;
-                string url = "https://localhost:7211/api/v1/feedback/PagingFeedbackList?pageNumber=" + Index + "&pageSize=" + size;
+                string url = "https://localhost:7211/api/v1/feedbacks/PagingFeedbackList?pageNumber=" + Index + "&pageSize=" + size;
 
                 string? jwt = Request.Cookies["jwt"]?.ToString();
                 if (jwt == null)
