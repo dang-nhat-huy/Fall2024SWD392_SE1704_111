@@ -13,7 +13,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
 {
     public class IndexModel : PageModel
     {
-        public IList<Feedback> Feedback { get; set; } = null!;
+        public IList<Feedback> Feedback { get; set; } = new List<Feedback>();
 
         public PagedResult<Feedback> dto { get; set; } = null!;
 
