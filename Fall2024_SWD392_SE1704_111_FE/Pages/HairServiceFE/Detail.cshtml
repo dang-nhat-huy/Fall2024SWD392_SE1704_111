@@ -1,0 +1,49 @@
+﻿@page
+@model Fall2024_SWD392_SE1704_111_FE.Pages.HairServiceFE.DetailsModel
+
+@{
+    ViewData["Title"] = "Hair Service Details";
+}
+
+<h1>Hair Service Details</h1>
+
+<div>
+    <h4>Hair Service</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HairService.ServiceName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HairService.ServiceName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HairService.ImageLink)
+        </dt>
+        <dd class="col-sm-10">
+            <img src="@Model.HairService.ImageLink" alt="Hair Service Image" style="max-width: 200px;" />
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HairService.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HairService.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HairService.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HairService.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HairService.EstimateTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HairService.EstimateTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.HairService?.ServiceId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
