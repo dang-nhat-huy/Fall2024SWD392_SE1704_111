@@ -99,6 +99,11 @@ namespace Service.Service
                 {
                     return new ResponseDTO(400, Const.FAIL_READ_MSG);
                 }
+                // Kiểm tra trùng lặp ServiceId
+                if (bookingRequest.ServiceId.Count != bookingRequest.ServiceId.Distinct().Count())
+                {
+                    return new ResponseDTO(400, "Service IDs cannot be duplicated.");
+                }
 
                 foreach (var serviceId in bookingRequest.ServiceId)
                 {
@@ -138,7 +143,11 @@ namespace Service.Service
                 {
                     return new ResponseDTO(400, Const.FAIL_READ_MSG);
                 }
-
+                // Kiểm tra trùng lặp StylistId
+                if (bookingRequest.StylistId.Count != bookingRequest.StylistId.Distinct().Count())
+                {
+                    return new ResponseDTO(400, "Stylist IDs cannot be duplicated.");
+                }
                 foreach (var stylistId in bookingRequest.StylistId)
                 {
                     var stylist = await _unitOfWork.UserRepository.GetByIdAsync(stylistId);
