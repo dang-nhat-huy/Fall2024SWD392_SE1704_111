@@ -9,7 +9,6 @@ namespace Repository.IRepository
 {
     public interface IScheduleRepository : IGenericRepository<Schedule>
     {
-        public Task<int> CreateScheduleAsync(Schedule entity);
-        Task<Schedule?> GetNextScheduleAsync(int currentScheduleId);
+        public  Task<int> CreateScheduleAsync(Schedule entity);
     }
 }

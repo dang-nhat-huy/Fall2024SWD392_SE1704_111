@@ -105,8 +105,6 @@ namespace Service.Service
                     return new ResponseDTO(400, "Service IDs cannot be duplicated.");
                 }
 
-                // Tính tổng thời gian ước lượng cho tất cả dịch vụ
-                TimeSpan totalTime = TimeSpan.Zero;
                 foreach (var serviceId in bookingRequest.ServiceId)
                 {
                     var service = await _unitOfWork.HairServiceRepository.GetByIdAsync(serviceId);
@@ -115,7 +113,6 @@ namespace Service.Service
                         return new ResponseDTO(400, $"Service with ID {serviceId} does not exist.");
                     }
                     totalPrice += service.Price;
-                    totalTime += service.EstimateTime ?? TimeSpan.Zero; // Cộng dồn thời gian ước lượng
                 }
 
                 // Kiểm tra Voucher nếu có VoucherId
@@ -160,33 +157,11 @@ namespace Service.Service
                     }
                 }
 
-                // Khởi tạo biến để lưu trữ lịch kế tiếp
-                Schedule? nextSchedule = null;
-                foreach (var scheduleId in bookingRequest.ScheduleId)
+                // kiểm tra schedule có tồn tại không
+                var schedule = await _unitOfWork.UserRepository.GetByIdAsync(bookingRequest.ScheduleId);
+                if (schedule == null)
                 {
-                    // Kiểm tra lịch có tồn tại không
-                    var schedule = await _unitOfWork.ScheduleRepository.GetByIdAsync(scheduleId);
-                    if (schedule == null)
-                    {
-                        return new ResponseDTO(400, $"Schedule with ID {scheduleId} does not exist.");
-                    }
-
-                    // Kiểm tra khoảng thời gian
-                    var scheduleDuration = (schedule.EndTime ?? TimeSpan.Zero) - (schedule.StartTime ?? TimeSpan.Zero);
-                    if (totalTime > scheduleDuration)
-                    {
-                        // Tìm lịch kế tiếp nếu khoảng thời gian không đủ
-                        nextSchedule = await _unitOfWork.ScheduleRepository.GetNextScheduleAsync(schedule.ScheduleId);
-                        if (nextSchedule != null)
-                        {
-                            // Cập nhật thông tin lịch vào booking
-                            bookingRequest.ScheduleId[0] = nextSchedule.ScheduleId; // Lưu lịch kế tiếp
-                        }
-                        else
-                        {
-                            return new ResponseDTO(400, "Not enough time available, and no next schedule found.");
-                        }
-                    }
+                    return new ResponseDTO(400, $"Stylist with ID {bookingRequest.ScheduleId} does not exist.");
                 }
 
                 // Tạo một đối tượng Booking mới từ DTO

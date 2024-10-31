@@ -48,7 +48,7 @@ namespace BusinessObject.RequestDTO
             public string? Phone { get; set; }
             public int? VoucherId { get; set; }
             [Required]
-            public List<int> ScheduleId { get; set; }
+            public int ScheduleId { get; set; }
             [Required]
             public List<int>? ServiceId { get; set; }
             [Required]
