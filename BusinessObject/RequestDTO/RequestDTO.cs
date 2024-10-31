@@ -29,6 +29,17 @@ namespace BusinessObject.RequestDTO
             [Required]
             [RegularExpression(@"^\d{10,15}$", ErrorMessage = "Phone number must be between 10 and 15 digits and only contain numbers.")]
             public string phone { get; set; }
+            [Required(ErrorMessage = "Full name is required.")]
+            public string? FullName { get; set; }
+            [Required(ErrorMessage = "Email is required.")]
+            [EmailAddress(ErrorMessage = "Invalid email format.")]
+            public string? Email { get; set; }
+            [Required(ErrorMessage = "Gender is required.")]
+            public int? Gender { get; set; }
+            [Required(ErrorMessage = "Address is required.")]
+            public string? Address { get; set; }
+            [Required(ErrorMessage = "Date of birth is required.")]
+            public DateTime? DateOfBirth { get; set; }
         }
 
         public class BookingRequestDTO
@@ -37,7 +48,7 @@ namespace BusinessObject.RequestDTO
             public string? Phone { get; set; }
             public int? VoucherId { get; set; }
             [Required]
-            public int ScheduleId { get; set; }
+            public List<int> ScheduleId { get; set; }
             [Required]
             public List<int>? ServiceId { get; set; }
             [Required]

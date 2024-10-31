@@ -14,10 +14,16 @@ namespace BusinessObject.Mapper
     public class UserMapping : Profile
     {
         public UserMapping() {
-            CreateMap<User, RegisterRequestDTO>().ReverseMap()
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.userName))
-                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.password))
-                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.phone));
+            CreateMap<User, RegisterRequestDTO>()
+                .ForMember(dest => dest.userName, opt => opt.MapFrom(src => src.UserName))
+                .ForMember(dest => dest.password, opt => opt.MapFrom(src => src.Password))
+                .ForMember(dest => dest.phone, opt => opt.MapFrom(src => src.Phone))
+                .ReverseMap()
+                .ForPath(dest => dest.UserProfile.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForPath(dest => dest.UserProfile.Email, opt => opt.MapFrom(src => src.Email))
+                .ForPath(dest => dest.UserProfile.Gender, opt => opt.MapFrom(src => src.Gender))
+                .ForPath(dest => dest.UserProfile.Address, opt => opt.MapFrom(src => src.Address))
+                .ForPath(dest => dest.UserProfile.DateOfBirth, opt => opt.MapFrom(src => src.DateOfBirth)).ReverseMap();
 
             CreateMap<User, LoginResponse>().ReverseMap();
 
