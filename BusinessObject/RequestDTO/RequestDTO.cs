@@ -314,8 +314,11 @@ namespace BusinessObject.RequestDTO
         public class CreateFeedbackDTO
         {
             [MinLength(5, ErrorMessage = "The description must be at least 5 characters long.")]
-            public string? Description { get; set; }
+            public string? Description { get; set; }       
 
+            [DataType(DataType.Date)]
+            public DateTime? CreateDate { get; set; }
+        }
 
         public class ResetPasswordRequest
         {
@@ -324,11 +327,5 @@ namespace BusinessObject.RequestDTO
             [Required]
             public string? Password { get; set; }
         }
-
-            [DataType(DataType.Date)]
-            public DateTime? CreateDate { get; set; }
-        }
-
-
     }
 }
