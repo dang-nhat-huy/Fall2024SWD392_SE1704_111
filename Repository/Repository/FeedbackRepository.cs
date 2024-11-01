@@ -13,27 +13,36 @@ namespace Repository.Repository
     {
         public FeedbackRepository() { }
         public FeedbackRepository(HairSalonBookingContext context) => _context = context;
+
+        public async Task<User?> GetUserByIdAsync(int userId)
+        {
+            return await _context.Users
+                .Include(u => u.UserProfile)  // Include related data, if any
+                .FirstOrDefaultAsync(u => u.UserId == userId);
+        }
+
+        public async Task<Feedback?> GetFeedbackById(int feedbackId)
+        {
+            return await _context.Feedbacks
+                .FirstOrDefaultAsync(f => f.FeedbackId == feedbackId);
+        }
+
         public async Task<int> CreateFeedbackAsync(Feedback entity)
         {
             _context.Add(entity);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Feedback>> GetAllFeedbackAsync()
+        public async Task<int> UpdateFeedbackAsync(Feedback feedback)
+        {
+            var tracker = _context.Attach(feedback);
+            tracker.State = EntityState.Modified;
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Feedback>> GetAllAsync()
         {
             return await _context.Feedbacks.ToListAsync();
         }
-
-        public async Task<Feedback> GetFeedbackByIdAsync(int id)
-        {
-            return await _context.Feedbacks.FirstOrDefaultAsync(u => u.FeedbackId == id);
-        }
-
-        public Task<List<Feedback>> GetFeedbackHistoryByCustomerIdAsync(int customerId)
-        {
-            throw new NotImplementedException();
-        }
-
-    
     }
 }

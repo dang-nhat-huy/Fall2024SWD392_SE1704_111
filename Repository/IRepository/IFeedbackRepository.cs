@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Repository.IRepository
 {
-    public interface IFeedbackRepository
+    public interface IFeedbackRepository : IGenericRepository<Feedback>
     {
-        Task<Feedback> GetFeedbackByIdAsync(int id);
+        Task<IEnumerable<Feedback>> GetAllAsync();
+        Task<User?> GetUserByIdAsync(int userId);
+        Task<Feedback?> GetFeedbackById(int feedbackId);
         Task<int> CreateFeedbackAsync(Feedback entity);
-        Task<List<Feedback>> GetFeedbackHistoryByCustomerIdAsync(int customerId);
-        Task<List<Feedback>> GetAllFeedbackAsync();
+        Task<int> UpdateFeedbackAsync(Feedback feedback);
     }
 }
