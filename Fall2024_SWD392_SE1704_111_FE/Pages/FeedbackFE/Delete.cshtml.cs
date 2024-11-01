@@ -9,14 +9,14 @@ using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
 using Newtonsoft.Json;
 
-namespace Fall2024_SWD392_SE1704_111_FE.Pages.VoucherFE
+namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
 {
     public class DeleteModel : PageModel
     {
         
 
         [BindProperty]
-      public Voucher Voucher { get; set; } = default!;
+      public Feedback Feedback { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -36,7 +36,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.VoucherFE
                 }
 
                 jwt = jwt.ToString();
-                string url = "https://localhost:7211/api/v1/voucher/GetVoucherById/" + id;
+                string url = "https://localhost:7211/api/v1/feedbacks/GetFeedbackById/" + id;
                 var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
                 HttpRequestMessage request = new HttpRequestMessage
@@ -53,7 +53,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.VoucherFE
 
                     // Deserialize `dto.Data` to `List<UserListDTO>`
                     var usersListJson = JsonConvert.SerializeObject(dto.Data);
-                    Voucher = JsonConvert.DeserializeObject<Voucher>(usersListJson);
+                    Feedback = JsonConvert.DeserializeObject<Feedback>(usersListJson);
                 }
                 else
                 {
@@ -68,13 +68,13 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.VoucherFE
             }
         }
 
-        public async Task<IActionResult> OnPostAsync(int id)
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
             try
             {
-                var voucherId = Voucher.VoucherId;
+                var feedbackId = Feedback.FeedbackId;
                 string? jwt = Request.Cookies["jwt"]!.ToString();
-                string url = "https://localhost:7211/api/v1/voucher/changeVoucherStatus/" + voucherId;
+                string url = "https://localhost:7211/api/v1/feedbacks/changeFeedbackStatus/" + feedbackId;
                 var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
 

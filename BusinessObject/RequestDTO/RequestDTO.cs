@@ -289,12 +289,33 @@ namespace BusinessObject.RequestDTO
         {
             public int? UserId { get; set; }
             public string? Description { get; set; }
-            
+            public DateTime? CreateDate { get; set; }
+            public string? CreateBy { get; set; }
+
         }
         public class ChangefeedbackStatusDTO
         {
             public FeedbackStatusEnum Status { get; set; }
         }
+        public class RemoveFeedbackDTO
+        {
+            public int? Status { get; set; }
+        }
+
+        public class UpdateFeedbackDTO
+        {
+            [MinLength(5, ErrorMessage = "The description must be at least 5 characters long.")]
+            public string? Description { get; set; }
+
+            [DataType(DataType.Date)]
+            public DateTime? CreateDate { get; set; }
+            
+        }
+        public class CreateFeedbackDTO
+        {
+            [MinLength(5, ErrorMessage = "The description must be at least 5 characters long.")]
+            public string? Description { get; set; }
+
 
         public class ResetPasswordRequest
         {
@@ -303,5 +324,11 @@ namespace BusinessObject.RequestDTO
             [Required]
             public string? Password { get; set; }
         }
+
+            [DataType(DataType.Date)]
+            public DateTime? CreateDate { get; set; }
+        }
+
+
     }
 }
