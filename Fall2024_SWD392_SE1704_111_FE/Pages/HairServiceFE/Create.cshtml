@@ -1,0 +1,62 @@
+﻿@page
+@model Fall2024_SWD392_SE1704_111_FE.Pages.HairServiceFE.CreateModel
+
+@{
+    ViewData["Title"] = "Create Hair Service";
+}
+
+<h1>Create Hair Service</h1>
+
+<h4>Hair Service</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="createDto.ServiceName" class="control-label"></label>
+                <input asp-for="createDto.ServiceName" class="form-control" />
+                <span asp-validation-for="createDto.ServiceName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="createDto.description" class="control-label"></label>
+                <textarea asp-for="createDto.description" class="form-control"></textarea>
+                <span asp-validation-for="createDto.description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="createDto.ImageLink" class="control-label"></label>
+                <input asp-for="createDto.ImageLink" class="form-control" />
+                <span asp-validation-for="createDto.ImageLink" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="createDto.price" class="control-label"></label>
+                <input asp-for="createDto.price" class="form-control" />
+                <span asp-validation-for="createDto.price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="createDto.estimateTime" class="control-label"></label>
+                <input asp-for="createDto.estimateTime" class="form-control" type="time" />
+                <span asp-validation-for="createDto.estimateTime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

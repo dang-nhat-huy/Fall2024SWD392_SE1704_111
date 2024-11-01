@@ -13,7 +13,9 @@ namespace BusinessObject.RequestDTO
     {
         public class LoginRequestDTO
         {
+            [Required]
             public string userName { get; set; }
+            [Required]
             public string password { get; set; }
         }
 
@@ -27,6 +29,17 @@ namespace BusinessObject.RequestDTO
             [Required]
             [RegularExpression(@"^\d{10,15}$", ErrorMessage = "Phone number must be between 10 and 15 digits and only contain numbers.")]
             public string phone { get; set; }
+            [Required(ErrorMessage = "Full name is required.")]
+            public string? FullName { get; set; }
+            [Required(ErrorMessage = "Email is required.")]
+            [EmailAddress(ErrorMessage = "Invalid email format.")]
+            public string? Email { get; set; }
+            [Required(ErrorMessage = "Gender is required.")]
+            public int? Gender { get; set; }
+            [Required(ErrorMessage = "Address is required.")]
+            public string? Address { get; set; }
+            [Required(ErrorMessage = "Date of birth is required.")]
+            public DateTime? DateOfBirth { get; set; }
         }
 
         public class BookingRequestDTO
@@ -190,17 +203,7 @@ namespace BusinessObject.RequestDTO
             public UserRole? RoleId { get; set; }
         }
 
-        public class BookingHistoryDTO
-        {
-            public int ServiceId { get; set; }
-            public string ServiceName { get; set; }
-            public int UserId { get; set; }
-            public string Username { get; set; }
-            public int ScheduleId { get; set; }
-            public DateTime StartDate { get; set; }
-            public DateTime EndDate { get; set; }
-            public double TotalPrice { get; set; }
-        }
+        
 
         public class VnPaymentRequestModel
         {
@@ -313,9 +316,19 @@ namespace BusinessObject.RequestDTO
             [MinLength(5, ErrorMessage = "The description must be at least 5 characters long.")]
             public string? Description { get; set; }
 
+
+        public class ResetPasswordRequest
+        {
+            [Required]
+            public string? UserName { get; set; }
+            [Required]
+            public string? Password { get; set; }
+        }
+
             [DataType(DataType.Date)]
             public DateTime? CreateDate { get; set; }
         }
+
 
     }
 }

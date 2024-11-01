@@ -32,11 +32,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/UserFE/Index">Manage Account</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/ServiceFE/Index">Manage Service</a>
-                            </li>
+                            
                             if (role.Equals("Manager"))
                             {
+                                <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/HairServiceFE/Index">Manage Service</a>
+                            </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/VoucherFE/Index">Manage voucher</a>
                                 </li>

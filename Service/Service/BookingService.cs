@@ -99,6 +99,11 @@ namespace Service.Service
                 {
                     return new ResponseDTO(400, Const.FAIL_READ_MSG);
                 }
+                // Kiểm tra trùng lặp ServiceId
+                if (bookingRequest.ServiceId.Count != bookingRequest.ServiceId.Distinct().Count())
+                {
+                    return new ResponseDTO(400, "Service IDs cannot be duplicated.");
+                }
 
                 foreach (var serviceId in bookingRequest.ServiceId)
                 {
@@ -138,7 +143,11 @@ namespace Service.Service
                 {
                     return new ResponseDTO(400, Const.FAIL_READ_MSG);
                 }
-
+                // Kiểm tra trùng lặp StylistId
+                if (bookingRequest.StylistId.Count != bookingRequest.StylistId.Distinct().Count())
+                {
+                    return new ResponseDTO(400, "Stylist IDs cannot be duplicated.");
+                }
                 foreach (var stylistId in bookingRequest.StylistId)
                 {
                     var stylist = await _unitOfWork.UserRepository.GetByIdAsync(stylistId);
@@ -180,12 +189,13 @@ namespace Service.Service
                 {
                     return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
                 }
+                var userInfo =  _unitOfWork.UserRepository.GetById(customerId);
                 var checkoutRequest = new CheckoutRequestDTO
                 {
                     TotalPrice = booking.TotalPrice,
                     CreateDate = DateTime.Now,
-                    Description = $"{bookingRequest.UserName} {bookingRequest.Phone}",
-                    FullName = bookingRequest.UserName,
+                    Description = $"{userInfo.UserName} {userInfo.Phone}",
+                    FullName = userInfo.UserName,
                     BookingId = booking.BookingId
                 };
                 return new ResponseDTO(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG, checkoutRequest);
@@ -207,6 +217,7 @@ namespace Service.Service
         {
             try
             {
+                // Lấy người dùng hiện tại
                 var user = await _jWTService.GetCurrentUserAsync();
                 if (user == null)
                 {
@@ -231,6 +242,7 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+
         public async Task<ResponseDTO> GetAllBookingsAsync()
         {
             try

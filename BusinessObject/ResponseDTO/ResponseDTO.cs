@@ -132,6 +132,24 @@ namespace BusinessObject.ResponseDTO
         public virtual ICollection<BookingDetail> BookingDetails { get; set; }
     }
 
+    public class BookingHistoryDTO
+    {
+        public int BookingId { get; set; }
+        // Danh sách các dịch vụ kèm tên nhân viên thực hiện
+        public List<ServiceDetailDTO> Services { get; set; } = new List<ServiceDetailDTO>();
+        public int ScheduleId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public double TotalPrice { get; set; }
+        public BookingStatus? Status { get; set; }
+    }
+
+    public class ServiceDetailDTO
+    {
+        public int ServiceId { get; set; }
+        public string ServiceName { get; set; }
+        public string StylistName { get; set; }
+    }
     public class UserListDTO
     {
         public int UserId { get; set; }
@@ -155,6 +173,7 @@ namespace BusinessObject.ResponseDTO
 
     public class ReportDTO
     {
+        public int ReportId { get; set; }
         public string? ReportName { get; set; }
         public string? ReportLink { get; set; }
         public ReportStatusEnum? Status { get; set; }

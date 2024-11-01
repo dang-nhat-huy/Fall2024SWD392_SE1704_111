@@ -314,5 +314,47 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+
+        public async Task<ResponseDTO> ResetPasswordAsync(ResetPasswordRequest resetPasswordRequest)
+        {
+            try
+            {
+                // Tìm kiếm người dùng theo username và lấy người dùng đầu tiên
+                var users = await _unitOfWork.UserRepository.GetUserByNameAsync(resetPasswordRequest.UserName);
+
+                // Kiểm tra xem danh sách người dùng có rỗng không
+                if (users == null || !users.Any())
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                }
+
+                // Lấy người dùng đầu tiên từ danh sách
+                var user = users.First();
+
+                // Cập nhật mật khẩu mới (nên mã hóa mật khẩu nếu cần)
+                user.Password = resetPasswordRequest.Password; // Nên mã hóa mật khẩu trước khi lưu
+
+                // Cập nhật thông tin ngày cập nhật
+                user.UpdateDate = DateTime.UtcNow;
+                user.UpdateBy = resetPasswordRequest.UserName; // Có thể là username hoặc Admin thực hiện cập nhật
+
+                // Lưu thay đổi
+                var checkUpdate = await _unitOfWork.UserRepository.UpdateAsync(user);
+
+                if (checkUpdate <= 0)
+                {
+                    return new ResponseDTO(Const.FAIL_UPDATE_CODE, "Reset Password has been fail.");
+                }
+
+                return new ResponseDTO(Const.SUCCESS_UPDATE_CODE, "Password has been reset successfully.", resetPasswordRequest);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ và trả về mã lỗi
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+
     }
 }
