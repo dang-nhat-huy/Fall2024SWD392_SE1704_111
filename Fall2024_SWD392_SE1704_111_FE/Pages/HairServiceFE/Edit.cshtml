@@ -16,33 +16,33 @@
             <input type="hidden" asp-for="HairService.ServiceId" />
 
             <div class="form-group">
-                <label asp-for="HairService.ImageLink" class="control-label"></label>
-                <input asp-for="HairService.ImageLink" class="form-control" />
-                <span asp-validation-for="HairService.ImageLink" class="text-danger"></span>
+                <label asp-for="updateServiceDto.ImageLink" class="control-label"></label>
+                <input asp-for="updateServiceDto.ImageLink" class="form-control" />
+                <span asp-validation-for="updateServiceDto.ImageLink" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="HairService.ServiceName" class="control-label"></label>
-                <input asp-for="HairService.ServiceName" class="form-control" />
-                <span asp-validation-for="HairService.ServiceName" class="text-danger"></span>
+                <label asp-for="updateServiceDto.ServiceName" class="control-label"></label>
+                <input asp-for="updateServiceDto.ServiceName" class="form-control" />
+                <span asp-validation-for="updateServiceDto.ServiceName" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="HairService.Description" class="control-label"></label>
-                <textarea asp-for="HairService.Description" class="form-control"></textarea>
-                <span asp-validation-for="HairService.Description" class="text-danger"></span>
+                <label asp-for="updateServiceDto.description" class="control-label"></label>
+                <textarea asp-for="updateServiceDto.description" class="form-control"></textarea>
+                <span asp-validation-for="updateServiceDto.description" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="HairService.Price" class="control-label"></label>
-                <input asp-for="HairService.Price" class="form-control" type="number" step="0.01" />
-                <span asp-validation-for="HairService.Price" class="text-danger"></span>
+                <label asp-for="updateServiceDto.price" class="control-label"></label>
+                <input asp-for="updateServiceDto.price" class="form-control" type="number" step="0.01" />
+                <span asp-validation-for="updateServiceDto.price" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="HairService.EstimateTime" class="control-label"></label>
-                <input asp-for="HairService.EstimateTime" class="form-control" type="time" />
-                <span asp-validation-for="HairService.EstimateTime" class="text-danger"></span>
+                <label asp-for="updateServiceDto.estimateTime" class="control-label"></label>
+                <input asp-for="updateServiceDto.estimateTime" class="form-control" type="time" />
+                <span asp-validation-for="updateServiceDto.estimateTime" class="text-danger"></span>
             </div>
 
             <div class="form-group">

@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static BusinessObject.RequestDTO.RequestDTO;
 using static BusinessObject.ResponseDTO.ResponseDTO;
+using static BusinessObject.ServiceEnum;
 
 namespace Service.Service
 {
@@ -139,7 +140,7 @@ namespace Service.Service
             }
         }
 
-        public async Task<ResponseDTO> ChangeServiceStatusAsync(RequestDTO.RemoveServiceDTO request, int servicetId)
+        public async Task<ResponseDTO> ChangeServiceStatusAsync(int servicetId)
         {
             try
             {
@@ -152,7 +153,7 @@ namespace Service.Service
 
                 // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
 
-                service.Status = request.Status;
+                service.Status = service.Status == ServiceStatusEnum.Active ? ServiceStatusEnum.Inactive : ServiceStatusEnum.Active;
                 service.UpdateDate = DateTime.Now;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
@@ -190,6 +191,22 @@ namespace Service.Service
             }
         }
 
+        public async Task<PagedResult<HairService>> GetAllHairServicePagingAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var hairServiceList = _unitOfWork.HairServiceRepository.GetAll();
+                if (hairServiceList == null)
+                {
+                    throw new Exception();
+                }
+                return await Paging.GetPagedResultAsync(hairServiceList.AsQueryable(), pageNumber, pageSize);
+            }
+            catch (Exception)
+            {
+                return new PagedResult<HairService>();
+            }
+        }
     }
 
 

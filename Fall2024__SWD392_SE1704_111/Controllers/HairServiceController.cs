@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Service.IService;
 using Service.Service;
 using static BusinessObject.RequestDTO.RequestDTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
@@ -26,7 +27,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getServices/{id}")]
+        [HttpGet("GetHairServiceById/{id}")]
         public async Task<IActionResult> GetServiceById([FromRoute]int id)
         {
             var services = await _serviceManagementService.GetServiceByIdAsync(id);
@@ -49,7 +50,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         }
 
 
-        [HttpPost("create")]
+        [HttpPost("CreateHairService")]
         public async Task<IActionResult> CreateService([FromBody] CreateServiceDTO request)
         {
             // Kiểm tra xem request có hợp lệ không
@@ -70,7 +71,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
-        [HttpPost("update/{serviceId}")]
+        [HttpPost("updateHairService/{serviceId}")]
         public async Task<IActionResult> UpdateReport([FromBody] UpdateServiceDTO request, [FromRoute] int serviceId)
         {
             // Kiểm tra xem request có hợp lệ không
@@ -91,17 +92,12 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
-        [HttpPost("remove/{serviceId}")]
-        public async Task<IActionResult> RemoveReport([FromRoute] int serviceId, [FromBody] RemoveServiceDTO request)
+        [HttpPost("changeHairServiceStatus/{serviceId}")]
+        public async Task<IActionResult> RemoveReport([FromRoute] int serviceId)
         {
-            // Kiểm tra xem request có hợp lệ không
-            if (request == null)
-            {
-                return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request."));
-            }
 
             // Gọi service để tạo report
-            var response = await _serviceManagementService.ChangeServiceStatusAsync(request, serviceId);
+            var response = await _serviceManagementService.ChangeServiceStatusAsync(serviceId);
 
             // Kiểm tra kết quả và trả về phản hồi phù hợp
             if (response.Status != Const.SUCCESS_READ_CODE)
@@ -110,6 +106,22 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
+        }
+
+        [Authorize(Roles = "Manager")]
+        [HttpGet("PagingHairServiceList")]
+        public async Task<IActionResult> GetHairServicePaging([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+            // Gọi service để lấy danh sách người dùng
+            var response = await _serviceManagementService.GetAllHairServicePagingAsync(pageNumber, pageSize);
+
+            // Trả về phản hồi
+            if (response == null)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
         }
     }
 }

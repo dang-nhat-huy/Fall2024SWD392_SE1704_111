@@ -17,7 +17,8 @@ namespace Service.IService
         Task<ResponseDTO> GetServiceByNameAsync(string name);
        
         Task<ResponseDTO> CreateServiceAsync(CreateServiceDTO request);
-        Task<ResponseDTO> ChangeServiceStatusAsync(RemoveServiceDTO request, int servicetId);
+        Task<ResponseDTO> ChangeServiceStatusAsync(int servicetId);
         Task<ResponseDTO> UpdateServiceAsync(UpdateServiceDTO request, int serviceId);
+        Task<PagedResult<HairService>> GetAllHairServicePagingAsync(int pageNumber, int pageSize);
     }
 }

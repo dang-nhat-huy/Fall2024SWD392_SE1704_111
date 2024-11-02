@@ -23,5 +23,9 @@ namespace Repository.Repository
                 .ToListAsync(); // Return list of HairService
         }
 
+        public async Task<HairService> GetHairServiceById(int hairServiceId)
+        {
+            return await GetByIdAsync(hairServiceId);
+        }
     }
 }

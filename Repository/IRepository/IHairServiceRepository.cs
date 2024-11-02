@@ -11,5 +11,6 @@ namespace Repository.IRepository
     public interface IHairServiceRepository : IGenericRepository<HairService>
     {
         public Task<List<HairService?>> GetServiceByNameAsync(string serviceName);
+        public Task<HairService> GetHairServiceById(int hairServiceId);
     }
 }

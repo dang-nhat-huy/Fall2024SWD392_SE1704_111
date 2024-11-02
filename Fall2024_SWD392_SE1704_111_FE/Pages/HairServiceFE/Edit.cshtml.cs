@@ -7,6 +7,7 @@ using BusinessObject.ResponseDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Fall2024_SWD392_SE1704_111_FE.Pages.HairServiceFE
 {
@@ -14,6 +15,8 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.HairServiceFE
     {
         [BindProperty]
         public HairService HairService { get; set; } = default!;
+        [BindProperty]
+        public UpdateServiceDTO updateServiceDto { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -38,7 +41,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.HairServiceFE
 
                     // Deserialize `dto.Data` to `HairService`
                     var hairServiceJson = JsonConvert.SerializeObject(dto.Data);
-                    HairService = JsonConvert.DeserializeObject<HairService>(hairServiceJson);
+                    HairService = JsonConvert.DeserializeObject<HairService>(hairServiceJson)!;
                 }
                 else
                 {
@@ -72,7 +75,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.HairServiceFE
                     return RedirectToPage("../Login");
                 }
 
-                string jsonRequest = JsonConvert.SerializeObject(HairService);
+                string jsonRequest = JsonConvert.SerializeObject(updateServiceDto);
                 string url = $"https://localhost:7211/api/v1/hairservice/updateHairService/{serviceId}";
 
                 var client = new HttpClient();

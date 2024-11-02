@@ -48,7 +48,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.HairServiceFE
 
                     // Deserialize dto.Data to HairService
                     var hairServiceJson = JsonConvert.SerializeObject(dto.Data);
-                    HairService = JsonConvert.DeserializeObject<HairService>(hairServiceJson);
+                    HairService = JsonConvert.DeserializeObject<HairService>(hairServiceJson)!;
                 }
                 else
                 {
