@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Service.IService;
 using Service.Service;
 using static BusinessObject.RequestDTO.RequestDTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
@@ -110,6 +111,22 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
+        }
+
+        //[Authorize(Roles = "Manager")]
+        [HttpGet("PagingHairServiceList")]
+        public async Task<IActionResult> GetHairServicePaging([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+            // Gọi service để lấy danh sách người dùng
+            var response = await _serviceManagementService.GetAllHairServicePagingAsync(pageNumber, pageSize);
+
+            // Trả về phản hồi
+            if (response == null)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
         }
     }
 }

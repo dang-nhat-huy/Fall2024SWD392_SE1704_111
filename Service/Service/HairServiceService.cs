@@ -190,6 +190,22 @@ namespace Service.Service
             }
         }
 
+        public async Task<PagedResult<HairService>> GetAllHairServicePagingAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var hairServiceList = _unitOfWork.HairServiceRepository.GetAll();
+                if (hairServiceList == null)
+                {
+                    throw new Exception();
+                }
+                return await Paging.GetPagedResultAsync(hairServiceList.AsQueryable(), pageNumber, pageSize);
+            }
+            catch (Exception)
+            {
+                return new PagedResult<HairService>();
+            }
+        }
     }
 
 
