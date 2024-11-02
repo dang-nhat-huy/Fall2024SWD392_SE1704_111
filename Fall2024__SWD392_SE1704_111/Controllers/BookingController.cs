@@ -60,7 +60,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("history")]
         public async Task<IActionResult> GetBookingHistoryOfCurrentUser()
         {
@@ -100,6 +100,21 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             {
                 return StatusCode(500, new { message = ex.Message });
             }
+        }
+
+        [HttpGet("PagingBookingList")]
+        public async Task<IActionResult> GetBookingPaging([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+            // Gọi service để lấy danh sách người dùng
+            var response = await _bookingService.GetAllBookingsAsync();
+
+            // Trả về phản hồi
+            if (response == null)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
         }
     }
 }

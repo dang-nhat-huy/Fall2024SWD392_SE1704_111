@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.Model;
+using BusinessObject.Paging;
 using BusinessObject.RequestDTO;
 using BusinessObject.ResponseDTO;
 using Microsoft.Extensions.Configuration;
@@ -262,6 +263,23 @@ namespace Service.Service
             catch (Exception ex)
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<PagedResult<Booking>> GetAllBookingPagingAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var bookingList = _unitOfWork.BookingRepository.GetAll();
+                if (bookingList == null)
+                {
+                    throw new Exception();
+                }
+                return await Paging.GetPagedResultAsync(bookingList.AsQueryable(), pageNumber, pageSize);
+            }
+            catch (Exception)
+            {
+                return new PagedResult<Booking>();
             }
         }
     }
