@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static BusinessObject.ServiceEnum;
 
 namespace BusinessObject.Model
 {
@@ -17,7 +18,7 @@ namespace BusinessObject.Model
         public string? Description { get; set; }
         public double? Price { get; set; }
         public TimeSpan? EstimateTime { get; set; }
-        public int? Status { get; set; }
+        public ServiceStatusEnum? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
