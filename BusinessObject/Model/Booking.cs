@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace BusinessObject.Model
 {
@@ -19,27 +18,18 @@ namespace BusinessObject.Model
         public int? ManagerId { get; set; }
         public int? CustomerId { get; set; }
         public int? StaffId { get; set; }
-        public int? ScheduleId { get; set; }
-        public BookingStatus? Status { get; set; }
+        public int? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
-        [JsonIgnore]
+
         public virtual User? Customer { get; set; }
-        [JsonIgnore]
         public virtual User? Manager { get; set; }
-        [JsonIgnore]
-        public virtual Schedule? Schedule { get; set; }
-        [JsonIgnore]
         public virtual User? Staff { get; set; }
-        [JsonIgnore]
         public virtual Voucher? Voucher { get; set; }
-        [JsonIgnore]
         public virtual ICollection<BookingDetail> BookingDetails { get; set; }
-        [JsonIgnore]
         public virtual ICollection<Payment> Payments { get; set; }
-        [JsonIgnore]
         public virtual ICollection<Report> Reports { get; set; }
     }
 }

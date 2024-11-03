@@ -7,7 +7,7 @@ namespace BusinessObject.Model
     {
         public Schedule()
         {
-            Bookings = new HashSet<Booking>();
+            BookingDetails = new HashSet<BookingDetail>();
             ScheduleUsers = new HashSet<ScheduleUser>();
         }
 
@@ -16,13 +16,13 @@ namespace BusinessObject.Model
         public TimeSpan? EndTime { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public ScheduleEnum? Status { get; set; }
+        public int? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
         public string? UpdateBy { get; set; }
 
-        public virtual ICollection<Booking> Bookings { get; set; }
+        public virtual ICollection<BookingDetail> BookingDetails { get; set; }
         public virtual ICollection<ScheduleUser> ScheduleUsers { get; set; }
     }
 }
