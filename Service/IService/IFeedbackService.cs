@@ -19,5 +19,6 @@ namespace Service.IService
         Task<PagedResult<Feedback>> GetAllFeedbackPagingAsync(int pageNumber, int pageSize);
         Task<ResponseDTO> GetFeedbackByIdAsync(int feedbackId);
         Task<ResponseDTO> ChangeStatusFeedbackById(int feedbackId);
+        Task<PagedResult<Feedback>> SearchFeedbackByDescriptionAsync(string query, int pageNumber, int pageSize);
     }
 }

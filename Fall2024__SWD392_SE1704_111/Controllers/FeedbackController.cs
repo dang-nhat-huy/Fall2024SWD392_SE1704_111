@@ -116,5 +116,18 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response); // Trả về mã 200 nếu thành công
         }
+        [Authorize(Roles = "Manager")]
+        [HttpGet("SearchByDescription")]
+        public async Task<IActionResult> SearchFeedbackByDescription([FromQuery] string query, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+            var response = await _feedbackService.SearchFeedbackByDescriptionAsync(query, pageNumber, pageSize);
+
+            if (response == null || response.Items.Count == 0)
+            {
+                return NotFound(new ResponseDTO(Const.FAIL_READ_CODE, "No feedbacks found with the specified description."));
+            }
+
+            return Ok(response);
+        }
     }
 }

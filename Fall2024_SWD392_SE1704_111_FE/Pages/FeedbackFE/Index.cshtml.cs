@@ -22,7 +22,62 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
         public double Count { get; set; }
         [BindProperty]
         public string? searchValue { get; set; } = null!;
+        public async Task<IActionResult> OnPostAsync()
+        {
+            try
+            {
+                var size = 5;
+                if (string.IsNullOrEmpty(searchValue))
+                {
+                    // Nếu không có giá trị tìm kiếm, chuyển hướng đến Index để hiển thị toàn bộ phản hồi
+                    return RedirectToPage("./Index");
+                }
 
+                string url = $"https://localhost:7211/api/v1/feedbacks/SearchByDescription?query={searchValue}&pageNumber={Index}&pageSize={size}";
+
+                string? jwt = Request.Cookies["jwt"];
+                if (jwt == null)
+                {
+                    TempData["errorLogin"] = "You need to login to access this page";
+                    return RedirectToPage("../Login");
+                }
+
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
+
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Get
+                };
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var dto = JsonConvert.DeserializeObject<PagedResult<Feedback>>(jsonResponse)!;
+
+                    Feedback = dto.Items;
+
+                    var countJson = JsonConvert.SerializeObject(dto.TotalCount);
+                    var count = JsonConvert.DeserializeObject<int>(countJson);
+                    Count = Math.Ceiling((double)count / size);
+
+                    return Page();
+                }
+                else
+                {
+                    TempData["errorList"] = "Error retrieving search results";
+                }
+
+                return Page();
+            }
+            catch (Exception)
+            {
+                TempData["errorList"] = "An error occurred while processing your request. Please try again later";
+                return Page();
+            }
+        }
         public async Task<IActionResult> OnGetAsync()
         {
             try

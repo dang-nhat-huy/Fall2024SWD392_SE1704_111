@@ -13,6 +13,10 @@
     var role = HttpContext.Session.GetString("Role");
 }
 
+<form method="post">
+    <input type="text" name="searchValue" value="@Model.searchValue" placeholder="Search by Description" />
+    <button type="submit">Search</button>
+</form>
 @if (!string.IsNullOrEmpty(currentUserName))
 {
     <h2>Welcome, @currentUserName!</h2>

@@ -284,5 +284,25 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+
+        public async Task<PagedResult<Feedback>> SearchFeedbackByDescriptionAsync(string query, int pageNumber, int pageSize)
+        {
+            var feedbacks = await _unitOfWork.FeedbackRepository.GetAll()
+            .Where(f => f.Description.Contains(query))
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+            var totalFeedbacks = await _unitOfWork.FeedbackRepository.GetAll()
+                .CountAsync(f => f.Description.Contains(query));
+
+            return new PagedResult<Feedback>
+            {
+                Items = feedbacks,
+                TotalCount = totalFeedbacks,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+        }
     }
 }
