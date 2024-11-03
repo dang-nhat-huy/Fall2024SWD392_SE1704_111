@@ -18,7 +18,7 @@ namespace BusinessObject.Model
         public int? ManagerId { get; set; }
         public int? CustomerId { get; set; }
         public int? StaffId { get; set; }
-        public int? Status { get; set; }
+        public BookingStatus? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
