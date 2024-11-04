@@ -157,11 +157,20 @@ namespace Service.Service
                     }
                 }
 
-                // kiểm tra schedule có tồn tại không
-                var schedule = await _unitOfWork.UserRepository.GetByIdAsync(bookingRequest.ScheduleId);
-                if (schedule == null)
+                // Kiểm tra ScheduleId có tồn tại không
+                if (bookingRequest.ScheduleId == null || !bookingRequest.ScheduleId.Any())
                 {
-                    return new ResponseDTO(400, $"Stylist with ID {bookingRequest.ScheduleId} does not exist.");
+                    return new ResponseDTO(400, "Schedule IDs cannot be null or empty.");
+                }
+
+                // Kiểm tra từng ScheduleId
+                foreach (var scheduleId in bookingRequest.ScheduleId)
+                {
+                    var schedule = await _unitOfWork.ScheduleRepository.GetByIdAsync(scheduleId);
+                    if (schedule == null)
+                    {
+                        return new ResponseDTO(400, $"Schedule with ID {scheduleId} does not exist.");
+                    }
                 }
 
                 // Tạo một đối tượng Booking mới từ DTO
@@ -170,6 +179,7 @@ namespace Service.Service
                 booking.CreateDate = DateTime.Now;
                 booking.Status = BookingStatus.InQueue;
                 booking.TotalPrice = totalPrice;
+                booking.CreateBy = user.UserName;
                 // Thêm BookingDetails từ ServiceId và StylistId
                 booking.BookingDetails = new List<BookingDetail>();
                 for (int i = 0; i < bookingRequest.ServiceId.Count; i++)
@@ -178,8 +188,9 @@ namespace Service.Service
                     {
                         ServiceId = bookingRequest.ServiceId[i],
                         StylistId = bookingRequest.StylistId[i],
+                        ScheduleId = bookingRequest.ScheduleId[i],
                         CreateDate = DateTime.Now,
-                        //CreateBy = bookingRequest.CreatedBy
+                        CreateBy = user.UserName,
                     });
                 }
 
@@ -232,8 +243,14 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "No booking history found.");
                 }
 
-                // Ánh xạ kết quả từ Booking sang BookingHistoryDTO
-                var bookingHistoryDto = _mapper.Map<List<BookingHistoryDTO>>(bookings);
+                // Ánh xạ kết quả từ Booking sang BookingHistoryDTO bằng ánh xạ thủ công
+                List<BookingHistoryDTO> bookingHistoryDto = new List<BookingHistoryDTO>();
+
+                foreach (var booking in bookings)
+                {
+                    var dto = _mapper.Map<BookingHistoryDTO>(booking);
+                    bookingHistoryDto.Add(dto);
+                }
 
                 return new ResponseDTO(Const.SUCCESS_READ_CODE, "Booking history retrieved successfully.", bookingHistoryDto);
             }

@@ -25,25 +25,32 @@ namespace BusinessObject.Mapper
 
             CreateMap<Booking, BookingRequestDTO>()
                 .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId))
-                .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))
                 .ReverseMap();
 
 
             CreateMap<Booking, ChangebookingStatusDTO>().ReverseMap();
 
             CreateMap<Booking, BookingHistoryDTO>()
-            .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
-            .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))
-            .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.Schedule.StartDate))
-            .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.Schedule.EndDate))
-            .ForMember(dest => dest.Services, opt => opt.MapFrom(src =>
-                        src.BookingDetails.Select(bookingDetail => new ServiceDetailDTO
-                        {
-                        ServiceId = bookingDetail.ServiceId ?? 0, 
-                        ServiceName = bookingDetail.Service.ServiceName, 
-                        StylistName = bookingDetail.Stylist.UserName 
-            }).ToList()))
-            .ReverseMap();
+    .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
+    .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src =>
+        src.BookingDetails.Select(detail => detail.Schedule.StartDate).FirstOrDefault() ?? DateTime.MinValue))
+    .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src =>
+        src.BookingDetails.Select(detail => detail.Schedule.EndDate).LastOrDefault() ?? DateTime.MinValue))
+    .ForMember(dest => dest.Services, opt => opt.MapFrom(src =>
+        src.BookingDetails.Select(bookingDetail => new ServiceDetailDTO
+        {
+            ServiceId = bookingDetail.ServiceId ?? 0,
+            ServiceName = bookingDetail.Service.ServiceName,
+            StylistName = bookingDetail.Stylist.UserName
+        }).ToList()))
+    .ForMember(dest => dest.Schedules, opt => opt.MapFrom(src =>
+        src.BookingDetails.Select(bookingDetail => new ScheduledDetailDTO
+        {
+            ScheduleId = bookingDetail.ScheduleId ?? 0,
+            StartTime = bookingDetail.Schedule.StartTime,
+            EndTime = bookingDetail.Schedule.EndTime
+        }).ToList()))
+    .ReverseMap();
 
             CreateMap<Booking, BookingResponseDTO>()
                  .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.BookingId))
@@ -52,7 +59,8 @@ namespace BusinessObject.Mapper
                  .ForMember(dest => dest.ManagerId, opt => opt.MapFrom(src => src.ManagerId))
                  .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
                  .ForMember(dest => dest.StaffId, opt => opt.MapFrom(src => src.StaffId))
-                 .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))
+                 .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src =>
+                        src.BookingDetails.Select(detail => detail.ScheduleId).ToList()))
                  .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                  .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate))
                  .ForMember(dest => dest.CreateBy, opt => opt.MapFrom(src => src.CreateBy))

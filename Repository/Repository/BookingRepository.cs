@@ -35,7 +35,8 @@ namespace Repository.Repository
                     .ThenInclude(bd => bd.Service)
                 .Include(b => b.BookingDetails)  
                     .ThenInclude(bd => bd.Stylist)
-                .Include(b => b.Schedule)
+                .Include(b => b.BookingDetails)
+                .ThenInclude(bd => bd.Schedule)
                 .ToListAsync();
         }
     }
