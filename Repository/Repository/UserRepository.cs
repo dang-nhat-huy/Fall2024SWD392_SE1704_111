@@ -86,5 +86,10 @@ namespace Repository.Repository
             return users; // Trả về IQueryable<User>
         }
 
+        public async Task<bool> ExistsByEmailAsync(string email)
+        {
+            // Kiểm tra xem có bất kỳ người dùng nào với email đã cho hay không
+            return await _context.Users.AnyAsync(u => u.UserProfile.Email == email);
+        }
     }
 }

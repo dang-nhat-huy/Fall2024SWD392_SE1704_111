@@ -92,6 +92,11 @@ namespace Service.Service
                 {
                     return new ResponseDTO(Const.FAIL_CREATE_CODE, "The username is already taken. Please choose a different username.");
                 }
+                // Kiểm tra xem email đã tồn tại hay chưa
+                if (await _unitOfWork.UserRepository.ExistsByEmailAsync(request.Email))
+                {
+                    return new ResponseDTO(Const.FAIL_CREATE_CODE, "The email is already registered. Please use a different email.");
+                }
 
                 //AutoMapper from RegisterRequestDTO => User
                 var user = _mapper.Map<User>(request);

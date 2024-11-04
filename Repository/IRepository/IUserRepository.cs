@@ -12,6 +12,8 @@ namespace Repository.IRepository
     {
         Task<bool> ExistsByNameAsync(string name);
 
+        Task<bool> ExistsByEmailAsync(string email);
+
         Task<User?> GetUserByCurrentId(int userId);
 
         Task<User?> GetUserByIdAsync(int userId);
