@@ -137,7 +137,7 @@ namespace BusinessObject.ResponseDTO
         public int BookingId { get; set; }
         // Danh sách các dịch vụ kèm tên nhân viên thực hiện
         public List<ServiceDetailDTO> Services { get; set; } = new List<ServiceDetailDTO>();
-        public int ScheduleId { get; set; }
+        public List<ScheduledDetailDTO> Schedules { get; set; } = new List<ScheduledDetailDTO>();
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public double TotalPrice { get; set; }
@@ -149,6 +149,13 @@ namespace BusinessObject.ResponseDTO
         public int ServiceId { get; set; }
         public string ServiceName { get; set; }
         public string StylistName { get; set; }
+    }
+
+    public class ScheduledDetailDTO
+    {
+        public int ScheduleId { get; set; }
+        public TimeSpan? StartTime { get; set; }
+        public TimeSpan? EndTime { get; set; }
     }
     public class UserListDTO
     {
@@ -202,7 +209,7 @@ namespace BusinessObject.ResponseDTO
         public int? ManagerId { get; set; }
         public int? CustomerId { get; set; }
         public int? StaffId { get; set; }
-        public int? ScheduleId { get; set; }
+        public List<int>? ScheduleId { get; set; }
         public BookingStatus? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
