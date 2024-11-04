@@ -93,6 +93,7 @@ namespace Service.Service
                     customerId = user.UserId;
                 }
                 double? totalPrice = 0;
+                double totalTime = 0;
 
                 // Kiểm tra ServiceId
                 if (bookingRequest.ServiceId == null || !bookingRequest.ServiceId.Any())
@@ -113,6 +114,7 @@ namespace Service.Service
                         return new ResponseDTO(400, $"Service with ID {serviceId} does not exist.");
                     }
                     totalPrice += service.Price;
+                    totalTime += service.EstimateTime?.TotalMinutes ?? 0;
                 }
 
                 // Kiểm tra Voucher nếu có VoucherId
@@ -163,7 +165,14 @@ namespace Service.Service
                     return new ResponseDTO(400, "Schedule IDs cannot be null or empty.");
                 }
 
-                // Kiểm tra từng ScheduleId
+                // Kiểm tra trùng lặp ScheduleId
+                if (bookingRequest.ScheduleId.Count != bookingRequest.ScheduleId.Distinct().Count())
+                {
+                    return new ResponseDTO(400, "Schedule IDs cannot be duplicated.");
+                }
+
+                double totalScheduleDuration = 0;
+                // Kiểm tra từng ScheduleId và so sánh với tổng thời gian
                 foreach (var scheduleId in bookingRequest.ScheduleId)
                 {
                     var schedule = await _unitOfWork.ScheduleRepository.GetByIdAsync(scheduleId);
@@ -171,6 +180,19 @@ namespace Service.Service
                     {
                         return new ResponseDTO(400, $"Schedule with ID {scheduleId} does not exist.");
                     }
+
+                    // Tính thời gian của lịch (đơn vị tính là phút) và cộng dồn vào totalScheduleDuration
+                    var scheduleDuration = (schedule.EndTime - schedule.StartTime)?.TotalMinutes;
+                    if (scheduleDuration.HasValue)
+                    {
+                        totalScheduleDuration += scheduleDuration.Value;
+                    }
+                }
+
+                // Kiểm tra xem tổng thời gian của dịch vụ có vượt quá tổng thời gian của lịch hay không
+                if (totalScheduleDuration < totalTime)
+                {
+                    return new ResponseDTO(400, "Total time of services exceeds the schedule duration. Please select additional schedules.");
                 }
 
                 // Tạo một đối tượng Booking mới từ DTO
@@ -179,7 +201,17 @@ namespace Service.Service
                 booking.CreateDate = DateTime.Now;
                 booking.Status = BookingStatus.InQueue;
                 booking.TotalPrice = totalPrice;
-                booking.CreateBy = user.UserName;
+
+                string name;
+                if(user == null)
+                {
+                     name = bookingRequest.UserName;
+                }
+                else
+                {
+                    name = user.UserName;
+                }
+                booking.CreateBy = name;
                 // Thêm BookingDetails từ ServiceId và StylistId
                 booking.BookingDetails = new List<BookingDetail>();
                 for (int i = 0; i < bookingRequest.ServiceId.Count; i++)
@@ -190,7 +222,7 @@ namespace Service.Service
                         StylistId = bookingRequest.StylistId[i],
                         ScheduleId = bookingRequest.ScheduleId[i],
                         CreateDate = DateTime.Now,
-                        CreateBy = user.UserName,
+                        CreateBy = name,
                     });
                 }
 
