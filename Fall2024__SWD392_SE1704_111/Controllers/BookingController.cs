@@ -42,6 +42,23 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
+        [Authorize(Roles = "Staff")]
+        [HttpPost("AcceptBookingStatus/{id}")]
+        public async Task<IActionResult> AcceptBookingStatus([FromRoute] int id)
+        {
+
+            // Gọi service để cập nhật thông tin người dùng
+            var response = await _bookingService.AcceptBookingStatus(id);
+
+            // Kiểm tra kết quả và trả về phản hồi phù hợp
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); // Trả về mã lỗi 400 với thông báo lỗi từ ResponseDTO
+            }
+
+            return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
+        }
+
         [HttpPost("createBooking")]
         public async Task<IActionResult> Booking([FromBody] BookingRequestDTO request)
         {
@@ -106,10 +123,25 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         public async Task<IActionResult> GetBookingPaging([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
         {
             // Gọi service để lấy danh sách người dùng
-            var response = await _bookingService.GetAllBookingsAsync();
+            var response = await _bookingService.GetAllBookingPagingAsync(pageNumber, pageSize);
 
             // Trả về phản hồi
             if (response == null)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
+        }
+
+        [HttpGet("GetBookingById/{bookingId}")]
+        public async Task<IActionResult> GetBookingById([FromRoute] int bookingId)
+        {
+
+            var response = await _bookingService.GetBookingByIdAsync(bookingId);
+
+            // Trả về phản hồi
+            if (response.Status != Const.SUCCESS_READ_CODE)
             {
                 return BadRequest(response); // Trả về mã lỗi nếu không thành công
             }

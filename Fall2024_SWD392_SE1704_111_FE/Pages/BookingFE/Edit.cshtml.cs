@@ -37,7 +37,6 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.BookingFE
             Booking = booking;
            ViewData["CustomerId"] = new SelectList(_context.Users, "UserId", "UserId");
            ViewData["ManagerId"] = new SelectList(_context.Users, "UserId", "UserId");
-           ViewData["ScheduleId"] = new SelectList(_context.Schedules, "ScheduleId", "ScheduleId");
            ViewData["StaffId"] = new SelectList(_context.Users, "UserId", "UserId");
            ViewData["VoucherId"] = new SelectList(_context.Vouchers, "VoucherId", "VoucherId");
             return Page();

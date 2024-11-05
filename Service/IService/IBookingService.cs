@@ -20,5 +20,7 @@ namespace Service.IService
         Task<ResponseDTO> GetBookingHistoryOfCurrentUser();
         Task<ResponseDTO> GetAllBookingsAsync();
         Task<PagedResult<Booking>> GetAllBookingPagingAsync(int pageNumber, int pageSize);
+        Task<ResponseDTO> GetBookingByIdAsync(int bookingId);
+        Task<ResponseDTO> AcceptBookingStatus(int bookingId);
     }
 }

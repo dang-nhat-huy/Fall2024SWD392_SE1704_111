@@ -5,11 +5,8 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Manage Booking</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -30,21 +27,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Booking[0].UpdateBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Booking[0].Customer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Booking[0].Manager)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Booking[0].Schedule)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Booking[0].Staff)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Booking[0].Voucher)
             </th>
             <th></th>
         </tr>
@@ -71,24 +53,9 @@
                 @Html.DisplayFor(modelItem => item.UpdateBy)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Customer.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Manager.UserId)
-            </td>
-             <td>
-                 @Html.DisplayFor(modelItem => item.Schedule.ScheduleId)
-             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Staff.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Voucher.VoucherId)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.BookingId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.BookingId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.BookingId">Delete</a>
+@*                 <a asp-page="./Edit" asp-route-id="@item.BookingId">Edit</a> | *@
+@*                 <a asp-page="./Details" asp-route-id="@item.BookingId">Details</a> | *@
+                <a asp-page="./Delete" asp-route-id="@item.BookingId">Change Status</a>
             </td>
         </tr>
 }
