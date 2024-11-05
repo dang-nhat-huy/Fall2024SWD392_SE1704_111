@@ -27,14 +27,19 @@
                         {
 
                         }
-                        else if (role.Equals("Admin") || role.Equals("Manager"))
+                        else if (role.Equals("Admin") || role.Equals("Manager") || role.Equals("Staff"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/UserFE/Index">Manage Account</a>
-                            </li>
-                            
-                            if (role.Equals("Manager"))
+                            if (role.Equals("Admin"))
                             {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/UserFE/Index">Manage Account</a>
+                                </li>
+                            }
+                            else if (role.Equals("Manager"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/UserFE/Index">Manage Account</a>
+                                </li>
                                 <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/HairServiceFE/Index">Manage Service</a>
                             </li>
@@ -45,11 +50,14 @@
                                     <a class="nav-link text-dark" asp-area="" asp-page="/FeedbackFE/Index">Manage feedback</a>
                                 </li>
                             }
-                            if (role.Equals("Staff"))
+                            else if (role.Equals("Staff"))
                             {
                                 <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/BookingFE/Index">Manage Booking</a>
-                            </li>
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/BookingFE/Index">Manage Booking</a>
+                                </li>
+@*                                 <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/FeedbackFE/Index">Manage feedback</a>
+                                </li> *@
                             }
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Logout">Logout</a>

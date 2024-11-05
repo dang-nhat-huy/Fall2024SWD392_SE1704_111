@@ -66,3 +66,13 @@
 }
     </tbody>
 </table>
+<div class="align-middle">
+    <ul class="pagination">
+        @for (int b = 1; b <= Model.Count; b++)
+        {
+            <li class="page-item @(b == Model.Index ? "active" : "")">
+                <a asp-page="./Index" asp-route-Index="@b" class="page-link">@b</a>
+            </li>
+        }
+    </ul>
+</div>
