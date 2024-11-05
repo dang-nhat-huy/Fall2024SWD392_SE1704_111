@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.Model;
+using BusinessObject.Paging;
 using BusinessObject.RequestDTO;
 using BusinessObject.ResponseDTO;
 using Microsoft.Extensions.Configuration;
@@ -52,7 +53,37 @@ namespace Service.Service
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
-        }       
+        }
+
+        public async Task<ResponseDTO> AcceptBookingStatus(int bookingId)
+        {
+            try
+            {
+                int customerId;
+                // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+
+                    var booking = await _unitOfWork.BookingRepository.GetBookingByIdAsync(bookingId);
+                if (booking == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "Booking not found !");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
+
+                booking.Status = booking.Status == BookingStatus.InQueue ? BookingStatus.Accepted : BookingStatus.InQueue;
+                booking.UpdateBy = user.UserName;
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.BookingRepository.UpdateAsync(booking);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Change Status Succeed");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
 
         public async Task<ResponseDTO> CreateBooking(BookingRequestDTO bookingRequest)
         {           
@@ -93,6 +124,7 @@ namespace Service.Service
                     customerId = user.UserId;
                 }
                 double? totalPrice = 0;
+                double totalTime = 0;
 
                 // Kiểm tra ServiceId
                 if (bookingRequest.ServiceId == null || !bookingRequest.ServiceId.Any())
@@ -113,6 +145,7 @@ namespace Service.Service
                         return new ResponseDTO(400, $"Service with ID {serviceId} does not exist.");
                     }
                     totalPrice += service.Price;
+                    totalTime += service.EstimateTime?.TotalMinutes ?? 0;
                 }
 
                 // Kiểm tra Voucher nếu có VoucherId
@@ -157,11 +190,40 @@ namespace Service.Service
                     }
                 }
 
-                // kiểm tra schedule có tồn tại không
-                var schedule = await _unitOfWork.UserRepository.GetByIdAsync(bookingRequest.ScheduleId);
-                if (schedule == null)
+                // Kiểm tra ScheduleId có tồn tại không
+                if (bookingRequest.ScheduleId == null || !bookingRequest.ScheduleId.Any())
                 {
-                    return new ResponseDTO(400, $"Stylist with ID {bookingRequest.ScheduleId} does not exist.");
+                    return new ResponseDTO(400, "Schedule IDs cannot be null or empty.");
+                }
+
+                // Kiểm tra trùng lặp ScheduleId
+                if (bookingRequest.ScheduleId.Count != bookingRequest.ScheduleId.Distinct().Count())
+                {
+                    return new ResponseDTO(400, "Schedule IDs cannot be duplicated.");
+                }
+
+                double totalScheduleDuration = 0;
+                // Kiểm tra từng ScheduleId và so sánh với tổng thời gian
+                foreach (var scheduleId in bookingRequest.ScheduleId)
+                {
+                    var schedule = await _unitOfWork.ScheduleRepository.GetByIdAsync(scheduleId);
+                    if (schedule == null)
+                    {
+                        return new ResponseDTO(400, $"Schedule with ID {scheduleId} does not exist.");
+                    }
+
+                    // Tính thời gian của lịch (đơn vị tính là phút) và cộng dồn vào totalScheduleDuration
+                    var scheduleDuration = (schedule.EndTime - schedule.StartTime)?.TotalMinutes;
+                    if (scheduleDuration.HasValue)
+                    {
+                        totalScheduleDuration += scheduleDuration.Value;
+                    }
+                }
+
+                // Kiểm tra xem tổng thời gian của dịch vụ có vượt quá tổng thời gian của lịch hay không
+                if (totalScheduleDuration < totalTime)
+                {
+                    return new ResponseDTO(400, "Total time of services exceeds the schedule duration. Please select additional schedules.");
                 }
 
                 // Tạo một đối tượng Booking mới từ DTO
@@ -170,6 +232,17 @@ namespace Service.Service
                 booking.CreateDate = DateTime.Now;
                 booking.Status = BookingStatus.InQueue;
                 booking.TotalPrice = totalPrice;
+
+                string name;
+                if(user == null)
+                {
+                     name = bookingRequest.UserName;
+                }
+                else
+                {
+                    name = user.UserName;
+                }
+                booking.CreateBy = name;
                 // Thêm BookingDetails từ ServiceId và StylistId
                 booking.BookingDetails = new List<BookingDetail>();
                 for (int i = 0; i < bookingRequest.ServiceId.Count; i++)
@@ -178,8 +251,9 @@ namespace Service.Service
                     {
                         ServiceId = bookingRequest.ServiceId[i],
                         StylistId = bookingRequest.StylistId[i],
+                        ScheduleId = bookingRequest.ScheduleId[i],
                         CreateDate = DateTime.Now,
-                        //CreateBy = bookingRequest.CreatedBy
+                        CreateBy = name,
                     });
                 }
 
@@ -232,8 +306,14 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "No booking history found.");
                 }
 
-                // Ánh xạ kết quả từ Booking sang BookingHistoryDTO
-                var bookingHistoryDto = _mapper.Map<List<BookingHistoryDTO>>(bookings);
+                // Ánh xạ kết quả từ Booking sang BookingHistoryDTO bằng ánh xạ thủ công
+                List<BookingHistoryDTO> bookingHistoryDto = new List<BookingHistoryDTO>();
+
+                foreach (var booking in bookings)
+                {
+                    var dto = _mapper.Map<BookingHistoryDTO>(booking);
+                    bookingHistoryDto.Add(dto);
+                }
 
                 return new ResponseDTO(Const.SUCCESS_READ_CODE, "Booking history retrieved successfully.", bookingHistoryDto);
             }
@@ -262,6 +342,73 @@ namespace Service.Service
             catch (Exception ex)
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<PagedResult<Booking>> GetAllBookingPagingAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var bookingList = _unitOfWork.BookingRepository.GetAll();
+                if (bookingList == null)
+                {
+                    throw new Exception();
+                }
+                return await Paging.GetPagedResultAsync(bookingList.AsQueryable(), pageNumber, pageSize);
+            }
+            catch (Exception)
+            {
+                return new PagedResult<Booking>();
+            }
+        }
+
+        public async Task<ResponseDTO> GetBookingByIdAsync(int bookingId)
+        {
+            try
+            {
+
+                var booking = await _unitOfWork.BookingRepository.GetByIdAsync(bookingId);
+
+                // Kiểm tra nếu danh sách rỗng
+                if (booking == null)
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "No Booking found with the ID");
+                }
+
+                //// Sử dụng AutoMapper để ánh xạ các entity sang DTO
+                //var result = _mapper.Map<VoucherDTO>(voucher);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, booking);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu xảy ra
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<PagedResult<Booking>> GetCustomerPagingByCreatedByAsync(string customerName, int pageNumber, int pageSize)
+        {
+            try
+            {
+
+                // Gọi repository để lấy danh sách người dùng theo tên
+                var users = _unitOfWork.BookingRepository.GetCustomerNameByCreatedByAsync(customerName);
+
+                // Kiểm tra nếu danh sách rỗng
+                if (users == null)
+                {
+                    throw new Exception();
+                }
+
+                var usersQuery = users.AsQueryable();
+
+                return await Paging.GetPagedResultAsync(usersQuery, pageNumber, pageSize);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu xảy ra
+                return new PagedResult<Booking>();
             }
         }
     }
