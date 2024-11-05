@@ -85,6 +85,10 @@ namespace RazorPage.Pages
                     {
                         return RedirectToPage("./UserFE/Index");
                     }
+                    else if (role.Equals("Staff"))
+                    {
+                        return RedirectToPage("./BookingFE/Index");
+                    }
                     else
                     {
                         TempData["errorLogin"] = "Unauthorize for this user!";

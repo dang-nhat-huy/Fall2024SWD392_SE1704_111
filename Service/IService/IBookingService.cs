@@ -1,4 +1,5 @@
-﻿using BusinessObject.ResponseDTO;
+﻿using BusinessObject.Model;
+using BusinessObject.ResponseDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,8 @@ namespace Service.IService
 
         Task<ResponseDTO> GetBookingHistoryOfCurrentUser();
         Task<ResponseDTO> GetAllBookingsAsync();
+        Task<PagedResult<Booking>> GetAllBookingPagingAsync(int pageNumber, int pageSize);
+        Task<ResponseDTO> GetBookingByIdAsync(int bookingId);
+        Task<ResponseDTO> AcceptBookingStatus(int bookingId);
     }
 }

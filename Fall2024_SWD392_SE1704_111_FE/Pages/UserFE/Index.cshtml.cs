@@ -72,14 +72,6 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                         var usersListJson = JsonConvert.SerializeObject(dto.Items);
                         Users = JsonConvert.DeserializeObject<IList<User>>(usersListJson)!;
 
-                        //// Lọc danh sách để không bao gồm người dùng đang đăng nhập
-                        //Users = Users.Where(u => u.UserId.ToString() != currentUserId).ToList();
-
-                        //if(role == "Manager")
-                        //{
-                        //    Users = Users.Where(u => u.UserId.ToString() != currentUserId && u.Role.ToString() != "Admin").ToList();
-                        //}
-
                         //phân trang cho list
                         var countJson = JsonConvert.SerializeObject(dto.TotalCount);
                         var count = JsonConvert.DeserializeObject<int>(countJson);
