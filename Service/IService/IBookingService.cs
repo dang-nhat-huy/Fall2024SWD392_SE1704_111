@@ -22,5 +22,7 @@ namespace Service.IService
         Task<PagedResult<Booking>> GetAllBookingPagingAsync(int pageNumber, int pageSize);
         Task<ResponseDTO> GetBookingByIdAsync(int bookingId);
         Task<ResponseDTO> AcceptBookingStatus(int bookingId);
+        //Task<ResponseDTO> GetCustomerNameByCreatedByAsync(string fullName);
+        Task<PagedResult<Booking>> GetCustomerPagingByCreatedByAsync(string customerName, int pageNumber, int pageSize);
     }
 }

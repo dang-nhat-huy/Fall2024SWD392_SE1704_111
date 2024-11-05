@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Fall2024_SWD392_SE1704_111_FE.Pages.BookingFE
 {
@@ -87,6 +88,69 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.BookingFE
             catch (Exception)
             {
                 TempData["errorList"] = "An error occurred while processing your request. Please try again later";
+                return Page();
+            }
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            try
+            {
+                var size = 5;
+                if (searchValue == null)
+                {
+                    //TempData["error"] = "You must input to search";
+                    return RedirectToPage("../BookingFE/Index");
+                }
+
+                ViewData["SearchOption"] = new SelectList(new[]
+                    {
+                    new { Value = "UserName", Text = "Username" }
+                }, "Value", "Text");
+
+                string? jwt = Request.Cookies["jwt"]!.ToString();
+
+
+                string url = $"https://localhost:7211/api/v1/booking/searchCustomerNameByCreatedBy/" + searchValue;
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(url),
+                    Method = HttpMethod.Get
+                };
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+
+                    // Lấy danh sách người dùng từ API nếu token hợp lệ
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var dto = JsonConvert.DeserializeObject<PagedResult<Booking>>(jsonResponse)!;
+
+                    // Deserialize `dto.Data` to `Booking`
+                    var bookingListJson = JsonConvert.SerializeObject(dto.Items);
+                    Booking = JsonConvert.DeserializeObject<IList<Booking>>(bookingListJson)!;
+
+                    var role = HttpContext.Session.GetString("Role");
+
+                    //phân trang cho list
+                    var countJson = JsonConvert.SerializeObject(dto.TotalCount);
+                    var count = JsonConvert.DeserializeObject<int>(countJson);
+                    Count = Math.Ceiling((double)count / size);
+
+                    return Page();  // Trả về Razor Page với danh sách người dùng
+                }
+                else
+                {
+                    TempData["error"] = "Error Getting Data";
+                }
+
+                return Page();
+            }
+            catch (Exception)
+            {
+                TempData["error"] = "An error occurred while processing your request. Please try again later";
                 return Page();
             }
         }

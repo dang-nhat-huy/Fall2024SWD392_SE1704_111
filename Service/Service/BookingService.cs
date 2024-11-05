@@ -59,8 +59,11 @@ namespace Service.Service
         {
             try
             {
+                int customerId;
                 // Lấy người dùng hiện tại
-                var booking = await _unitOfWork.BookingRepository.GetBookingByIdAsync(bookingId);
+                var user = await _jWTService.GetCurrentUserAsync();
+
+                    var booking = await _unitOfWork.BookingRepository.GetBookingByIdAsync(bookingId);
                 if (booking == null)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "Booking not found !");
@@ -69,6 +72,7 @@ namespace Service.Service
                 // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
 
                 booking.Status = booking.Status == BookingStatus.InQueue ? BookingStatus.Accepted : BookingStatus.InQueue;
+                booking.UpdateBy = user.UserName;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 await _unitOfWork.BookingRepository.UpdateAsync(booking);
@@ -380,6 +384,31 @@ namespace Service.Service
             {
                 // Xử lý ngoại lệ nếu xảy ra
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<PagedResult<Booking>> GetCustomerPagingByCreatedByAsync(string customerName, int pageNumber, int pageSize)
+        {
+            try
+            {
+
+                // Gọi repository để lấy danh sách người dùng theo tên
+                var users = _unitOfWork.BookingRepository.GetCustomerNameByCreatedByAsync(customerName);
+
+                // Kiểm tra nếu danh sách rỗng
+                if (users == null)
+                {
+                    throw new Exception();
+                }
+
+                var usersQuery = users.AsQueryable();
+
+                return await Paging.GetPagedResultAsync(usersQuery, pageNumber, pageSize);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu xảy ra
+                return new PagedResult<Booking>();
             }
         }
     }

@@ -39,5 +39,15 @@ namespace Repository.Repository
                 .ThenInclude(bd => bd.Schedule)
                 .ToListAsync();
         }
+
+        public IQueryable<Booking> GetCustomerNameByCreatedByAsync(string fullName)
+        {
+            var customerList = _context.Bookings
+                .Where(u => u.CreateBy.ToLower().StartsWith(fullName.ToLower())); // Trả về danh sách
+
+            return customerList;
+
+
+        }
     }
 }
