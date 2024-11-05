@@ -39,21 +39,20 @@ namespace Service.Service
         {
             try
             {
-                var query = await _unitOfWork.ScheduleRepository.GetAllWithTwoInclude("Bookings", "ScheduleUsers").ToListAsync();
+                var listUser = await _unitOfWork.ScheduleRepository.GetAllAsync();
 
-                if (query == null || !query.Any())
+                if (listUser == null)
                 {
-                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "Empty List");
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "No Schedule found.");
                 }
-
-                // Sử dụng AutoMapper để ánh xạ danh sách
-                var result = _mapper.Map<List<ScheduleDTO>>(query);
-
-                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+                else
+                {
+                    return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, listUser);
+                }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return new ResponseDTO(Const.ERROR_EXCEPTION, e.Message);
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
         public async Task<ResponseDTO> CreateSchedule(RequestDTO.CreateScheduleDTO request)
