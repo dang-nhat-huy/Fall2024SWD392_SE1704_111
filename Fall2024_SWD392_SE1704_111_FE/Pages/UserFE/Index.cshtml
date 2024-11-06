@@ -4,6 +4,10 @@
 @{
     ViewData["Title"] = "Hair Salon Management";
 }
+@if (TempData["Message"] != null)
+{
+    <h2 class="text-info">@TempData["Message"]</h2>
+}
 
 @{
     // Lấy tên người dùng từ session

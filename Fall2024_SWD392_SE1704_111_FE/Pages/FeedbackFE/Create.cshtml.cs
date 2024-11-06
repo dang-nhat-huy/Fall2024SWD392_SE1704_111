@@ -66,7 +66,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
                 // Kiểm tra phản hồi từ API
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["success"] = "Feedback created successfully";
+                    TempData["Message"] = "Feedback created successfully";
                     var role = HttpContext.Session.GetString("Role");
                     if (role == "Manager")
                     {
