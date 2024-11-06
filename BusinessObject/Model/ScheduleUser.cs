@@ -8,6 +8,7 @@ namespace BusinessObject.Model
         public int ScheduleUserId { get; set; }
         public int? UserId { get; set; }
         public int? ScheduleId { get; set; }
+        public ScheduleUserEnum? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
