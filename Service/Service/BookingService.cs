@@ -259,20 +259,23 @@ namespace Service.Service
 
                 // Lưu Booking vào database thông qua UnitOfWork
                 var checkUpdate = await _unitOfWork.BookingRepository.CreateBookingAsync(booking);
-                if (checkUpdate <= 0)
+                if (checkUpdate > 0)
                 {
-                    return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
+                    // Gọi hàm cập nhật status cho ScheduleUser
+                    await UpdateScheduleUserStatusAsync(bookingRequest.StylistId,bookingRequest.ScheduleId, ScheduleUserEnum.InQueue, name);
+
+                    var userInfo = _unitOfWork.UserRepository.GetById(customerId);
+                    var checkoutRequest = new CheckoutRequestDTO
+                    {
+                        TotalPrice = booking.TotalPrice,
+                        CreateDate = DateTime.Now,
+                        Description = $"{userInfo.UserName} {userInfo.Phone}",
+                        FullName = userInfo.UserName,
+                        BookingId = booking.BookingId
+                    };
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG, checkoutRequest);
                 }
-                var userInfo =  _unitOfWork.UserRepository.GetById(customerId);
-                var checkoutRequest = new CheckoutRequestDTO
-                {
-                    TotalPrice = booking.TotalPrice,
-                    CreateDate = DateTime.Now,
-                    Description = $"{userInfo.UserName} {userInfo.Phone}",
-                    FullName = userInfo.UserName,
-                    BookingId = booking.BookingId
-                };
-                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG, checkoutRequest);
+                return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
             }
             catch (Exception ex)
             {
@@ -280,6 +283,39 @@ namespace Service.Service
             }
             
         }
+
+        private async Task UpdateScheduleUserStatusAsync(List<int> stylistIds, List<int> scheduleIds, ScheduleUserEnum status, string updatedBy)
+        {
+            try
+            {
+                foreach (var stylistId in stylistIds)
+                {
+                    foreach (var scheduleId in scheduleIds)
+                    {
+                        // Sử dụng repository để lấy bản ghi ScheduleUser
+                        var scheduleUser = await _unitOfWork.ScheduleUserRepository
+                            .GetByUserAndScheduleIdAsync(stylistId, scheduleId);
+
+                        if (scheduleUser != null)
+                        {
+                            // Cập nhật Status và UpdateBy cho từng bản ghi
+                            scheduleUser.Status = status;
+                            scheduleUser.UpdateDate = DateTime.Now;
+                            scheduleUser.UpdateBy = updatedBy;
+
+                            // Lưu thay đổi
+                            await _unitOfWork.ScheduleUserRepository.UpdateAsync(scheduleUser);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi nếu cần
+                Console.WriteLine($"Error updating ScheduleUser status: {ex.Message}");
+            }
+        }
+
         public async Task<IEnumerable<ViewBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10)
         {
             var bookings = await _unitOfWork.BookingRepository.GetAllAsync();
