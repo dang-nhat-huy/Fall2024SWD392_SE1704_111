@@ -25,6 +25,11 @@ namespace BusinessObject.Mapper
                 .ForPath(dest => dest.UserProfile.Address, opt => opt.MapFrom(src => src.Address))
                 .ForPath(dest => dest.UserProfile.DateOfBirth, opt => opt.MapFrom(src => src.DateOfBirth)).ReverseMap();
 
+            CreateMap<User, GuestRegisterRequestDTO>()
+                .ForMember(dest => dest.userName, opt => opt.MapFrom(src => src.UserName))
+                .ForMember(dest => dest.phone, opt => opt.MapFrom(src => src.Phone))
+                .ReverseMap();
+
             CreateMap<User, LoginResponse>().ReverseMap();
 
             CreateMap<User, ChangeStatusAccountDTO>().ReverseMap();
