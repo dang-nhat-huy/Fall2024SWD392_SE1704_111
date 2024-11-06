@@ -16,7 +16,7 @@ namespace Repository.Repository
 
         public ScheduleUserRepository(HairSalonBookingContext context) => _context = context;
 
-        public async Task<IQueryable<ScheduleUser>> GetUserByRoleAsync()
+        public async Task<IQueryable<ScheduleUser>> GetListScheduleByRoleAsync()
         {
             return _context.ScheduleUsers.Include(get => get.Schedule)
                 .Include(y => y.User)
