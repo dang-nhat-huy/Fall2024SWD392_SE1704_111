@@ -51,6 +51,7 @@ namespace BusinessObject.Model
 
             return strConn;
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Booking>(entity =>
@@ -204,7 +205,7 @@ namespace BusinessObject.Model
             modelBuilder.Entity<HairService>(entity =>
             {
                 entity.HasKey(e => e.ServiceId)
-                    .HasName("PK__HairServ__4550733F0D6A995D");
+                    .HasName("PK__HairServ__4550733FC5DC62AD");
 
                 entity.Property(e => e.ServiceId).HasColumnName("serviceID");
 
@@ -460,6 +461,8 @@ namespace BusinessObject.Model
 
                 entity.Property(e => e.ScheduleId).HasColumnName("scheduleID");
 
+                entity.Property(e => e.Status).HasColumnName("status").HasConversion<int>();
+
                 entity.Property(e => e.UpdateBy)
                     .HasMaxLength(255)
                     .HasColumnName("updateBy");
@@ -485,7 +488,7 @@ namespace BusinessObject.Model
             modelBuilder.Entity<ServicesStylist>(entity =>
             {
                 entity.HasKey(e => e.ServiceStylistId)
-                    .HasName("PK__Services__9352A5DC4E162FC0");
+                    .HasName("PK__Services__9352A5DCB2964AE8");
 
                 entity.ToTable("Services_Stylist");
 
@@ -501,6 +504,8 @@ namespace BusinessObject.Model
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ServiceId).HasColumnName("serviceID");
+
+                entity.Property(e => e.Status).HasColumnName("status").HasConversion<int>();
 
                 entity.Property(e => e.StylistId).HasColumnName("stylistID");
 
@@ -610,7 +615,7 @@ namespace BusinessObject.Model
             {
                 entity.ToTable("UserProfile");
 
-                entity.HasIndex(e => e.Email, "UQ__UserProf__AB6E6164A69C8877")
+                entity.HasIndex(e => e.Email, "UQ__UserProf__AB6E61647D9BE3FC")
                     .IsUnique();
 
                 entity.HasIndex(e => e.UserId, "UX_UserProfile_UserID")
