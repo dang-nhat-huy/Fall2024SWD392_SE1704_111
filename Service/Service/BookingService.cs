@@ -103,7 +103,7 @@ namespace Service.Service
                     else
                     {
                         //Nếu người dùng chưa đăng nhập
-                        RegisterRequestDTO registerRequestDTO = new RegisterRequestDTO();
+                        GuestRegisterRequestDTO registerRequestDTO = new GuestRegisterRequestDTO();
                         registerRequestDTO.userName = bookingRequest.UserName;
                         registerRequestDTO.phone = bookingRequest.Phone;
                         var registUser = _mapper.Map<User>(registerRequestDTO);

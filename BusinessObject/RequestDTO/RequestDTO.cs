@@ -42,7 +42,16 @@ namespace BusinessObject.RequestDTO
             public DateTime? DateOfBirth { get; set; }
         }
 
-        public class BookingRequestDTO
+        public class GuestRegisterRequestDTO
+        {
+            [Required]
+            [StringLength(255, ErrorMessage = "Username cannot exceed 255 characters.")]
+            public string userName { get; set; }
+            [Required]
+            [RegularExpression(@"^\d{10,15}$", ErrorMessage = "Phone number must be between 10 and 15 digits and only contain numbers.")]
+            public string phone { get; set; }
+        }
+            public class BookingRequestDTO
         {
             public string? UserName { get; set; }
             public string? Phone { get; set; }
