@@ -200,7 +200,7 @@ namespace Service.Service
         {
             try
             {
-                var feedbackList = _unitOfWork.FeedbackRepository.GetAll();
+                var feedbackList = _unitOfWork.FeedbackRepository.GetAll().Where(s => s.Status == FeedbackStatusEnum.Active);
                 if (feedbackList == null)
                 {
                     throw new Exception();

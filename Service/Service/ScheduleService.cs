@@ -33,22 +33,27 @@ namespace Service.Service
        
         public IQueryable<Schedule> GetListSchedule()
         {
-            var query = _unitOfWork.ScheduleRepository.GetAll();
+            var query = _unitOfWork.ScheduleRepository.GetAll()
+                 .Where(s => s.Status == ScheduleEnum.Available);
             return query;
         }
         public async Task<ResponseDTO> GetListScheduleAsync()
         {
             try
             {
-                var listUser = await _unitOfWork.ScheduleRepository.GetAllAsync();
+                // Lấy tất cả các Schedule
+                var allSchedules = await _unitOfWork.ScheduleRepository.GetAllAsync();
 
-                if (listUser == null)
+                // Lọc những Schedule có Status là "Available"
+                var availableSchedules = allSchedules.Where(s => s.Status == ScheduleEnum.Available).ToList();
+
+                if (!availableSchedules.Any())
                 {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "No Schedule found.");
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "No Available Schedule found.");
                 }
                 else
                 {
-                    return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, listUser);
+                    return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, availableSchedules);
                 }
             }
             catch (Exception ex)
@@ -142,7 +147,7 @@ namespace Service.Service
         {
             try
             {
-                var scheduleList = _unitOfWork.ScheduleRepository.GetAll();
+                var scheduleList = _unitOfWork.ScheduleRepository.GetAll().Where(s => s.Status == ScheduleEnum.Available);
                 if (scheduleList == null)
                 {
                     throw new Exception();
