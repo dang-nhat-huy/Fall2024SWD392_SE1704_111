@@ -20,6 +20,14 @@ namespace Repository.Repository
             return await _context.Bookings.FirstOrDefaultAsync(u => u.BookingId == id);
         }
 
+        public async Task<List<Booking>> GetBookingIncludeByIdAsync(int id)
+        {
+            return await _context.Bookings
+                .Where(b => b.BookingId == id)
+                .Include(b => b.BookingDetails)
+                .ToListAsync();
+        }
+
         public async Task<int> CreateBookingAsync(Booking entity)
         {
 

@@ -33,7 +33,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             var response = await _reportService.CreateReportAsync(request);
 
             // Kiểm tra kết quả và trả về phản hồi phù hợp
-            if (response.Status != Const.SUCCESS_READ_CODE)
+            if (response.Status != Const.SUCCESS_CREATE_CODE)
             {
                 return BadRequest(response); // Trả về mã lỗi 400 với thông báo lỗi từ ResponseDTO
             }
