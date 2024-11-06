@@ -13,35 +13,20 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @* <div class="form-group">
-                <label asp-for="Feedback.UserId" class="control-label"></label>
-                <select asp-for="Feedback.UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
-            </div> *@
+           
             <div class="form-group">
-                <label asp-for="Feedback.Description" class="control-label"></label>
-                <input asp-for="Feedback.Description" class="form-control" />
-                <span asp-validation-for="Feedback.Description" class="text-danger"></span>
+                <label asp-for="createDto.Description" class="control-label"></label>
+                <input asp-for="createDto.Description" class="form-control" />
+                <span asp-validation-for="createDto.Description" class="text-danger"></span>
             </div>
-            @* <div class="form-group">
-                <label asp-for="Feedback.Status" class="control-label"></label>
-                <input asp-for="Feedback.Status" class="form-control" />
-                <span asp-validation-for="Feedback.Status" class="text-danger"></span>
-            </div> *@
-            @* <div class="form-group">
-                <label asp-for="Feedback.CreateBy" class="control-label"></label>
-                <input asp-for="Feedback.CreateBy" class="form-control" />
-                <span asp-validation-for="Feedback.CreateBy" class="text-danger"></span>
-            </div> *@
+           
+            
             <div class="form-group">
-                <label asp-for="Feedback.CreateDate" class="control-label"></label>
-                <input asp-for="Feedback.CreateDate" class="form-control" />
-                <span asp-validation-for="Feedback.CreateDate" class="text-danger"></span>
+                <label asp-for="createDto.CreateDate" class="control-label"></label>
+                <input asp-for="createDto.CreateDate" class="form-control" />
+                <span asp-validation-for="createDto.CreateDate" class="text-danger"></span>
             </div>
-           @*  <div class="form-group">
-                <label asp-for="Feedback.UpdateBy" class="control-label"></label>
-                <input asp-for="Feedback.UpdateBy" class="form-control" />
-                <span asp-validation-for="Feedback.UpdateBy" class="text-danger"></span>
-            </div> *@
+          
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

@@ -26,15 +26,18 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
         {
             try
             {
-                var size = 5;
+                int size = 5;
+
+                // Nếu không có giá trị tìm kiếm, chuyển hướng đến Index để hiển thị toàn bộ phản hồi
                 if (string.IsNullOrEmpty(searchValue))
                 {
-                    // Nếu không có giá trị tìm kiếm, chuyển hướng đến Index để hiển thị toàn bộ phản hồi
                     return RedirectToPage("./Index");
                 }
 
+                // Xây dựng URL API để tìm kiếm feedback theo description
                 string url = $"https://localhost:7211/api/v1/feedbacks/SearchByDescription?query={searchValue}&pageNumber={Index}&pageSize={size}";
 
+                // Lấy JWT từ cookie để thực hiện xác thực
                 string? jwt = Request.Cookies["jwt"];
                 if (jwt == null)
                 {
@@ -42,32 +45,40 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
                     return RedirectToPage("../Login");
                 }
 
-                var client = new HttpClient();
+                // Thiết lập HttpClient với Authorization Header
+                using var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
 
+                // Tạo yêu cầu HTTP GET
                 HttpRequestMessage request = new HttpRequestMessage
                 {
                     RequestUri = new Uri(url),
                     Method = HttpMethod.Get
                 };
+
+                // Gửi yêu cầu và nhận phản hồi
                 HttpResponseMessage response = await client.SendAsync(request);
 
+                // Kiểm tra nếu phản hồi thành công
                 if (response.IsSuccessStatusCode)
                 {
+                    // Đọc và chuyển đổi JSON response thành đối tượng PagedResult
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    var dto = JsonConvert.DeserializeObject<PagedResult<Feedback>>(jsonResponse)!;
+                    var dto = JsonConvert.DeserializeObject<PagedResult<Feedback>>(jsonResponse);
 
-                    Feedback = dto.Items;
+                    // Gán Feedback với danh sách feedback từ API hoặc danh sách trống nếu không có kết quả
+                    Feedback = dto?.Items ?? new List<Feedback>();
 
-                    var countJson = JsonConvert.SerializeObject(dto.TotalCount);
-                    var count = JsonConvert.DeserializeObject<int>(countJson);
-                    Count = Math.Ceiling((double)count / size);
+                    // Tính toán số trang dựa trên tổng số phản hồi
+                    Count = Math.Ceiling((double)(dto?.TotalCount ?? 0) / size);
 
                     return Page();
                 }
                 else
                 {
+                    // Đặt thông báo lỗi nếu API không thành công
                     TempData["errorList"] = "Error retrieving search results";
+                    Feedback = new List<Feedback>();  // Gán danh sách trống nếu có lỗi
                 }
 
                 return Page();
@@ -75,9 +86,11 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
             catch (Exception)
             {
                 TempData["errorList"] = "An error occurred while processing your request. Please try again later";
+                Feedback = new List<Feedback>();  // Gán danh sách trống khi gặp lỗi ngoại lệ
                 return Page();
             }
         }
+
         public async Task<IActionResult> OnGetAsync()
         {
             try

@@ -51,41 +51,20 @@ namespace Service.Service
 
             return tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
         }
-        public async Task<ResponseDTO> CreateFeedbackAsync(FeedbackRequestDTO request)
+        public async Task<ResponseDTO> CreateFeedbackAsync(CreateFeedbackDTO request)
         {
             try
             {
-                var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-
-                if (string.IsNullOrEmpty(token))
-                {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "Token is missing.");
-                }
-
-                var claimsPrincipal = ValidateToken(token);
-
-                var userIdClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
-                if (userIdClaim == null)
-                {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found in token.");
-                }
-
-                int userId = int.Parse(userIdClaim.Value);
-
-                var user = await _jWTService.GetCurrentUserAsync();
-                if (user == null)
-                {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
-                }
-
+                //AutoMapper from RegisterRequestDTO => User
                 var feedback = _mapper.Map<Feedback>(request);
-                feedback.UserId = userId;
-                feedback.CreateBy = user.UserName;
+
                 feedback.CreateDate = DateTime.Now;
+                feedback.Status = FeedbackStatusEnum.Active;
+                feedback.Description = request.Description;
+              
 
-                var result = await _unitOfWork.FeedbackRepository.CreateFeedbackAsync(feedback);
-
-                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG, result);
+                await _unitOfWork.FeedbackRepository.CreateAsync(feedback);
+                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "Feedback created successfully", request);
             }
             catch (Exception ex)
             {
@@ -287,22 +266,33 @@ namespace Service.Service
 
         public async Task<PagedResult<Feedback>> SearchFeedbackByDescriptionAsync(string query, int pageNumber, int pageSize)
         {
-            var feedbacks = await _unitOfWork.FeedbackRepository.GetAll()
-            .Where(f => f.Description.Contains(query))
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-
-            var totalFeedbacks = await _unitOfWork.FeedbackRepository.GetAll()
-                .CountAsync(f => f.Description.Contains(query));
-
-            return new PagedResult<Feedback>
+            try
             {
-                Items = feedbacks,
-                TotalCount = totalFeedbacks,
-                PageNumber = pageNumber,
-                PageSize = pageSize
-            };
+                var feedbacks = await _unitOfWork.FeedbackRepository.GetAll()
+ .Where(f => f.Description.Contains(query))
+ .Skip((pageNumber - 1) * pageSize)
+ .Take(pageSize)
+ .ToListAsync();
+
+                var totalFeedbacks = await _unitOfWork.FeedbackRepository.GetAll()
+                    .CountAsync(f => f.Description.Contains(query));
+
+                return new PagedResult<Feedback>
+                {
+                    Items = feedbacks,
+                    TotalCount = totalFeedbacks,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                };
+
+            }
+            catch (Exception ex)
+            {
+                return new PagedResult<Feedback>();
+            }
+
         }
+
+       
     }
 }

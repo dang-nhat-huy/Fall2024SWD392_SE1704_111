@@ -13,7 +13,7 @@ namespace Service.IService
     public interface IFeedbackService
     {
         Task<ResponseDTO> GetFeedbackListAsync();
-        Task<ResponseDTO> CreateFeedbackAsync(FeedbackRequestDTO request);
+        Task<ResponseDTO> CreateFeedbackAsync(CreateFeedbackDTO request);
         Task<ResponseDTO> UpdateFeedbackAsync(FeedbackRequestDTO request, int feedbackId);
         Task<ResponseDTO> ChangeFeedbackStatusAsync(int feedbackId, FeedbackStatusEnum status);
         Task<PagedResult<Feedback>> GetAllFeedbackPagingAsync(int pageNumber, int pageSize);

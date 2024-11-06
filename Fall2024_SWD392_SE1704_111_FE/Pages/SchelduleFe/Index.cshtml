@@ -26,6 +26,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Schedules[0].ScheduleId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Schedules[0].StartDate)
             </th>
             <th>
@@ -47,6 +50,9 @@
         @foreach (var item in Model.Schedules)
         {
             <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ScheduleId)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.StartDate)
                 </td>
@@ -81,4 +87,3 @@
         }
     </ul>
 </div>
-s

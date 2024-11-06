@@ -17,7 +17,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
     {
        
         [BindProperty]
-        public Feedback Feedback { get; set; } = new Feedback();
+        public Feedback Feedback { get; set; } = default!;
         [BindProperty]
         public CreateFeedbackDTO createDto { get; set; } = default!;
         public ResponseDTO dto { get; set; } = null!;
@@ -46,7 +46,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
 
                 // Serialize CreateAccountDTO thành JSON
                 string jsonRequest = JsonConvert.SerializeObject(createDto);
-                string url = "https://localhost:7211/api/v1/voucher/CreateVoucher"; // Đường dẫn đến API
+                string url = "https://localhost:7211/api/v1/feedbacks/createFeedback"; // Đường dẫn đến API
 
                 // Tạo HttpClient để gửi yêu cầu
                 var client = new HttpClient();

@@ -289,6 +289,7 @@ namespace BusinessObject.RequestDTO
         {
             public int? UserId { get; set; }
             public string? Description { get; set; }
+            [DateInFuture(ErrorMessage = "Create date must not be in the past.")]
             public DateTime? CreateDate { get; set; }
             public string? CreateBy { get; set; }
 
@@ -314,8 +315,8 @@ namespace BusinessObject.RequestDTO
         public class CreateFeedbackDTO
         {
             [MinLength(5, ErrorMessage = "The description must be at least 5 characters long.")]
-            public string? Description { get; set; }       
-
+            public string? Description { get; set; }
+           
             [DataType(DataType.Date)]
             public DateTime? CreateDate { get; set; }
         }

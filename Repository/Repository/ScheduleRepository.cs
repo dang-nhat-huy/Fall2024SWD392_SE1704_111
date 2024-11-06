@@ -22,5 +22,10 @@ namespace Repository.Repository
 
 
         }
+
+        public async Task<Schedule> GetScheduleById(int scheduleId)
+        {
+            return await GetByIdAsync(scheduleId);
+        }
     }
 }
