@@ -30,7 +30,7 @@ namespace Service.Service
         public async Task<List<ScheduleUserDTO>> GetListScheduleUserAsync()
         {
             // Lấy IQueryable từ repository
-            var listQuery = await _unitOfWork.ScheduleUserRepository.GetUserByRoleAsync();
+            var listQuery = await _unitOfWork.ScheduleUserRepository.GetListScheduleByRoleAsync();
 
             // Sử dụng ProjectTo để ánh xạ thành List<ScheduleUserDTO>
             var resultList = await _mapper.ProjectTo<ScheduleUserDTO>(listQuery).ToListAsync();
