@@ -41,7 +41,7 @@ namespace Service.Service
 
                 // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
 
-                booking.Status = request.Status;
+                booking.Status = (BookingStatus?)request.Status;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 await _unitOfWork.BookingRepository.UpdateAsync(booking);

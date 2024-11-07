@@ -125,7 +125,7 @@ namespace BusinessObject.RequestDTO
 
         public class ChangebookingStatusDTO
         {
-            public BookingStatus Status { get; set; }
+            public BookingUpdateStatus Status { get; set; }
         }
 
         public class SearchAccountByNameDTO

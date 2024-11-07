@@ -16,4 +16,12 @@ namespace BusinessObject
         Complete,
         Cancel,
     }
+    public enum BookingUpdateStatus
+    {
+        Accepted = 2,
+        InProgress,
+        Delay,
+        Complete,
+        Cancel,
+    }
 }
