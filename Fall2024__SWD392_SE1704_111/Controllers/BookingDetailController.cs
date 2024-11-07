@@ -1,4 +1,5 @@
 ﻿using BusinessObject.ResponseDTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.IService;
 using static BusinessObject.ResponseDTO.ReportDTO;
@@ -17,6 +18,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
         }
 
+        [Authorize]
         [HttpGet("{bookingDetailID}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookingDetailResponseDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

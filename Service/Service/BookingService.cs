@@ -42,7 +42,7 @@ namespace Service.Service
 
                 // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
 
-                booking.Status = request.Status;
+                booking.Status = (BookingStatus?)request.Status;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 await _unitOfWork.BookingRepository.UpdateAsync(booking);
@@ -63,7 +63,7 @@ namespace Service.Service
                 // Lấy người dùng hiện tại
                 var user = await _jWTService.GetCurrentUserAsync();
 
-                    var booking = await _unitOfWork.BookingRepository.GetBookingByIdAsync(bookingId);
+                var booking = await _unitOfWork.BookingRepository.GetBookingByIdAsync(bookingId);
                 if (booking == null)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "Booking not found !");
@@ -86,7 +86,7 @@ namespace Service.Service
         }
 
         public async Task<ResponseDTO> CreateBooking(BookingRequestDTO bookingRequest)
-        {           
+        {
             try
             {
                 int customerId;
@@ -96,14 +96,14 @@ namespace Service.Service
                 {
                     // Kiểm tra xem UserName đã tồn tại hay chưa
                     var existingUser = await _unitOfWork.UserRepository.GetUserByUserNameAsync(bookingRequest.UserName);
-                    if(existingUser != null)
+                    if (existingUser != null)
                     {
                         customerId = existingUser.UserId;
                     }
                     else
                     {
                         //Nếu người dùng chưa đăng nhập
-                        RegisterRequestDTO registerRequestDTO = new RegisterRequestDTO();
+                        GuestRegisterRequestDTO registerRequestDTO = new GuestRegisterRequestDTO();
                         registerRequestDTO.userName = bookingRequest.UserName;
                         registerRequestDTO.phone = bookingRequest.Phone;
                         var registUser = _mapper.Map<User>(registerRequestDTO);
@@ -116,7 +116,7 @@ namespace Service.Service
                         }
                         customerId = registUser.UserId; // Sử dụng UserId của người dùng mới
                     }
-                    
+
                 }
                 else
                 {
@@ -234,9 +234,9 @@ namespace Service.Service
                 booking.TotalPrice = totalPrice;
 
                 string name;
-                if(user == null)
+                if (user == null)
                 {
-                     name = bookingRequest.UserName;
+                    name = bookingRequest.UserName;
                 }
                 else
                 {
@@ -245,41 +245,79 @@ namespace Service.Service
                 booking.CreateBy = name;
                 // Thêm BookingDetails từ ServiceId và StylistId
                 booking.BookingDetails = new List<BookingDetail>();
-                for (int i = 0; i < bookingRequest.ServiceId.Count; i++)
+                for (int i = 0; i < bookingRequest.ScheduleId.Count; i++)
                 {
-                    booking.BookingDetails.Add(new BookingDetail
+                    for (int y = 0; y < bookingRequest.ServiceId.Count; y++)
                     {
-                        ServiceId = bookingRequest.ServiceId[i],
-                        StylistId = bookingRequest.StylistId[i],
-                        ScheduleId = bookingRequest.ScheduleId[i],
-                        CreateDate = DateTime.Now,
-                        CreateBy = name,
-                    });
+                        booking.BookingDetails.Add(new BookingDetail
+                        {
+                            ServiceId = bookingRequest.ServiceId[y],
+                            StylistId = bookingRequest.StylistId[y],
+                            ScheduleId = bookingRequest.ScheduleId[i],
+                            CreateDate = DateTime.Now,
+                            CreateBy = name,
+                        });
+                    }
                 }
-
                 // Lưu Booking vào database thông qua UnitOfWork
                 var checkUpdate = await _unitOfWork.BookingRepository.CreateBookingAsync(booking);
-                if (checkUpdate <= 0)
+                if (checkUpdate > 0)
                 {
-                    return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
+                    // Gọi hàm cập nhật status cho ScheduleUser
+                    await UpdateScheduleUserStatusAsync(bookingRequest.StylistId, bookingRequest.ScheduleId, ScheduleUserEnum.InQueue, name);
+
+                    var userInfo = _unitOfWork.UserRepository.GetById(customerId);
+                    var checkoutRequest = new CheckoutRequestDTO
+                    {
+                        TotalPrice = booking.TotalPrice,
+                        CreateDate = DateTime.Now,
+                        Description = $"{userInfo.UserName} {userInfo.Phone}",
+                        FullName = userInfo.UserName,
+                        BookingId = booking.BookingId
+                    };
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG, checkoutRequest);
                 }
-                var userInfo =  _unitOfWork.UserRepository.GetById(customerId);
-                var checkoutRequest = new CheckoutRequestDTO
-                {
-                    TotalPrice = booking.TotalPrice,
-                    CreateDate = DateTime.Now,
-                    Description = $"{userInfo.UserName} {userInfo.Phone}",
-                    FullName = userInfo.UserName,
-                    BookingId = booking.BookingId
-                };
-                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG, checkoutRequest);
+                return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
             }
             catch (Exception ex)
             {
                 return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG, ex);
             }
-            
+
         }
+
+        private async Task UpdateScheduleUserStatusAsync(List<int> stylistIds, List<int> scheduleIds, ScheduleUserEnum status, string updatedBy)
+        {
+            try
+            {
+                foreach (var stylistId in stylistIds)
+                {
+                    foreach (var scheduleId in scheduleIds)
+                    {
+                        // Sử dụng repository để lấy bản ghi ScheduleUser
+                        var scheduleUser = await _unitOfWork.ScheduleUserRepository
+                            .GetByUserAndScheduleIdAsync(stylistId, scheduleId);
+
+                        if (scheduleUser != null)
+                        {
+                            // Cập nhật Status và UpdateBy cho từng bản ghi
+                            scheduleUser.Status = status;
+                            scheduleUser.UpdateDate = DateTime.Now;
+                            scheduleUser.UpdateBy = updatedBy;
+
+                            // Lưu thay đổi
+                            await _unitOfWork.ScheduleUserRepository.UpdateAsync(scheduleUser);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi nếu cần
+                Console.WriteLine($"Error updating ScheduleUser status: {ex.Message}");
+            }
+        }
+
         public async Task<IEnumerable<ViewBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10)
         {
             var bookings = await _unitOfWork.BookingRepository.GetAllAsync();

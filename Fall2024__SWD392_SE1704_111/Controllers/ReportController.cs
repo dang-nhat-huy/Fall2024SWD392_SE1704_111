@@ -19,7 +19,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             this._reportService = reportService;
         }
 
-        //[Authorize(Roles = "Stylist")]
+        [Authorize(Roles = "Stylist")]
         [HttpPost("createReport")]
         public async Task<IActionResult> CreateReport([FromBody] CreateReportDTO request)
         {
@@ -33,7 +33,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             var response = await _reportService.CreateReportAsync(request);
 
             // Kiểm tra kết quả và trả về phản hồi phù hợp
-            if (response.Status != Const.SUCCESS_READ_CODE)
+            if (response.Status != Const.SUCCESS_CREATE_CODE)
             {
                 return BadRequest(response); // Trả về mã lỗi 400 với thông báo lỗi từ ResponseDTO
             }
@@ -41,7 +41,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
-        //[Authorize(Roles = "Stylist")]
+        [Authorize(Roles = "Stylist")]
         [HttpPost("updateReport/{reportId}")]
         public async Task<IActionResult> UpdateReport([FromBody] UpdateReportDTO request, [FromRoute] int reportId)
         {
@@ -63,7 +63,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
-        //[Authorize(Roles = "Stylist")]
+        [Authorize(Roles = "Stylist")]
         [HttpPost("changeReportStatus/{reportId}")]
         public async Task<IActionResult> RemoveReport([FromRoute] int reportId, [FromBody] RemoveReportDTO request)
         {
@@ -85,7 +85,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
-        //[Authorize(Roles = "Stylist, Manager")]
+        [Authorize(Roles = "Stylist, Manager")]
         [HttpGet("reportList")]
         public async Task<IActionResult> GetListUser()
         {

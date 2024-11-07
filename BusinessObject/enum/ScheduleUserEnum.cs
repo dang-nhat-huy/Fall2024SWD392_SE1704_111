@@ -6,19 +6,11 @@ using System.Threading.Tasks;
 
 namespace BusinessObject
 {
-    public enum BookingStatus
+    public enum ScheduleUserEnum
     {
         None = 0,
         InQueue,
         Accepted,
-        InProgress,
-        Delay,
-        Complete,
-        Cancel,
-    }
-    public enum BookingUpdateStatus
-    {
-        Accepted = 2,
         InProgress,
         Delay,
         Complete,

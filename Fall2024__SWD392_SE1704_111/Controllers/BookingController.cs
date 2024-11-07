@@ -20,7 +20,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             _bookingService = bookingService;
         }
 
-        [Authorize(Roles = "Stylist")]
+        [Authorize(Roles = "Stylist, Staff")]
         [HttpPost("changeBookingStatus/{id}")]
         public async Task<IActionResult> ChangeBookingStatus([FromRoute] int id, [FromBody] ChangebookingStatusDTO request)
         {
@@ -99,6 +99,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             
         }
 
+        [Authorize]
         [HttpGet("bookingList")]
         public async Task<IActionResult> GetAllBookings()
         {

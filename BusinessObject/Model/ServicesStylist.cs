@@ -8,6 +8,7 @@ namespace BusinessObject.Model
         public int ServiceStylistId { get; set; }
         public int? StylistId { get; set; }
         public int? ServiceId { get; set; }
+        public int? Status { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }

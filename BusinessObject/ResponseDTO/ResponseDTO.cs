@@ -155,6 +155,7 @@ namespace BusinessObject.ResponseDTO
         public DateTime EndDate { get; set; }
         public double TotalPrice { get; set; }
         public BookingStatus? Status { get; set; }
+
     }
 
     public class ServiceDetailDTO
@@ -162,6 +163,9 @@ namespace BusinessObject.ResponseDTO
         public int ServiceId { get; set; }
         public string ServiceName { get; set; }
         public string StylistName { get; set; }
+
+        public double? Price { get; set; }
+        public TimeSpan? EstimateTime { get; set; }
     }
 
     public class ScheduledDetailDTO
