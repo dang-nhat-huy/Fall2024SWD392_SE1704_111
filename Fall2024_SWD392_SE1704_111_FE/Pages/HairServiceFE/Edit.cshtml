@@ -41,7 +41,7 @@
 
             <div class="form-group">
                 <label asp-for="updateServiceDto.estimateTime" class="control-label"></label>
-                <input asp-for="updateServiceDto.estimateTime" class="form-control" type="time" />
+                <input asp-for="updateServiceDto.estimateTime" class="form-control" type="time" min="00:00" max="00:59" />
                 <span asp-validation-for="updateServiceDto.estimateTime" class="text-danger"></span>
             </div>
 
