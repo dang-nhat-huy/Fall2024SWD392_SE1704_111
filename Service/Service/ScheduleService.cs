@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BusinessObject.RequestDTO.RequestDTO;
 using static BusinessObject.ResponseDTO.ResponseDTO;
 
 namespace Service.Service
@@ -32,22 +33,28 @@ namespace Service.Service
        
         public IQueryable<Schedule> GetListSchedule()
         {
-            var query = _unitOfWork.ScheduleRepository.GetAll();
+            var query = _unitOfWork.ScheduleRepository.GetAll()
+                 .Where(s => s.Status == ScheduleEnum.Available);
             return query;
         }
         public async Task<ResponseDTO> GetListScheduleAsync()
         {
             try
             {
-                var listUser = await _unitOfWork.ScheduleRepository.GetAllAsync();
+                // Lấy tất cả các Schedule
+                var allSchedules = await _unitOfWork.ScheduleRepository.GetAllAsync();
 
-                if (listUser == null)
+                // Lọc những Schedule có Status là "Available"
+                var availableSchedules = allSchedules.Where(s => s.Status == ScheduleEnum.Available).ToList();
+                var scheduleDto = _mapper.Map<List<GetAllScheduleDTO>>(availableSchedules);
+
+                if (!scheduleDto.Any())
                 {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "No Schedule found.");
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "No Available Schedule found.");
                 }
                 else
                 {
-                    return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, listUser);
+                    return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, scheduleDto);
                 }
             }
             catch (Exception ex)
@@ -55,7 +62,7 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
-        public async Task<ResponseDTO> CreateSchedule(RequestDTO.CreateScheduleDTO request)
+        public async Task<ResponseDTO> CreateSchedule(CreateScheduleDTO request)
         {
             try
             {
@@ -134,6 +141,91 @@ namespace Service.Service
             catch (Exception ex)
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message, ex);
+            }
+        }
+
+        public async Task<PagedResult<Schedule>> GetAllSchedulePagingAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var scheduleList = _unitOfWork.ScheduleRepository.GetAll().Where(s => s.Status == ScheduleEnum.Available);
+                if (scheduleList == null)
+                {
+                    throw new Exception();
+                }
+                return await Paging.GetPagedResultAsync(scheduleList.AsQueryable(), pageNumber, pageSize);
+            }
+            catch (Exception)
+            {
+                return new PagedResult<Schedule>();
+            }
+        }
+
+        public async Task<ResponseDTO> GetScheduleByIdAsync(int scheduleId)
+        {
+            try
+            {
+
+                var schedule = await _unitOfWork.ScheduleRepository.GetScheduleById(scheduleId);
+
+                // Kiểm tra nếu danh sách rỗng
+                if (schedule == null)
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "No vouchers found with the ID");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ các entity sang DTO
+                var result = _mapper.Map<ScheduleDTO>(schedule);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu xảy ra
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<ResponseDTO> ChangeStatusScheduleById(int scheduleId)
+        {
+            try
+            {
+                // Lấy người dùng hiện tại
+                var schedule = await _unitOfWork.ScheduleRepository.GetByIdAsync(scheduleId);
+                if (schedule == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "Feedback not found !");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
+
+                schedule.Status = schedule.Status == ScheduleEnum.Available ? ScheduleEnum.UnAvailable : ScheduleEnum.Available;
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.ScheduleRepository.UpdateAsync(schedule);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Change Schedule Status Succeed");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<PagedResult<Schedule>> GetAllSchedulePagingAsync_1(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var scheduleList = _unitOfWork.ScheduleRepository.GetAll();
+                if (scheduleList == null)
+                {
+                    throw new Exception();
+                }
+                return await Paging.GetPagedResultAsync(scheduleList.AsQueryable(), pageNumber, pageSize);
+            }
+            catch (Exception)
+            {
+                return new PagedResult<Schedule>();
             }
         }
     }

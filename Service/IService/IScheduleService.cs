@@ -17,5 +17,10 @@ namespace Service.IService
         Task<ResponseDTO> CreateSchedule(CreateScheduleDTO createScheduleDTO);
         Task<ResponseDTO> UpdateSchedule(UpdateScheduleDTO updateScheduleDTO, int scheduleId);
         Task<ResponseDTO> DeleteSchedule(RemoveScheduleDTO removeScheduleDTO, int scheduleId);
+        Task<PagedResult<Schedule>> GetAllSchedulePagingAsync(int pageNumber, int pageSize);
+        Task<PagedResult<Schedule>> GetAllSchedulePagingAsync_1(int pageNumber, int pageSize);
+        Task<ResponseDTO> GetScheduleByIdAsync(int scheduleId);
+        Task<ResponseDTO> ChangeStatusScheduleById(int scheduleId);
+
     }
 }

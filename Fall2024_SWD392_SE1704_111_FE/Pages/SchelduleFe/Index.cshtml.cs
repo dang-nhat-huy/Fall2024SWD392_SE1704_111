@@ -26,7 +26,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.ScheduleFE
             {
                 var size = 5;
 
-                string url = "https://localhost:7211/api/v1/schedule/PagingScheduleList?pageNumber=" + Index + "&pageSize=" + size;
+                string url = "https://localhost:7211/api/v1/schedule/PagingScheduleList_1?pageNumber=" + Index + "&pageSize=" + size;
 
                 string? jwt = Request.Cookies["jwt"]!.ToString();
                 if (jwt == null)

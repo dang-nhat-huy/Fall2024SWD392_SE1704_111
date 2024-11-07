@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Model;
+using Microsoft.EntityFrameworkCore;
 using Repository.IRepository;
 using System;
 using System.Collections.Generic;
@@ -22,5 +23,24 @@ namespace Repository.Repository
 
 
         }
+
+        public async Task<Schedule> GetScheduleById(int scheduleId)
+        {
+            return await GetByIdAsync(scheduleId);
+        }
+
+        public async Task<List<Schedule>> GetScheduleHistoryByScheduleIdAsync(int scheduleId)
+        {
+            return await _context.Schedules
+                 .Where(s => s.ScheduleId == scheduleId)
+                 .Include(s => s.BookingDetails)
+                     .ThenInclude(bd => bd.Booking) // Bao gồm thông tin Booking của BookingDetail
+                 .Include(s => s.BookingDetails)
+                     .ThenInclude(bd => bd.Service) // Bao gồm thông tin Service của BookingDetail
+                 .Include(s => s.BookingDetails)
+                     .ThenInclude(bd => bd.Stylist) // Bao gồm thông tin Stylist của BookingDetail
+                 .Include(s => s.ScheduleUsers) // Bao gồm thông tin ScheduleUser liên quan
+                .ToListAsync(); // Lấy đối tượng Schedule đầu tiên hoặc null nếu không có
+        } 
     }
 }

@@ -35,7 +35,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.ScheduleFE
                     return RedirectToPage("../Logout");
                 }
 
-                string url = $"https://localhost:7211/api/v1/schedule/GetScheduleById/{id}";
+                string url = "https://localhost:7211/api/v1/schedule/GetScheduleById/" + id;
                 var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
 

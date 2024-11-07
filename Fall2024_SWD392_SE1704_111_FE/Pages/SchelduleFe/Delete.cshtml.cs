@@ -71,7 +71,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.ScheduleFE
             {
                 var scheduleId = Schedule.ScheduleId;
                 string? jwt = Request.Cookies["jwt"]!.ToString();
-                string url = "https://localhost:7211/api/v1/schedule/ChangeScheduleStatus/" + scheduleId;
+                string url = "https://localhost:7211/api/v1/schedule/changeScheduleStatus/" + scheduleId;
                 var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
 

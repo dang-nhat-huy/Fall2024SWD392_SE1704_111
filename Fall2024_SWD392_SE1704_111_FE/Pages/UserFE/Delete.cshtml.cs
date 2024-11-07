@@ -89,7 +89,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["success"] = "Change Successfully";
+                    TempData["Message"] = "Change Status Successfully";
                     return RedirectToPage("./Index");
                 }
                 else

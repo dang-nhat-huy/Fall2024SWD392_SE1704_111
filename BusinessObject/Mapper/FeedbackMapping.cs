@@ -34,6 +34,7 @@ namespace BusinessObject.Mapper
               .ReverseMap();
 
             CreateMap<Feedback, ChangefeedbackStatusDTO>().ReverseMap();
+            CreateMap<Feedback, CreateFeedbackDTO>().ReverseMap();
         }
 
     }
