@@ -20,6 +20,14 @@ namespace Repository.Repository
             return await _context.Bookings.FirstOrDefaultAsync(u => u.BookingId == id);
         }
 
+        public async Task<List<Booking>> GetBookingIncludeByIdAsync(int id)
+        {
+            return await _context.Bookings
+                .Where(b => b.BookingId == id)
+                .Include(b => b.BookingDetails)
+                .ToListAsync();
+        }
+
         public async Task<int> CreateBookingAsync(Booking entity)
         {
 
@@ -38,6 +46,16 @@ namespace Repository.Repository
                 .Include(b => b.BookingDetails)
                 .ThenInclude(bd => bd.Schedule)
                 .ToListAsync();
+        }
+
+        public IQueryable<Booking> GetCustomerNameByCreatedByAsync(string fullName)
+        {
+            var customerList = _context.Bookings
+                .Where(u => u.CreateBy.ToLower().StartsWith(fullName.ToLower())); // Trả về danh sách
+
+            return customerList;
+
+
         }
     }
 }

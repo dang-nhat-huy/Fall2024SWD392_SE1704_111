@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.Model;
+using BusinessObject.Paging;
 using BusinessObject.RequestDTO;
 using BusinessObject.ResponseDTO;
 using Microsoft.Extensions.Configuration;
@@ -52,7 +53,37 @@ namespace Service.Service
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
-        }       
+        }
+
+        public async Task<ResponseDTO> AcceptBookingStatus(int bookingId)
+        {
+            try
+            {
+                int customerId;
+                // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+
+                    var booking = await _unitOfWork.BookingRepository.GetBookingByIdAsync(bookingId);
+                if (booking == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "Booking not found !");
+                }
+
+                // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
+
+                booking.Status = booking.Status == BookingStatus.InQueue ? BookingStatus.Accepted : BookingStatus.InQueue;
+                booking.UpdateBy = user.UserName;
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.BookingRepository.UpdateAsync(booking);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, "Change Status Succeed");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
 
         public async Task<ResponseDTO> CreateBooking(BookingRequestDTO bookingRequest)
         {           
@@ -347,6 +378,73 @@ namespace Service.Service
             catch (Exception ex)
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<PagedResult<Booking>> GetAllBookingPagingAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var bookingList = _unitOfWork.BookingRepository.GetAll();
+                if (bookingList == null)
+                {
+                    throw new Exception();
+                }
+                return await Paging.GetPagedResultAsync(bookingList.AsQueryable(), pageNumber, pageSize);
+            }
+            catch (Exception)
+            {
+                return new PagedResult<Booking>();
+            }
+        }
+
+        public async Task<ResponseDTO> GetBookingByIdAsync(int bookingId)
+        {
+            try
+            {
+
+                var booking = await _unitOfWork.BookingRepository.GetByIdAsync(bookingId);
+
+                // Kiểm tra nếu danh sách rỗng
+                if (booking == null)
+                {
+                    return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "No Booking found with the ID");
+                }
+
+                //// Sử dụng AutoMapper để ánh xạ các entity sang DTO
+                //var result = _mapper.Map<VoucherDTO>(voucher);
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, booking);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu xảy ra
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<PagedResult<Booking>> GetCustomerPagingByCreatedByAsync(string customerName, int pageNumber, int pageSize)
+        {
+            try
+            {
+
+                // Gọi repository để lấy danh sách người dùng theo tên
+                var users = _unitOfWork.BookingRepository.GetCustomerNameByCreatedByAsync(customerName);
+
+                // Kiểm tra nếu danh sách rỗng
+                if (users == null)
+                {
+                    throw new Exception();
+                }
+
+                var usersQuery = users.AsQueryable();
+
+                return await Paging.GetPagedResultAsync(usersQuery, pageNumber, pageSize);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu xảy ra
+                return new PagedResult<Booking>();
             }
         }
     }

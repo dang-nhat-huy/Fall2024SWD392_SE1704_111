@@ -16,6 +16,7 @@ using static BusinessObject.ReportEnum;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Repository.IRepository;
 
 namespace Service.Service
 {
@@ -26,6 +27,8 @@ namespace Service.Service
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IJWTService _jWTService;
+
+        private readonly BookingDetailService _bookingDetailService;
         public ReportService(IUnitOfWork unitOfWork, IConfiguration config, IMapper mapper, IHttpContextAccessor httpContextAccessor, IJWTService jWTService)
         {
             _unitOfWork = unitOfWork;
@@ -94,10 +97,39 @@ namespace Service.Service
                 }
 
                 int userId = int.Parse(userIdClaim.Value);
-
-                if (await _unitOfWork.BookingRepository.GetByIdAsync((int)request.BookingId) == null)
+                var bookingList = await _unitOfWork.BookingRepository.GetBookingIncludeByIdAsync((int)request.BookingId);
+                if (bookingList == null)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Booking not found");
+                }
+
+                Boolean check = false;
+
+                List<int?> checkStylist = new List<int?>();
+                // Lấy thông tin BookingDetail liên quan đến BookingId
+                foreach (var bookingDetailList in bookingList)
+                {
+                    foreach (var bookingDetail in bookingDetailList.BookingDetails)
+                    {
+                        if (bookingDetail == null)
+                        {
+                            return new ResponseDTO(Const.FAIL_READ_CODE, "BookingDetail not found");
+                        }
+
+                        checkStylist.Add(bookingDetail.StylistId);
+                    }
+                    // Kiểm tra StylistId trong BookingDetail có trùng với userId hiện tại không
+                    foreach (var Stylist in checkStylist)
+                    {
+                        if (Stylist == userId)
+                        {
+                            check = true;
+                        }
+                    }
+                    if (check != true)
+                    {
+                        return new ResponseDTO(Const.FAIL_READ_CODE, "Current user is not authorized to create this report.");
+                    }
                 }
 
                 // Lấy người dùng hiện tại

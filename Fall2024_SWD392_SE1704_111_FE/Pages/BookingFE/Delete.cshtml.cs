@@ -19,7 +19,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.BookingFE
     {
 
         [BindProperty]
-        public Booking Booking { get; set; } = default!;
+      public Booking Booking { get; set; } = default!;
         [BindProperty]
         public int Status { get; set; } = 1;
         public ChangebookingStatusDTO BookingStatus { get; set; } = new ChangebookingStatusDTO();
