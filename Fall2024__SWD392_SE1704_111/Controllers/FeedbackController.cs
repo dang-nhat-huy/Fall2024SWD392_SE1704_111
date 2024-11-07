@@ -22,7 +22,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             _feedbackService = feedbackService;
         }
 
-        //[Authorize(Roles = "Customer, Manager")]
+        [Authorize(Roles = "Customer, Manager")]
         [HttpPost("createFeedback")]
         public async Task<IActionResult> CreateFeedback([FromBody] FeedbackRequestDTO request)
         {
@@ -41,7 +41,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response);
         }
 
-        //[Authorize(Roles = "Customer, Manager")]
+        [Authorize(Roles = "Customer, Manager")]
         [HttpPost("updateFeedback/{feedbackId}")]
         public async Task<IActionResult> UpdateFeedback([FromBody] FeedbackRequestDTO request, [FromRoute] int feedbackId)
         {
@@ -89,7 +89,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu thành công
         }
 
-        //[Authorize(Roles = "Customer, Manager")]
+        [Authorize(Roles = "Customer, Manager")]
         [HttpGet("feedbackList")]
         public async Task<IActionResult> GetFeedbackList()
         {
@@ -102,6 +102,8 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response);
         }
+
+
         [HttpGet("GetFeedbackById/{feedbackId}")]
         public async Task<IActionResult> GetFeedbackById([FromRoute] int feedbackId)
         {

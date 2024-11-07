@@ -3,6 +3,7 @@ using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
 using Service.IService;
 using static BusinessObject.RequestDTO.RequestDTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
@@ -24,6 +25,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost("create")]
         public async Task<IActionResult> CreateSchedule([FromBody] CreateScheduleDTO request)
         {
@@ -45,6 +47,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost("update/{scheduleId}")]
         public async Task<IActionResult> UpdateSchedule([FromBody] UpdateScheduleDTO request, [FromRoute] int scheduleId)
         {
@@ -66,6 +69,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost("remove/{scheduleId}")]
         public async Task<IActionResult> RemoveSchedule([FromRoute] int scheduleId, [FromBody] RemoveScheduleDTO request)
         {
