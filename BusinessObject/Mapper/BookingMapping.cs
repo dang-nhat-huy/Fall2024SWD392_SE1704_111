@@ -41,7 +41,9 @@ namespace BusinessObject.Mapper
         {
             ServiceId = bookingDetail.ServiceId ?? 0,
             ServiceName = bookingDetail.Service.ServiceName,
-            StylistName = bookingDetail.Stylist.UserName
+            StylistName = bookingDetail.Stylist.UserName,
+            EstimateTime = bookingDetail.Service.EstimateTime,
+            Price = bookingDetail.Service.Price
         }).ToList()))
     .ForMember(dest => dest.Schedules, opt => opt.MapFrom(src =>
         src.BookingDetails.Select(bookingDetail => new ScheduledDetailDTO
