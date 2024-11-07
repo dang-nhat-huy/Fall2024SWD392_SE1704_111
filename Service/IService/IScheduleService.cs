@@ -21,6 +21,7 @@ namespace Service.IService
         Task<PagedResult<Schedule>> GetAllSchedulePagingAsync_1(int pageNumber, int pageSize);
         Task<ResponseDTO> GetScheduleByIdAsync(int scheduleId);
         Task<ResponseDTO> ChangeStatusScheduleById(int scheduleId);
+        Task<PagedResult<Schedule>> SearchScheduleByStartDateAsync(DateOnly startDate, int pageNumber, int pageSize);
 
     }
 }

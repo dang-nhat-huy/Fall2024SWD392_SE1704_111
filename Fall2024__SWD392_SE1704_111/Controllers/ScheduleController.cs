@@ -147,5 +147,18 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response);
         }
+        [Authorize(Roles = "Manager")]
+        [HttpGet("SearchByStartDate")]
+        public async Task<IActionResult> SearchScheduleByStartDate([FromQuery] DateTime startDate, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+            var response = await _scheduleService.SearchScheduleByStartDateAsync(startDate, pageNumber, pageSize);
+
+            if (response == null || response.Items.Count == 0)
+            {
+                return NotFound(new ResponseDTO(Const.FAIL_READ_CODE, "No schedules found with the specified start date."));
+            }
+
+            return Ok(response);
+        }
     }
 }

@@ -228,5 +228,32 @@ namespace Service.Service
                 return new PagedResult<Schedule>();
             }
         }
+
+        public async Task<PagedResult<Schedule>> SearchScheduleByStartDateAsync(DateOnly startDate, int pageNumber, int pageSize)
+        {
+            try
+            {
+                var schedules = await _unitOfWork.ScheduleRepository.GetAll()
+                    .Where(s => s.StartDate.Day == startDate.Day)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                var totalSchedules = await _unitOfWork.ScheduleRepository.GetAll()
+                    .CountAsync(s => s.StartDate.Day == startDate.Day);
+
+                return new PagedResult<Schedule>
+                {
+                    Items = schedules,
+                    TotalCount = totalSchedules,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                };
+            }
+            catch (Exception ex)
+            {
+                return new PagedResult<Schedule>();
+            }
+        }
     }
 }
