@@ -96,7 +96,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.FeedbackFE
             try
             {
                 var size = 5;
-                string url = "https://localhost:7211/api/v1/feedbacks/PagingFeedbackList?pageNumber=" + Index + "&pageSize=" + size;
+                string url = "https://localhost:7211/api/v1/feedbacks/PagingFeedbackList1?pageNumber=" + Index + "&pageSize=" + size;
 
                 string? jwt = Request.Cookies["jwt"]?.ToString();
                 if (jwt == null)

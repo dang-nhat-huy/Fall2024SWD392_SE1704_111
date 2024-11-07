@@ -40,7 +40,7 @@
 
             <div class="form-group">
                 <label asp-for="createDto.estimateTime" class="control-label"></label>
-                <input asp-for="createDto.estimateTime" class="form-control" type="time" />
+                <input asp-for="createDto.estimateTime" class="form-control" type="time" min="00:00" max="00:59" />
                 <span asp-validation-for="createDto.estimateTime" class="text-danger"></span>
             </div>
 

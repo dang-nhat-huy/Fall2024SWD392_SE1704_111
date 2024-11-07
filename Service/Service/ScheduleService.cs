@@ -211,5 +211,22 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+
+        public async Task<PagedResult<Schedule>> GetAllSchedulePagingAsync_1(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var scheduleList = _unitOfWork.ScheduleRepository.GetAll();
+                if (scheduleList == null)
+                {
+                    throw new Exception();
+                }
+                return await Paging.GetPagedResultAsync(scheduleList.AsQueryable(), pageNumber, pageSize);
+            }
+            catch (Exception)
+            {
+                return new PagedResult<Schedule>();
+            }
+        }
     }
 }
