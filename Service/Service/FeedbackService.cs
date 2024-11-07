@@ -293,6 +293,21 @@ namespace Service.Service
 
         }
 
-       
+        public async Task<PagedResult<Feedback>> GetAllFeedbackPagingAsync1(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var feedbackList = _unitOfWork.FeedbackRepository.GetAll();
+                if (feedbackList == null)
+                {
+                    throw new Exception();
+                }
+                return await Paging.GetPagedResultAsync(feedbackList.AsQueryable(), pageNumber, pageSize);
+            }
+            catch (Exception)
+            {
+                return new PagedResult<Feedback>();
+            }
+        }
     }
 }
