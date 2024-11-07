@@ -20,5 +20,6 @@ namespace Service
         IVoucherRepository VoucherRepository { get; }
         IServicesStylistRepository ServicesStylistRepository { get; }
         IFeedbackRepository FeedbackRepository { get; }
+        IBookingDetailRepository BookingDetailRepository { get; }
     }
 }

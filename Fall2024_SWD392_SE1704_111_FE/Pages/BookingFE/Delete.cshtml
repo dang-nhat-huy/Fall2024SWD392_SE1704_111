@@ -76,7 +76,9 @@
     
     <form method="post">
         <input type="hidden" asp-for="Booking.BookingId" />
-        <input type="submit" value="Accept/Cancel" class="btn btn-danger" /> |
+        <strong>Status</strong>
+        <select asp-for="Status" asp-items="ViewBag.BookingStatus" class="form-control"></select>
+        <input type="submit" class="btn btn-danger" />
         <a asp-page="./Index">Back to List</a>
     </form>
 </div>

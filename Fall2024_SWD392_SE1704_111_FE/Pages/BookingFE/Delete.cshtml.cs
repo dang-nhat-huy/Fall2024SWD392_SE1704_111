@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject.Model;
 using BusinessObject.ResponseDTO;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using BusinessObject;
+using static BusinessObject.RequestDTO.RequestDTO;
+using Microsoft.OpenApi.Extensions;
 
 namespace Fall2024_SWD392_SE1704_111_FE.Pages.BookingFE
 {
@@ -16,7 +20,9 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.BookingFE
 
         [BindProperty]
       public Booking Booking { get; set; } = default!;
-
+        [BindProperty]
+        public int Status { get; set; } = 1;
+        public ChangebookingStatusDTO BookingStatus { get; set; } = new ChangebookingStatusDTO();
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             try
@@ -53,6 +59,14 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.BookingFE
                     // Deserialize `dto.Data` to `List<UserListDTO>`
                     var usersListJson = JsonConvert.SerializeObject(dto.Data);
                     Booking = JsonConvert.DeserializeObject<Booking>(usersListJson)!;
+
+                    ViewData["BookingStatus"] = new SelectList(
+                        Enum.GetValues(typeof(BookingUpdateStatus))
+                            .Cast<BookingUpdateStatus>()
+                            .Select(status => new { Value = (int)status, Text = status.ToString() }),
+                        "Value",
+                        "Text"
+                    );
                 }
                 else
                 {
@@ -73,14 +87,17 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.BookingFE
             {
                 var bookingId = Booking.BookingId;
                 string? jwt = Request.Cookies["jwt"]!.ToString();
-                string url = "https://localhost:7211/api/v1/booking/AcceptBookingStatus/" + bookingId;
+                BookingStatus.Status = (BookingUpdateStatus) Status;
+                string jsonStatus = JsonConvert.SerializeObject(BookingStatus);
+                string url = "https://localhost:7211/api/v1/booking/changeBookingStatus/" + bookingId;
                 var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
 
                 HttpRequestMessage request = new HttpRequestMessage
                 {
                     RequestUri = new Uri(url),
-                    Method = HttpMethod.Post
+                    Method = HttpMethod.Post,
+                    Content = new StringContent(jsonStatus, System.Text.Encoding.UTF8, "application/json")
                 };
                 HttpResponseMessage response = await client.SendAsync(request);
 
@@ -91,12 +108,26 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.BookingFE
                 }
                 else
                 {
+                    ViewData["BookingStatus"] = new SelectList(
+                        Enum.GetValues(typeof(BookingUpdateStatus))
+                            .Cast<BookingUpdateStatus>()
+                            .Select(status => new { Value = (int)status, Text = status.ToString() }),
+                        "Value",
+                        "Text"
+                    );
                     TempData["error"] = "Error Getting Data";
                 }
                 return Page();
             }
             catch (Exception)
             {
+                ViewData["BookingStatus"] = new SelectList(
+                        Enum.GetValues(typeof(BookingUpdateStatus))
+                            .Cast<BookingUpdateStatus>()
+                            .Select(status => new { Value = (int)status, Text = status.ToString() }),
+                        "Value",
+                        "Text"
+                    );
                 TempData["error"] = "An error occurred while processing your request. Please try again later";
                 return Page();
             }
