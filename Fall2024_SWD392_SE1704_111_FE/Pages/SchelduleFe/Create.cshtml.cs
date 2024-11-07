@@ -60,7 +60,7 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.ScheduleFE
                 // Check API response
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["success"] = "Schedule created successfully";
+                    TempData["Message"] = "Schedule created successfully";
                     var role = HttpContext.Session.GetString("Role");
                     if (role == "Manager")
                     {

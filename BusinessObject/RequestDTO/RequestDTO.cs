@@ -155,9 +155,15 @@ namespace BusinessObject.RequestDTO
 
         public class CreateScheduleDTO
         {
+            [Required(ErrorMessage = "StartTime is required.")]
             public TimeSpan? StartTime { get; set; }
+            [Required(ErrorMessage = "EndTime is required.")]
+            [EndTimeGreaterThanStartTime("StartTime", ErrorMessage = "EndTime must be greater than StartTime.")]
             public TimeSpan? EndTime { get; set; }
+            [Required(ErrorMessage = "StartDate is required.")]
             public DateTime? StartDate { get; set; }
+            [Required(ErrorMessage = "EndDate is required.")]
+            [EndDateValidation("StartDate", ErrorMessage = "EndDate must be greater than StartDate.")]
             public DateTime? EndDate { get; set; }
         }
         public class UpdateScheduleDTO
@@ -327,6 +333,35 @@ namespace BusinessObject.RequestDTO
             public string? UserName { get; set; }
             [Required]
             public string? Password { get; set; }
+        }
+        public class EndTimeGreaterThanStartTime : ValidationAttribute
+        {
+            private readonly string _comparisonProperty;
+
+            public EndTimeGreaterThanStartTime(string comparisonProperty)
+            {
+                _comparisonProperty = comparisonProperty;
+            }
+
+            protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
+            {
+                var startTimeValue = validationContext.ObjectInstance.GetType()
+                                       .GetProperty(_comparisonProperty)
+                                       ?.GetValue(validationContext.ObjectInstance, null);
+
+                if (value != null && startTimeValue != null)
+                {
+                    var endTime = (TimeSpan)value;
+                    var startTime = (TimeSpan)startTimeValue;
+
+                    if (endTime <= startTime)
+                    {
+                        return new ValidationResult(ErrorMessage ?? "EndTime must be greater than StartTime.");
+                    }
+                }
+
+                return ValidationResult.Success;
+            }
         }
     }
 }
