@@ -63,7 +63,7 @@ namespace Service.Service
                 // Lấy người dùng hiện tại
                 var user = await _jWTService.GetCurrentUserAsync();
 
-                    var booking = await _unitOfWork.BookingRepository.GetBookingByIdAsync(bookingId);
+                var booking = await _unitOfWork.BookingRepository.GetBookingByIdAsync(bookingId);
                 if (booking == null)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG, "Booking not found !");
@@ -86,7 +86,7 @@ namespace Service.Service
         }
 
         public async Task<ResponseDTO> CreateBooking(BookingRequestDTO bookingRequest)
-        {           
+        {
             try
             {
                 int customerId;
@@ -96,7 +96,7 @@ namespace Service.Service
                 {
                     // Kiểm tra xem UserName đã tồn tại hay chưa
                     var existingUser = await _unitOfWork.UserRepository.GetUserByUserNameAsync(bookingRequest.UserName);
-                    if(existingUser != null)
+                    if (existingUser != null)
                     {
                         customerId = existingUser.UserId;
                     }
@@ -116,7 +116,7 @@ namespace Service.Service
                         }
                         customerId = registUser.UserId; // Sử dụng UserId của người dùng mới
                     }
-                    
+
                 }
                 else
                 {
@@ -234,9 +234,9 @@ namespace Service.Service
                 booking.TotalPrice = totalPrice;
 
                 string name;
-                if(user == null)
+                if (user == null)
                 {
-                     name = bookingRequest.UserName;
+                    name = bookingRequest.UserName;
                 }
                 else
                 {
@@ -245,24 +245,26 @@ namespace Service.Service
                 booking.CreateBy = name;
                 // Thêm BookingDetails từ ServiceId và StylistId
                 booking.BookingDetails = new List<BookingDetail>();
-                for (int i = 0; i < bookingRequest.ServiceId.Count; i++)
+                for (int i = 0; i < bookingRequest.ScheduleId.Count; i++)
                 {
-                    booking.BookingDetails.Add(new BookingDetail
+                    for (int y = 0; y < bookingRequest.ServiceId.Count; y++)
                     {
-                        ServiceId = bookingRequest.ServiceId[i],
-                        StylistId = bookingRequest.StylistId[i],
-                        ScheduleId = bookingRequest.ScheduleId[i],
-                        CreateDate = DateTime.Now,
-                        CreateBy = name,
-                    });
+                        booking.BookingDetails.Add(new BookingDetail
+                        {
+                            ServiceId = bookingRequest.ServiceId[y],
+                            StylistId = bookingRequest.StylistId[y],
+                            ScheduleId = bookingRequest.ScheduleId[i],
+                            CreateDate = DateTime.Now,
+                            CreateBy = name,
+                        });
+                    }
                 }
-
                 // Lưu Booking vào database thông qua UnitOfWork
                 var checkUpdate = await _unitOfWork.BookingRepository.CreateBookingAsync(booking);
                 if (checkUpdate > 0)
                 {
                     // Gọi hàm cập nhật status cho ScheduleUser
-                    await UpdateScheduleUserStatusAsync(bookingRequest.StylistId,bookingRequest.ScheduleId, ScheduleUserEnum.InQueue, name);
+                    await UpdateScheduleUserStatusAsync(bookingRequest.StylistId, bookingRequest.ScheduleId, ScheduleUserEnum.InQueue, name);
 
                     var userInfo = _unitOfWork.UserRepository.GetById(customerId);
                     var checkoutRequest = new CheckoutRequestDTO
@@ -281,7 +283,7 @@ namespace Service.Service
             {
                 return new ResponseDTO(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG, ex);
             }
-            
+
         }
 
         private async Task UpdateScheduleUserStatusAsync(List<int> stylistIds, List<int> scheduleIds, ScheduleUserEnum status, string updatedBy)
