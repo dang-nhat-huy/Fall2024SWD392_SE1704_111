@@ -31,6 +31,18 @@ namespace BusinessObject.Mapper
                 .ReverseMap();
             CreateMap<Schedule, ScheduleDTO>()
                 .ReverseMap();
+            CreateMap<Schedule, GetAllScheduleDTO>()
+               .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))
+                .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.StartTime))
+                 .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime))
+                  .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
+                   .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate))
+                    .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                     .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate))
+                      .ForMember(dest => dest.CreateBy, opt => opt.MapFrom(src => src.CreateBy))
+                       .ForMember(dest => dest.UpdateDate, opt => opt.MapFrom(src => src.UpdateDate))
+                        .ForMember(dest => dest.UpdateBy, opt => opt.MapFrom(src => src.UpdateBy))
+                        .ReverseMap();
         }
 
 

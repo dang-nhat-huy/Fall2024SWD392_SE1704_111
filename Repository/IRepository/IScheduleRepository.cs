@@ -10,5 +10,7 @@ namespace Repository.IRepository
     public interface IScheduleRepository : IGenericRepository<Schedule>
     {
         public  Task<int> CreateScheduleAsync(Schedule entity);
+        Task<Schedule> GetScheduleById(int scheduleId);
+        Task<List<Schedule>> GetScheduleHistoryByScheduleIdAsync(int scheduleId);
     }
 }

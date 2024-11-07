@@ -21,47 +21,50 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Voucher[0].DiscountAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Voucher[0].StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Voucher[0].EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Voucher[0].Status)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Voucher) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DiscountAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.VoucherId">Edit</a> |
-                <a asp-page="./Delete" asp-route-id="@item.VoucherId">Change Status</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voucher[0].DiscountAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voucher[0].StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voucher[0].EndDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voucher[0].Status)
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Voucher)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiscountAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.VoucherId">Edit</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.VoucherId">Change Status</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 <div class="align-middle">
     <ul class="pagination">
         @for (int b = 1; b <= Model.Count; b++)

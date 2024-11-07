@@ -11,6 +11,53 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Fall2024_SWD392_SE1704_111_FE.styles.css" asp-append-version="true" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: #e3f2fd;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: #212529;
+            transition: color 0.2s ease;
+        }
+
+            .nav-link:hover {
+                color: #007bff;
+            }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            padding: 10px 0;
+        }
+
+        /* CSS for sidebar */
+        .sidebar {
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+            .sidebar .nav-link {
+                display: block;
+                margin-bottom: 10px;
+            }
+    </style>
 </head>
 <body>
     <header>
@@ -21,57 +68,61 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (role is null)
-                        {
-
-                        }
-                        else if (role.Equals("Admin") || role.Equals("Manager") || role.Equals("Staff"))
-                        {
-                            if (role.Equals("Admin"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/UserFE/Index">Manage Account</a>
-                                </li>
-                            }
-                            else if (role.Equals("Manager"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/UserFE/Index">Manage Account</a>
-                                </li>
-                                <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/HairServiceFE/Index">Manage Service</a>
-                            </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/VoucherFE/Index">Manage voucher</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/FeedbackFE/Index">Manage feedback</a>
-                                </li>
-                            }
-                            else if (role.Equals("Staff"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/BookingFE/Index">Manage Booking</a>
-                                </li>
-@*                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/FeedbackFE/Index">Manage feedback</a>
-                                </li> *@
-                            }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Logout">Logout</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
             </div>
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        <div class="row">
+            <div class="col-md-3 sidebar">
+                <ul class="navbar-nav flex-column">
+                    @if (role is null)
+                    {
+
+                    }
+                    else if (role.Equals("Admin") || role.Equals("Manager") || role.Equals("Staff"))
+                    {
+                        if (role.Equals("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/UserFE/Index">Manage Account</a>
+                            </li>
+                        }
+                        else if (role.Equals("Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/UserFE/Index">Manage Account</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/HairServiceFE/Index">Manage Service</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/VoucherFE/Index">Manage Voucher</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/FeedbackFE/Index">Manage Feedback</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/SchelduleFe/Index">Manage Schedule</a>
+                            </li>
+                        }
+                        else if (role.Equals("Staff"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/BookingFE/Index">Manage Booking</a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Logout">Logout</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">

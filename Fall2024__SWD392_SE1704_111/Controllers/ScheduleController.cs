@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Service.IService;
 using static BusinessObject.RequestDTO.RequestDTO;
 using Microsoft.AspNetCore.Authorization;
+using Service.Service;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
@@ -24,9 +25,8 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             var result = await _scheduleService.GetListScheduleAsync();
             return Ok(result);
         }
-
         [Authorize(Roles = "Manager")]
-        [HttpPost("create")]
+        [HttpPost("createSchedule")]
         public async Task<IActionResult> CreateSchedule([FromBody] CreateScheduleDTO request)
         {
             // Kiểm tra xem request có hợp lệ không
@@ -89,6 +89,48 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             return Ok(response); // Trả về mã 200 nếu cập nhật thành công với thông tin trong ResponseDTO
+        }
+        [Authorize(Roles = "Manager")]
+        [HttpGet("PagingScheduleList")]
+        public async Task<IActionResult> GetVoucherPaging([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+            // Gọi service để lấy danh sách người dùng
+            var response = await _scheduleService.GetAllSchedulePagingAsync(pageNumber, pageSize);
+
+            // Trả về phản hồi
+            if (response == null)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
+        }
+        [HttpGet("GetScheduleById/{scheduleId}")]
+        public async Task<IActionResult> GetScheduleById([FromRoute] int scheduleId)
+        {
+
+            var response = await _scheduleService.GetScheduleByIdAsync(scheduleId);
+
+            // Trả về phản hồi
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response); // Trả về mã lỗi nếu không thành công
+            }
+
+            return Ok(response); // Trả về mã 200 nếu thành công
+        }
+        [Authorize(Roles = "Manager")]
+        [HttpPost("changeScheduleStatus/{scheduleId}")]
+        public async Task<IActionResult> ChangeScheduleStatus([FromRoute] int scheduleId)
+        {
+            var response = await _scheduleService.ChangeStatusScheduleById(scheduleId);
+
+            if (response.Status != Const.SUCCESS_UPDATE_CODE)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
         }
     }
 }

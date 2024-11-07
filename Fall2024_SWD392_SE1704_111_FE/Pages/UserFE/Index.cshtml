@@ -4,6 +4,10 @@
 @{
     ViewData["Title"] = "Hair Salon Management";
 }
+@if (TempData["Message"] != null)
+{
+    <h2 class="text-info">@TempData["Message"]</h2>
+}
 
 @{
     // Lấy tên người dùng từ session
@@ -24,70 +28,78 @@
 </form>
 
 <p>
-    
+
     @if (role!.Equals("Admin"))
     {
-        <a asp-page="Create">Create New</a>        
+        <a asp-page="Create">Create New</a>
     }
     else if (role!.Equals("Manager"))
     {
 
     }
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Users[0].UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Users[0].Password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Users[0].Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Users[0].Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Users[0].Role)
-            </th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Users) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Role)
-            </td>
-            <td>
-                    @if (role!.Equals("Admin"))
-                    {
-                        <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a> <span> | </span>
-                        <a asp-page="./Delete" asp-route-id="@item.UserId">Change Status</a>
-                    }
-                    else if (role!.Equals("Manager"))
-                    {
-                        <a asp-page="./Delete" asp-route-id="@item.UserId">Change Status</a>
-                    }
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].Password)
+                </th>
+                <th>
+
+                    @Html.DisplayNameFor(model => model.Users[0].Phone)  
+
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].Role)
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Users)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem
+                                 => item.Password)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phone)  
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Role)  
+
+                    </td>
+                    <td>
+                        @if (role!.Equals("Admin"))
+                        {
+                            <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a> <span> | </span>
+                            <a asp-page="./Delete" asp-route-id="@item.UserId">Change Status</a>
+                        }
+                        else if (role!.Equals("Manager"))
+                        {
+                            <a asp-page="./Delete" asp-route-id="@item.UserId">Change Status</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 <div class="align-middle">
     <ul class="pagination">
         @for (int b = 1; b <= Model.Count; b++)

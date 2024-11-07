@@ -12,60 +12,61 @@
     <button type="submit">Search</button>
 </form>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Booking[0].TotalPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Booking[0].Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Booking[0].CreateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Booking[0].CreateBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Booking[0].UpdateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Booking[0].UpdateBy)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Booking) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdateDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdateBy)
-            </td>
-            <td>
-@*                 <a asp-page="./Edit" asp-route-id="@item.BookingId">Edit</a> | *@
-@*                 <a asp-page="./Details" asp-route-id="@item.BookingId">Details</a> | *@
-                <a asp-page="./Delete" asp-route-id="@item.BookingId">Change Status</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Booking[0].TotalPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Booking[0].Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Booking[0].CreateDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Booking[0].CreateBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Booking[0].UpdateDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Booking[0].UpdateBy)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Booking)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UpdateDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UpdateBy)
+                    </td>
+                    <td>
+                        <a asp-page="./Delete" asp-route-id="@item.BookingId">Change Status</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 <div class="align-middle">
     <ul class="pagination">
         @for (int b = 1; b <= Model.Count; b++)
