@@ -83,6 +83,19 @@ namespace BusinessObject.ResponseDTO
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }
+    public class GetAllScheduleDTO
+    {
+        public int ScheduleId { get; set; }
+        public TimeSpan? StartTime { get; set; }
+        public TimeSpan? EndTime { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public ScheduleEnum? Status { get; set; }
+        public DateTime? CreateDate { get; set; }
+        public string? CreateBy { get; set; }
+        public DateTime? UpdateDate { get; set; }
+        public string? UpdateBy { get; set; }
+    }
 
     public class UserProfileDTO
     {

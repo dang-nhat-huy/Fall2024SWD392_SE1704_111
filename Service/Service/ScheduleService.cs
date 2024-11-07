@@ -46,14 +46,15 @@ namespace Service.Service
 
                 // Lọc những Schedule có Status là "Available"
                 var availableSchedules = allSchedules.Where(s => s.Status == ScheduleEnum.Available).ToList();
+                var scheduleDto = _mapper.Map<List<GetAllScheduleDTO>>(availableSchedules);
 
-                if (!availableSchedules.Any())
+                if (!scheduleDto.Any())
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "No Available Schedule found.");
                 }
                 else
                 {
-                    return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, availableSchedules);
+                    return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, scheduleDto);
                 }
             }
             catch (Exception ex)

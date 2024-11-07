@@ -29,43 +29,43 @@
 
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create">Create New Feedback</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-           @*  <th>@Html.DisplayNameFor(model => model.Feedback[0].CreateBy)</th> *@
-            <th>@Html.DisplayNameFor(model => model.Feedback[0].Description)</th>
-            <th>@Html.DisplayNameFor(model => model.Feedback[0].CreateDate)</th>
-            <th>@Html.DisplayNameFor(model => model.Feedback[0].Status)</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Feedback != null && Model.Feedback.Count > 0)
-        {
-            @foreach (var item in Model.Feedback)
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Feedback[0].Description)</th>
+                <th>@Html.DisplayNameFor(model => model.Feedback[0].CreateDate)</th>
+                <th>@Html.DisplayNameFor(model => model.Feedback[0].Status)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Feedback != null && Model.Feedback.Count > 0)
+            {
+                @foreach (var item in Model.Feedback)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CreateDate)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                        <td>
+                            <a asp-page="./Delete" asp-route-id="@item.FeedbackId">Change Status</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                 @*    <td>@Html.DisplayFor(modelItem => item.CreateBy)</td> *@
-                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                    <td>@Html.DisplayFor(modelItem => item.CreateDate)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                    <td>
-                       
-                        <a asp-page="./Delete" asp-route-id="@item.FeedbackId">Change Status</a>
-                    </td>
+                    <td colspan="5">No feedbacks found.</td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="5">No feedbacks found.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 
 <div class="align-middle">
     <ul class="pagination">
