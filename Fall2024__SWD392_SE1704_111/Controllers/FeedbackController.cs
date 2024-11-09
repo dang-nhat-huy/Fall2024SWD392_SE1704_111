@@ -22,7 +22,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             _feedbackService = feedbackService;
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize]
         [HttpPost("createFeedback")]
         public async Task<IActionResult> CreateFeedback([FromBody] CreateFeedbackDTO request)
         {
@@ -41,7 +41,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize]
         [HttpPost("updateFeedback/{feedbackId}")]
         public async Task<IActionResult> UpdateFeedback([FromBody] FeedbackRequestDTO request, [FromRoute] int feedbackId)
         {
@@ -60,7 +60,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize]
         [HttpPost("changeFeedbackStatus/{feedbackId}")]
         public async Task<IActionResult> ChangeFeedbackStatus([FromRoute] int feedbackId)
         {
@@ -73,7 +73,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response);
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize]
         [HttpGet("PagingFeedbackList")]
         public async Task<IActionResult> GetVoucherPaging([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
         {
@@ -88,7 +88,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response); // Trả về mã 200 nếu thành công
         } 
-        [Authorize(Roles = "Manager")]
+        [Authorize]
         [HttpGet("PagingFeedbackList1")]
         public async Task<IActionResult> GetVoucherPaging1([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
         {
@@ -104,7 +104,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu thành công
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize]
         [HttpGet("feedbackList")]
         public async Task<IActionResult> GetFeedbackList()
         {
@@ -117,7 +117,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response);
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize]
         [HttpGet("GetFeedbackById/{feedbackId}")]
         public async Task<IActionResult> GetFeedbackById([FromRoute] int feedbackId)
         {
@@ -132,7 +132,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
 
             return Ok(response); // Trả về mã 200 nếu thành công
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize]
         [HttpGet("SearchByDescription")]
         public async Task<IActionResult> SearchFeedbackByDescription([FromQuery] string query, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
         {
