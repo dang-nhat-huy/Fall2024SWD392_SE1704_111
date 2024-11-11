@@ -12,6 +12,7 @@ namespace Repository.IRepository
     {
         Task<IQueryable<ScheduleUser>> GetListScheduleByRoleAsync();
         Task<ScheduleUser?> GetByUserAndScheduleIdAsync(int userId, int scheduleId);
+        Task<List<ScheduleUser>> GetScheduleUserByStylistIdAsync(int stylistId);
 
     }
 }

@@ -28,5 +28,13 @@ namespace Repository.Repository
             return await _context.ScheduleUsers
                 .FirstOrDefaultAsync(su => su.UserId == userId && su.ScheduleId == scheduleId);
         }
+
+        public async Task<List<ScheduleUser>> GetScheduleUserByStylistIdAsync(int stylistId)
+        {
+            return await _context.ScheduleUsers
+                .Where(u => u.UserId == stylistId)
+                .Include("Schedule")
+                .ToListAsync();
+        }
     }
 }
