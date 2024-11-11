@@ -60,9 +60,20 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.BookingFE
                     var usersListJson = JsonConvert.SerializeObject(dto.Data);
                     Booking = JsonConvert.DeserializeObject<Booking>(usersListJson)!;
 
+                    //ViewData["BookingStatus"] = new SelectList(
+                    //    Enum.GetValues(typeof(BookingUpdateStatus))
+                    //        .Cast<BookingUpdateStatus>()
+                    //        .Select(status => new { Value = (int)status, Text = status.ToString() }),
+                    //    "Value",
+                    //    "Text"
+                    //);
+
+                    var currentStatus = (BookingUpdateStatus)Booking.Status!;
+
                     ViewData["BookingStatus"] = new SelectList(
                         Enum.GetValues(typeof(BookingUpdateStatus))
                             .Cast<BookingUpdateStatus>()
+                            .Where(status => status >= currentStatus) // Chỉ lấy các trạng thái sau trạng thái hiện tại
                             .Select(status => new { Value = (int)status, Text = status.ToString() }),
                         "Value",
                         "Text"

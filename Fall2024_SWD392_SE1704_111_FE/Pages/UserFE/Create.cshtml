@@ -28,11 +28,17 @@
                 <input asp-for="createDto.Phone" class="form-control" />
                 <span asp-validation-for="createDto.Phone" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="createDto.RoleId" class="control-label"></label>
                 <input asp-for="createDto.RoleId" class="form-control" />
                 <span asp-validation-for="createDto.RoleId" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <label asp-for="createDto.RoleId" class="control-label"></label>
+                <select asp-for="createDto.RoleId" asp-items="ViewBag.UserRoles" class="form-control"></select>
+                <span asp-validation-for="createDto.RoleId" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
