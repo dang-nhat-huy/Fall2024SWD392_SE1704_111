@@ -20,7 +20,13 @@ namespace BusinessObject.Mapper
                 .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.Schedule.EndTime))
                 .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.Schedule.StartDate))
                 .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.Schedule.EndDate));
-                
+
+
+            CreateMap<ScheduleCurrentUserDTO, ScheduleUser>()
+                .ForMember(dest => dest.Schedule, opt => opt.Ignore())
+                .ForMember(dest => dest.User, opt => opt.Ignore());
+
+            CreateMap<ScheduleUser, ScheduleCurrentUserDTO>();
         }
     }
 }

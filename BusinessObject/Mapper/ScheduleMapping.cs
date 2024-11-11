@@ -43,8 +43,10 @@ namespace BusinessObject.Mapper
                        .ForMember(dest => dest.UpdateDate, opt => opt.MapFrom(src => src.UpdateDate))
                         .ForMember(dest => dest.UpdateBy, opt => opt.MapFrom(src => src.UpdateBy))
                         .ReverseMap();
+
+            CreateMap<Schedule, ScheduledDetailDTO>().ReverseMap();
         }
 
-
+        
     }
 }

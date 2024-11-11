@@ -13,5 +13,6 @@ namespace Service.IService
     public interface IScheduleUserService
     {
         Task<List<ScheduleUserDTO>> GetListScheduleUserAsync();
+        Task<ResponseDTO> GetScheduleUserOfCurrentUser();
     }
 }
