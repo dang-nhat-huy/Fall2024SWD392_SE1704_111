@@ -1,4 +1,6 @@
-﻿using BusinessObject.ResponseDTO;
+﻿using AutoMapper;
+using BusinessObject;
+using BusinessObject.ResponseDTO;
 using Microsoft.EntityFrameworkCore;
 using Repository.IRepository;
 using Service.IService;
@@ -14,10 +16,16 @@ namespace Service.Service
     public class BookingDetailService : IBookingDetailService
     {
         private readonly IBookingDetailRepository _bookingDetailRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IJWTService _jWTService;
 
-        public BookingDetailService(IBookingDetailRepository bookingDetailRepository)
+        public BookingDetailService(IBookingDetailRepository bookingDetailRepository, IUnitOfWork unitOfWork, IMapper mapper, IJWTService jWTService)
         {
             _bookingDetailRepository = bookingDetailRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _jWTService = jWTService;
         }
 
         public async Task<BookingDetailResponseDTO> GetBookingDetailByIdAsync(int bookingDetailID)
@@ -87,6 +95,56 @@ namespace Service.Service
             {
                 // Xử lý exception (ví dụ: log lỗi, throw exception)
                 return null;
+            }
+        }
+
+        public async Task<ResponseDTO> GetBookingOfCurrentStylist()
+        {
+            try
+            {
+                // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                }
+
+                // Lấy danh sách booking của user hiện tại từ repository
+                var bookings = await _unitOfWork.BookingDetailRepository.GetBookingByStylistIdAsync(user.UserId);
+                if (bookings == null || bookings.Count == 0)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "No booking found.");
+                }
+
+                // Ánh xạ kết quả từ Booking sang BookingHistoryDTO bằng ánh xạ thủ công
+                List<BookingOfStylistDTO> bookingDto = new List<BookingOfStylistDTO>();
+
+                foreach (var booking in bookings)
+                {
+                    var dto = _mapper.Map<BookingOfStylistDTO>(booking);
+                    bookingDto.Add(dto);
+                }
+                //// Loại bỏ các BookingDetail trùng lặp theo ServiceId và ScheduleId
+                //foreach (var booking in bookingHistoryDto)
+                //{
+                //    // Lọc dịch vụ chỉ lấy dịch vụ duy nhất (không trùng lặp)
+                //    booking.Services = booking.Services
+                //        .GroupBy(s => s.ServiceId)  // Nhóm theo serviceId
+                //        .Select(g => g.First())     // Lấy bản ghi đầu tiên trong mỗi nhóm (do đã lọc trùng)
+                //        .ToList();
+
+                //    // Lọc lịch trình chỉ lấy lịch trình duy nhất (không trùng lặp)
+                //    booking.Schedules = booking.Schedules
+                //        .GroupBy(s => s.ScheduleId)  // Nhóm theo scheduleId
+                //        .Select(g => g.First())      // Lấy bản ghi đầu tiên trong mỗi nhóm (do đã lọc trùng)
+                //        .ToList();
+
+                //}
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, "Booking retrieved successfully.", bookingDto);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
     }

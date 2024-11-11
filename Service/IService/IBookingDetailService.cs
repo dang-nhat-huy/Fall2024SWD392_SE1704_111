@@ -11,5 +11,6 @@ namespace Service.IService
     public interface IBookingDetailService
     {
         Task<BookingDetailResponseDTO> GetBookingDetailByIdAsync(int bookingDetailID);
+        Task<ResponseDTO> GetBookingOfCurrentStylist();
     }
 }
