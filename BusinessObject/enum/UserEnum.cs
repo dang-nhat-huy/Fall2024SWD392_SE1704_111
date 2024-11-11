@@ -23,4 +23,12 @@ namespace BusinessObject
         Active,
         Banned,
     }
+
+    public enum CreateUserRole
+    {
+        None = 0,
+        Stylist,
+        Staff,
+        Manager,
+    }
 }

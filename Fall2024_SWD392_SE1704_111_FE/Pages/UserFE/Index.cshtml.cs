@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Principal;
 using System.Drawing;
 using System.Data;
+using BusinessObject;
 
 namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
 {
@@ -29,6 +30,8 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
         public double Count { get; set; }
         [BindProperty]
         public string? searchValue { get; set; } = null!;
+        [BindProperty(SupportsGet = true)]
+        public UserRole? RoleFilter { get; set; } = null!;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -71,6 +74,12 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                         // Deserialize `dto.Data` to `User`
                         var usersListJson = JsonConvert.SerializeObject(dto.Items);
                         Users = JsonConvert.DeserializeObject<IList<User>>(usersListJson)!;
+
+                        // Lọc theo role nếu có
+                        if (RoleFilter != null)
+                        {
+                            Users = Users.Where(u => u.Role == RoleFilter).ToList();
+                        }
 
                         //phân trang cho list
                         var countJson = JsonConvert.SerializeObject(dto.TotalCount);
@@ -140,6 +149,12 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                     Users = JsonConvert.DeserializeObject<IList<User>>(usersListJson)!;
 
                     var role = HttpContext.Session.GetString("Role");
+
+                    // Lọc theo role nếu có
+                    if (RoleFilter!=null)
+                    {
+                        Users = Users.Where(u => u.Role == RoleFilter).ToList();
+                    }
 
                     // Lấy thông tin ID của người dùng hiện tại từ token hoặc session
                     var currentUserId = HttpContext.Session.GetString("UserId");

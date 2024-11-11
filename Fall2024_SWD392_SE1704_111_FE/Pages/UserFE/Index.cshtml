@@ -27,6 +27,21 @@
     <button type="submit">Search</button>
 </form>
 
+ @* <form method="post">
+
+     <select name="selectedRole" value="@Model.RoleFilter">
+         <option value="">All Roles</option>
+         <option value="Customer">Customer</option>
+         <option value="Stylist">Stylist</option>
+         <option value="Staff">Staff</option>
+         <option value="Manager">Manager</option>
+         <option value="Admin">Admin</option>
+     </select>
+
+     <button type="submit">Search</button>
+ </form> *@
+
+
 <p>
 
     @if (role!.Equals("Admin"))

@@ -11,6 +11,7 @@ using BusinessObject.ResponseDTO;
 using Newtonsoft.Json;
 using System.Drawing;
 using System.Text;
+using BusinessObject;
 
 namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
 {
@@ -22,6 +23,19 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
         [BindProperty]
         public CreateAccountDTO createDto { get; set; } = default!;
         public ResponseDTO dto { get; set; } = null!;
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            ViewData["UserRoles"] = new SelectList(
+                Enum.GetValues(typeof(CreateUserRole))
+                    .Cast<CreateUserRole>()
+                    .Select(role => new { Value = (int)role, Text = role.ToString() }),
+                "Value",
+                "Text"
+            );
+
+            return Page();
+        }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
