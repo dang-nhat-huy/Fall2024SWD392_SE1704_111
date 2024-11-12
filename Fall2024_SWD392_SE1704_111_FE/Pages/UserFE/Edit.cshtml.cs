@@ -11,6 +11,7 @@ using BusinessObject.ResponseDTO;
 using Newtonsoft.Json;
 using static BusinessObject.RequestDTO.RequestDTO;
 using System.Text;
+using BusinessObject;
 
 namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
 {
@@ -58,6 +59,14 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
                     // Deserialize `dto.Data` to `List<UserListDTO>`
                     var usersListJson = JsonConvert.SerializeObject(dto.Data);
                     User = JsonConvert.DeserializeObject<User>(usersListJson);
+
+                    ViewData["UserRoles"] = new SelectList(
+                Enum.GetValues(typeof(CreateUserRole))
+                    .Cast<CreateUserRole>()
+                    .Select(role => new { Value = (int)role, Text = role.ToString() }),
+                "Value",
+                "Text"
+            );
                 }
                 else
                 {

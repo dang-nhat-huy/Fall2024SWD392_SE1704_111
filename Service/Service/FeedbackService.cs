@@ -61,7 +61,7 @@ namespace Service.Service
                 feedback.CreateDate = DateTime.Now;
                 feedback.Status = FeedbackStatusEnum.Active;
                 feedback.Description = request.Description;
-              
+                
 
                 await _unitOfWork.FeedbackRepository.CreateAsync(feedback);
                 return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "Feedback created successfully", request);
@@ -269,10 +269,10 @@ namespace Service.Service
             try
             {
                 var feedbacks = await _unitOfWork.FeedbackRepository.GetAll()
- .Where(f => f.Description.Contains(query))
- .Skip((pageNumber - 1) * pageSize)
- .Take(pageSize)
- .ToListAsync();
+                     .Where(f => f.Description.Contains(query))
+                     .Skip((pageNumber - 1) * pageSize)
+                     .Take(pageSize)
+                     .ToListAsync();
 
                 var totalFeedbacks = await _unitOfWork.FeedbackRepository.GetAll()
                     .CountAsync(f => f.Description.Contains(query));
