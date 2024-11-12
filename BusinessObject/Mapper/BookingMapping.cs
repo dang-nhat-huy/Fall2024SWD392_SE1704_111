@@ -31,13 +31,13 @@ namespace BusinessObject.Mapper
             CreateMap<Booking, ChangebookingStatusDTO>().ReverseMap();
 
             CreateMap<Booking, BookingHistoryDTO>()
-    .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
-    .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src =>
-        src.BookingDetails.Select(detail => detail.Schedule.StartDate).FirstOrDefault() ?? DateTime.MinValue))
-    .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src =>
-        src.BookingDetails.Select(detail => detail.Schedule.EndDate).LastOrDefault() ?? DateTime.MinValue))
-    .ForMember(dest => dest.Services, opt => opt.MapFrom(src =>
-        src.BookingDetails.Select(bookingDetail => new ServiceDetailDTO
+                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src =>
+                    src.BookingDetails.Select(detail => detail.Schedule.StartDate).FirstOrDefault() ?? DateTime.MinValue))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src =>
+                    src.BookingDetails.Select(detail => detail.Schedule.EndDate).LastOrDefault() ?? DateTime.MinValue))
+                .ForMember(dest => dest.Services, opt => opt.MapFrom(src =>
+                    src.BookingDetails.Select(bookingDetail => new ServiceDetailDTO
         {
             ServiceId = bookingDetail.ServiceId ?? 0,
             ServiceName = bookingDetail.Service.ServiceName,

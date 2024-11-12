@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Model;
+using Microsoft.EntityFrameworkCore;
 using Repository.IRepository;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,15 @@ namespace Repository.Repository
         public BookingDetailRepository() { }
 
         public BookingDetailRepository(HairSalonBookingContext context) => _context = context;
+
+        public async Task<List<BookingDetail>> GetBookingByStylistIdAsync(int stylistId)
+        {
+            return await _context.BookingDetails
+                .Where(b => b.StylistId == stylistId)
+                .Include(b => b.Service) 
+                .Include(b => b.Schedule) 
+                .Include(b => b.Booking)  
+                .ToListAsync();
+        }
     }
 }

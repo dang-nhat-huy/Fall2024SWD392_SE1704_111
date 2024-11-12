@@ -158,6 +158,18 @@ namespace BusinessObject.ResponseDTO
 
     }
 
+    public class BookingOfStylistDTO
+    {
+        public int BookingId { get; set; }
+        // Danh sách các dịch vụ kèm tên nhân viên thực hiện
+        public ServiceDetailDTO Services { get; set; } = new ServiceDetailDTO();
+        public ScheduledDetailDTO Schedules { get; set; } = new ScheduledDetailDTO();
+        public double TotalPrice { get; set; }
+        public BookingStatus? Status { get; set; }
+        public string? CreateBy { get; set; }
+
+    }
+
     public class ScheduleCurrentUserDTO
     {
         public int ScheduleUserId { get; set; }
@@ -174,6 +186,7 @@ namespace BusinessObject.ResponseDTO
 
         public double? Price { get; set; }
         public TimeSpan? EstimateTime { get; set; }
+
     }
 
     public class ScheduledDetailDTO
