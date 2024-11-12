@@ -24,19 +24,27 @@ namespace BusinessObject.Mapper
                       .ForMember(dest => dest.UpdateBy, opt => opt.MapFrom(src => src.UpdateBy));
 
             CreateMap<BookingDetail, BookingOfStylistDTO>()
-                .ForMember(dest => dest.BookingDetailId, opt => opt.MapFrom(src => src.BookingDetailId))
-                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.Booking.TotalPrice))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Booking.Status))
-                .ForMember(dest => dest.CreateBy, opt => opt.MapFrom(src => src.Booking.CreateBy))
-                .ReverseMap();
+    .ForMember(dest => dest.Services, opt => opt.MapFrom(src => src.Service)) // Chuyển qua ánh xạ giữa Service và ServiceDetailDTO
+    .ForMember(dest => dest.Schedules, opt => opt.MapFrom(src => new ScheduledDetailDTO
+    {
+        ScheduleId = src.ScheduleId ?? 0,
+        StartTime = src.Schedule.StartTime,
+        EndTime = src.Schedule.EndTime,
+        StartDate = src.Schedule.StartDate,
+        EndDate = src.Schedule.EndDate
+    }))
+    .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.BookingId))
+    .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.Service.Price ?? 0))
+    .ForMember(dest => dest.CreateBy, opt => opt.MapFrom(src => src.CreateBy))
+    .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Booking.Status))
+    .ReverseMap();
 
             CreateMap<HairService, ServiceDetailDTO>()
-                .ForMember(dest => dest.ServiceId, opt => opt.MapFrom(src => src.ServiceId))
-                .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.ServiceName))
-                .ForMember(dest => dest.StylistName, opt => opt.NullSubstitute(null))
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-                .ForMember(dest => dest.EstimateTime, opt => opt.MapFrom(src => src.EstimateTime))
-                .ReverseMap();
+    .ForMember(dest => dest.ServiceId, opt => opt.MapFrom(src => src.ServiceId))
+    .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.ServiceName))
+    .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+    .ForMember(dest => dest.StylistName, opt => opt.Ignore()) 
+    .ForMember(dest => dest.EstimateTime, opt => opt.MapFrom(src => src.EstimateTime));
 
             CreateMap<Schedule, ScheduledDetailDTO>()
                 .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))

@@ -124,23 +124,14 @@ namespace Service.Service
                     var dto = _mapper.Map<BookingOfStylistDTO>(booking);
                     bookingDto.Add(dto);
                 }
-                //// Loại bỏ các BookingDetail trùng lặp theo ServiceId và ScheduleId
-                //foreach (var booking in bookingHistoryDto)
-                //{
-                //    // Lọc dịch vụ chỉ lấy dịch vụ duy nhất (không trùng lặp)
-                //    booking.Services = booking.Services
-                //        .GroupBy(s => s.ServiceId)  // Nhóm theo serviceId
-                //        .Select(g => g.First())     // Lấy bản ghi đầu tiên trong mỗi nhóm (do đã lọc trùng)
-                //        .ToList();
 
-                //    // Lọc lịch trình chỉ lấy lịch trình duy nhất (không trùng lặp)
-                //    booking.Schedules = booking.Schedules
-                //        .GroupBy(s => s.ScheduleId)  // Nhóm theo scheduleId
-                //        .Select(g => g.First())      // Lấy bản ghi đầu tiên trong mỗi nhóm (do đã lọc trùng)
-                //        .ToList();
+                // Xử lý loại bỏ phần tử trùng lặp theo BookingId
+                var distinctBookings = bookingDto
+                    .GroupBy(b => b.BookingId)
+                    .Select(g => g.First()) // Lấy phần tử đầu tiên của mỗi nhóm (trùng lặp)
+                    .ToList();
 
-                //}
-                return new ResponseDTO(Const.SUCCESS_READ_CODE, "Booking retrieved successfully.", bookingDto);
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, "Booking retrieved successfully.", distinctBookings);
             }
             catch (Exception ex)
             {

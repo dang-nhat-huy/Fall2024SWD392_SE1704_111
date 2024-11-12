@@ -19,9 +19,9 @@ namespace Repository.Repository
         {
             return await _context.BookingDetails
                 .Where(b => b.StylistId == stylistId)
-                .Include("Service")
-                .Include("Schedule")
-                .Include("Booking")
+                .Include(b => b.Service) 
+                .Include(b => b.Schedule) 
+                .Include(b => b.Booking)  
                 .ToListAsync();
         }
     }
