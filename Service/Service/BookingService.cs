@@ -351,22 +351,21 @@ namespace Service.Service
                     var dto = _mapper.Map<BookingHistoryDTO>(booking);
                     bookingHistoryDto.Add(dto);
                 }
-                // Loại bỏ các BookingDetail trùng lặp theo ServiceId và ScheduleId
+
                 foreach (var booking in bookingHistoryDto)
                 {
                     // Lọc dịch vụ chỉ lấy dịch vụ duy nhất (không trùng lặp)
                     booking.Services = booking.Services
-                        .GroupBy(s => s.ServiceId)  // Nhóm theo serviceId
-                        .Select(g => g.First())     // Lấy bản ghi đầu tiên trong mỗi nhóm (do đã lọc trùng)
+                        .DistinctBy(s => s.ServiceId)
                         .ToList();
 
                     // Lọc lịch trình chỉ lấy lịch trình duy nhất (không trùng lặp)
                     booking.Schedules = booking.Schedules
-                        .GroupBy(s => s.ScheduleId)  // Nhóm theo scheduleId
-                        .Select(g => g.First())      // Lấy bản ghi đầu tiên trong mỗi nhóm (do đã lọc trùng)
+                        .DistinctBy(sched => sched.ScheduleId)
                         .ToList();
 
                 }
+
                 return new ResponseDTO(Const.SUCCESS_READ_CODE, "Booking history retrieved successfully.", bookingHistoryDto);
             }
             catch (Exception ex)
