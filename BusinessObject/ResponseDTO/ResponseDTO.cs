@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static BusinessObject.ReportEnum;
+using static BusinessObject.ServiceEnum;
 
 namespace BusinessObject.ResponseDTO
 {
@@ -55,6 +56,7 @@ namespace BusinessObject.ResponseDTO
         public string? Description { get; set; }
         public double? Price { get; set; }
         public TimeSpan? EstimateTime { get; set; }
+        public ServiceStatusEnum? Status { get; set; }
     }
 
     public class StylistResponseDTO
