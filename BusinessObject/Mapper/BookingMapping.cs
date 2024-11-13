@@ -50,7 +50,9 @@ namespace BusinessObject.Mapper
         {
             ScheduleId = bookingDetail.ScheduleId ?? 0,
             StartTime = bookingDetail.Schedule.StartTime,
-            EndTime = bookingDetail.Schedule.EndTime
+            EndTime = bookingDetail.Schedule.EndTime,
+            StartDate = bookingDetail.Schedule.StartDate,
+            EndDate = bookingDetail.Schedule.EndDate,
         }).ToList()))
     .ReverseMap();
 
