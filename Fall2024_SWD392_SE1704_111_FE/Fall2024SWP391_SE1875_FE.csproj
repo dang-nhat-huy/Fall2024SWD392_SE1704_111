@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fall2024__SWD392_SE1704_111\Fall2024__SWD392_SE1704_111.csproj" />
+    <ProjectReference Include="..\Fall2024__SWD392_SE1704_111\Fall2024SWP391_SE1875.csproj" />
   </ItemGroup>
 
   <ItemGroup>
