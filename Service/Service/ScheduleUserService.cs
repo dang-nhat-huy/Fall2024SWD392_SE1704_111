@@ -101,37 +101,48 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
                 }
 
-                //// Kiểm tra xem UserId có phải là Stylist không
-                //var targetUser = await _unitOfWork.UserRepository.GetByIdAsync(request.UserId);
-                //if (targetUser == null)
-                //{
-                //    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
-                //}
-
-                //// Kiểm tra xem Schedule đã tồn tại chưa (dựa trên StartDate, StartTime, EndDate, EndTime)
-                //var existingSchedule = await _unitOfWork.ScheduleRepository
-                //    .GetAll()  // Hoặc phương thức nào để lấy tất cả Schedule
-                //    .FirstOrDefaultAsync(s => s.StartDate == request.StartDate && s.StartTime == request.StartTime && s.EndDate == request.EndDate && s.EndTime == request.EndTime);
-
-                //if (existingSchedule != null)
-                //{
-                //    return new ResponseDTO(Const.FAIL_READ_CODE, "Schedule already exists.");
-                //}
-
-                // Tạo Schedule mới từ DTO request
-                var schedule = new Schedule
+                // Kiểm tra vai trò của UserId trong DTO
+                var targetUser = await _unitOfWork.UserRepository.GetByIdAsync(request.UserId);
+                if (targetUser == null)
                 {
-                    StartTime = request.StartTime,
-                    EndTime = request.EndTime,
-                    StartDate = request.StartDate,
-                    EndDate = request.EndDate,
-                    Status = ScheduleEnum.Available,  // Giả sử trạng thái ban đầu là Available
-                    CreateBy = user.UserName,
-                    CreateDate = DateTime.Now
-                };
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                }
 
-                // Lưu Schedule vào cơ sở dữ liệu
-                var createdSchedule = await _unitOfWork.ScheduleRepository.CreateAsync(schedule);
+                // Kiểm tra nếu vai trò của người dùng không phải là Stylist
+                if (targetUser.Role != UserRole.Stylist)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "The user is not a Stylist.");
+                }
+
+                // Kiểm tra xem Schedule đã tồn tại chưa (dựa trên StartDate, StartTime, EndDate, EndTime)
+                var existingSchedule = await _unitOfWork.ScheduleRepository
+                    .GetAll()  // Hoặc phương thức nào để lấy tất cả Schedule
+                    .FirstOrDefaultAsync(s => s.StartDate == request.StartDate && s.StartTime == request.StartTime &&
+                    s.EndDate == request.EndDate && s.EndTime == request.EndTime);
+
+                Schedule schedule;
+
+                if (existingSchedule != null)
+                {
+                    schedule = existingSchedule;
+                }
+                else
+                {
+                    // Tạo Schedule mới từ DTO request
+                    schedule = new Schedule
+                    {
+                        StartTime = request.StartTime,
+                        EndTime = request.EndTime,
+                        StartDate = request.StartDate,
+                        EndDate = request.EndDate,
+                        Status = ScheduleEnum.Available,  // Giả sử trạng thái ban đầu là Available
+                        CreateBy = user.UserName,
+                        CreateDate = DateTime.Now
+                    };
+
+                    // Lưu Schedule vào cơ sở dữ liệu
+                    var createdSchedule = await _unitOfWork.ScheduleRepository.CreateAsync(schedule);
+                }
 
                 var existingScheduleUser = await _unitOfWork.ScheduleUserRepository
                     .GetAll()
@@ -143,7 +154,6 @@ namespace Service.Service
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Schedule user is already assigned to this schedule.");
                 }
-
 
                 var scheduleUser = new ScheduleUser
                 {

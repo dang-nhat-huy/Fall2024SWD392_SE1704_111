@@ -411,7 +411,7 @@ namespace BusinessObject.RequestDTO
             [DataType(DataType.Date)]
             [DateInFuture(ErrorMessage = "End date must not be in the past.")]
             public DateTime? EndDate { get; set; }
-            public int? UserId { get; set; }
+            public int UserId { get; set; }
         }
     }
 }

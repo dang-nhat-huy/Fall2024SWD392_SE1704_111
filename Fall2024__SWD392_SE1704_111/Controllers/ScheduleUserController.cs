@@ -48,10 +48,6 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         [HttpPost("createScheduleUser")]
         public async Task<IActionResult> CreateScheduleUser([FromBody] createScheduleUser createScheduleUser)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
 
             try
             {
