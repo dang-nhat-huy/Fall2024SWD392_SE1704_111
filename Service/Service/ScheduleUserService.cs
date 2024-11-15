@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BusinessObject.RequestDTO.RequestDTO;
 using static BusinessObject.ResponseDTO.ResponseDTO;
 
 namespace Service.Service
@@ -50,14 +51,14 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
                 }
 
-                
+
                 var scheduleUsers = await _unitOfWork.ScheduleUserRepository.GetScheduleUserByStylistIdAsync(user.UserId);
                 if (scheduleUsers == null || scheduleUsers.Count == 0)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "No Schedule of Stylist found.");
                 }
 
-                
+
                 List<ScheduleCurrentUserDTO> currentStylistScheduleDto = new List<ScheduleCurrentUserDTO>();
 
                 foreach (var scheduleUser in scheduleUsers)
@@ -72,7 +73,7 @@ namespace Service.Service
                     };
                     currentStylistScheduleDto.Add(dto);
                 }
-                
+
                 //foreach (var schedule in currentStylistScheduleDto)
                 //{
                 //    schedule.Schedule = schedule.Schedule
@@ -82,6 +83,71 @@ namespace Service.Service
 
                 //}
                 return new ResponseDTO(Const.SUCCESS_READ_CODE, "Schedule of Stylist retrieved successfully.", currentStylistScheduleDto);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<ResponseDTO> createScheduleUser(createScheduleUser request)
+        {
+            try
+            {
+                // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                }
+
+                // Kiểm tra xem Schedule đã tồn tại chưa (dựa trên StartDate, StartTime, EndDate, EndTime)
+                var existingSchedule = await _unitOfWork.ScheduleRepository
+                    .GetAll()  // Hoặc phương thức nào để lấy tất cả Schedule
+                    .FirstOrDefaultAsync(s => s.StartDate == request.StartDate && s.StartTime == request.StartTime && s.EndDate == request.EndDate && s.EndTime == request.EndTime);
+
+                if (existingSchedule != null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Schedule already exists.");
+                }
+
+                // Tạo Schedule mới từ DTO request
+                var schedule = new Schedule
+                {
+                    StartTime = request.StartTime,
+                    EndTime = request.EndTime,
+                    StartDate = request.StartDate,
+                    EndDate = request.EndDate,
+                    Status = ScheduleEnum.Available,  // Giả sử trạng thái ban đầu là Available
+                    CreateBy = user.UserName,
+                    CreateDate = DateTime.Now
+                };
+
+                // Lưu Schedule vào cơ sở dữ liệu
+                var createdSchedule = await _unitOfWork.ScheduleRepository.CreateAsync(schedule);
+
+                // Kiểm tra xem ScheduleUser đã có trạng thái Assigned cho user này và schedule vừa tạo chưa
+                var existingScheduleUser = await _unitOfWork.ScheduleUserRepository
+                    .GetAll()
+                    .FirstOrDefaultAsync(su => su.UserId == request.UserId && su.ScheduleId == schedule.ScheduleId);
+
+                if (existingScheduleUser != null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Schedule user is already assigned to this schedule.");
+                }
+
+                var scheduleUser = new ScheduleUser
+                {
+                    UserId = request.UserId,
+                    ScheduleId = schedule.ScheduleId,
+                    Status = ScheduleUserEnum.Assign,  // Giả sử trạng thái ban đầu là Assigned
+                    CreateBy = user.UserName,
+                    CreateDate = DateTime.Now
+                };
+
+                // Lưu ScheduleUser vào cơ sở dữ liệu
+                await _unitOfWork.ScheduleUserRepository.CreateAsync(scheduleUser);
+                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "create schedule stylist successfully", request);
             }
             catch (Exception ex)
             {
