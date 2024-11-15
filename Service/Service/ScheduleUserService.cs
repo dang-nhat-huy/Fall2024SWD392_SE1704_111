@@ -101,15 +101,22 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
                 }
 
-                // Kiểm tra xem Schedule đã tồn tại chưa (dựa trên StartDate, StartTime, EndDate, EndTime)
-                var existingSchedule = await _unitOfWork.ScheduleRepository
-                    .GetAll()  // Hoặc phương thức nào để lấy tất cả Schedule
-                    .FirstOrDefaultAsync(s => s.StartDate == request.StartDate && s.StartTime == request.StartTime && s.EndDate == request.EndDate && s.EndTime == request.EndTime);
+                //// Kiểm tra xem UserId có phải là Stylist không
+                //var targetUser = await _unitOfWork.UserRepository.GetByIdAsync(request.UserId);
+                //if (targetUser == null)
+                //{
+                //    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                //}
 
-                if (existingSchedule != null)
-                {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "Schedule already exists.");
-                }
+                //// Kiểm tra xem Schedule đã tồn tại chưa (dựa trên StartDate, StartTime, EndDate, EndTime)
+                //var existingSchedule = await _unitOfWork.ScheduleRepository
+                //    .GetAll()  // Hoặc phương thức nào để lấy tất cả Schedule
+                //    .FirstOrDefaultAsync(s => s.StartDate == request.StartDate && s.StartTime == request.StartTime && s.EndDate == request.EndDate && s.EndTime == request.EndTime);
+
+                //if (existingSchedule != null)
+                //{
+                //    return new ResponseDTO(Const.FAIL_READ_CODE, "Schedule already exists.");
+                //}
 
                 // Tạo Schedule mới từ DTO request
                 var schedule = new Schedule
@@ -126,15 +133,17 @@ namespace Service.Service
                 // Lưu Schedule vào cơ sở dữ liệu
                 var createdSchedule = await _unitOfWork.ScheduleRepository.CreateAsync(schedule);
 
-                // Kiểm tra xem ScheduleUser đã có trạng thái Assigned cho user này và schedule vừa tạo chưa
                 var existingScheduleUser = await _unitOfWork.ScheduleUserRepository
                     .GetAll()
-                    .FirstOrDefaultAsync(su => su.UserId == request.UserId && su.ScheduleId == schedule.ScheduleId);
+                    .FirstOrDefaultAsync(su => su.UserId == request.UserId &&
+                    su.Schedule.StartTime == request.StartTime && su.Schedule.EndTime == request.EndTime && 
+                    su.Schedule.StartDate == request.StartDate && su.Schedule.EndDate == request.EndDate);
 
                 if (existingScheduleUser != null)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Schedule user is already assigned to this schedule.");
                 }
+
 
                 var scheduleUser = new ScheduleUser
                 {
