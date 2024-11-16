@@ -101,24 +101,11 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
                 }
 
-                // Kiểm tra vai trò của UserId trong DTO
-                var targetUser = await _unitOfWork.UserRepository.GetByIdAsync(request.UserId);
-                if (targetUser == null)
-                {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
-                }
-
-                // Kiểm tra nếu vai trò của người dùng không phải là Stylist
-                if (targetUser.Role != UserRole.Stylist)
-                {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "The user is not a Stylist.");
-                }
-
                 // Kiểm tra xem Schedule đã tồn tại chưa (dựa trên StartDate, StartTime, EndDate, EndTime)
                 var existingSchedule = await _unitOfWork.ScheduleRepository
-                    .GetAll()  // Hoặc phương thức nào để lấy tất cả Schedule
+                    .GetAll()
                     .FirstOrDefaultAsync(s => s.StartDate == request.StartDate && s.StartTime == request.StartTime &&
-                    s.EndDate == request.EndDate && s.EndTime == request.EndTime);
+                                              s.EndDate == request.EndDate && s.EndTime == request.EndTime);
 
                 Schedule schedule;
 
@@ -141,23 +128,44 @@ namespace Service.Service
                     };
 
                     // Lưu Schedule vào cơ sở dữ liệu
-                    var createdSchedule = await _unitOfWork.ScheduleRepository.CreateAsync(schedule);
+                    await _unitOfWork.ScheduleRepository.CreateAsync(schedule);
                 }
 
-                var existingScheduleUser = await _unitOfWork.ScheduleUserRepository
-                    .GetAll()
-                    .FirstOrDefaultAsync(su => su.UserId == request.UserId &&
-                    su.Schedule.StartTime == request.StartTime && su.Schedule.EndTime == request.EndTime && 
-                    su.Schedule.StartDate == request.StartDate && su.Schedule.EndDate == request.EndDate);
-
-                if (existingScheduleUser != null)
+                // Nếu UserId được nhập vào
+                if (request.UserId != 0)
                 {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "Schedule user is already assigned to this schedule.");
+                    // Kiểm tra UserId có hợp lệ hay không
+                    var targetUser = await _unitOfWork.UserRepository.GetByIdAsync(request.UserId);
+                    if (targetUser == null)
+                    {
+                        return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                    }
+
+                    // Kiểm tra nếu vai trò của người dùng không phải là Stylist
+                    if (targetUser.Role != UserRole.Stylist)
+                    {
+                        return new ResponseDTO(Const.FAIL_READ_CODE, "The user is not a Stylist.");
+                    }
+
+                    // Kiểm tra xem ScheduleUser đã tồn tại chưa
+                    var existingScheduleUser = await _unitOfWork.ScheduleUserRepository
+                        .GetAll()
+                        .FirstOrDefaultAsync(su => su.UserId == request.UserId &&
+                                                   su.Schedule.StartTime == request.StartTime &&
+                                                   su.Schedule.EndTime == request.EndTime &&
+                                                   su.Schedule.StartDate == request.StartDate &&
+                                                   su.Schedule.EndDate == request.EndDate);
+
+                    if (existingScheduleUser != null)
+                    {
+                        return new ResponseDTO(Const.FAIL_READ_CODE, "Schedule user is already assigned to this schedule.");
+                    }
                 }
 
+                // Tạo mới ScheduleUser với UserId có thể null
                 var scheduleUser = new ScheduleUser
                 {
-                    UserId = request.UserId,
+                    UserId = request.UserId != 0 ? request.UserId : null, // UserId để trống nếu không được nhập
                     ScheduleId = schedule.ScheduleId,
                     Status = ScheduleUserEnum.Assign,  // Giả sử trạng thái ban đầu là Assigned
                     CreateBy = user.UserName,
@@ -173,5 +181,6 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+
     }
 }
