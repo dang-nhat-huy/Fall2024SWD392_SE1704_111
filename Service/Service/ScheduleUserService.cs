@@ -228,7 +228,7 @@ namespace Service.Service
                 else
                 {
                     // Nếu có lịch, lấy danh sách UserId từ ScheduleUser của lịch
-                    var excludedUserIds = await _unitOfWork.ScheduleUserRepository.GetExcludedUserIdByScheduleIdAsync(schedule.ScheduleId);
+                    var excludedUserIds = await _unitOfWork.ScheduleUserRepository.GetExcludedUserIdsByScheduleIdAsync(schedule.ScheduleId);
 
                     // Trả về danh sách stylist, trừ các user có UserId đã có trong lịch
                     var checkedStylists = await _unitOfWork.UserRepository.GetStylistsExcludingIdsAsync(excludedUserIds, UserStatus.Active);

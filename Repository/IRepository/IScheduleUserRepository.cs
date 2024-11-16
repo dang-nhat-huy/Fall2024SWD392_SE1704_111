@@ -14,7 +14,8 @@ namespace Repository.IRepository
         Task<ScheduleUser?> GetByUserAndScheduleIdAsync(int userId, int scheduleId);
         Task<List<ScheduleUser>> GetScheduleUserByStylistIdAsync(int stylistId);
         Task<List<ScheduleUser>> GetScheduleUsersOfStylistsAsync();
-        Task<int?> GetExcludedUserIdByScheduleIdAsync(int scheduleId);
+        //Task<int?> GetExcludedUserIdByScheduleIdAsync(int scheduleId);
+        Task<List<int>> GetExcludedUserIdsByScheduleIdAsync(int scheduleId);
 
     }
 }

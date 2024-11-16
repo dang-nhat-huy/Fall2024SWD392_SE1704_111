@@ -26,6 +26,7 @@ namespace Repository.IRepository
         IQueryable<User> GetUsersByNameExcludingCurrentUserAndRoleAsync(int currentUserId, UserRole? role, string? userName);
         Task<List<User>> GetAllStylistsAsync();
         Task<List<User>> GetStylistsByStatusAsync(UserStatus status);
-        Task<List<User>> GetStylistsExcludingIdsAsync(int? excludedUserIds, UserStatus status);
+        //Task<List<User>> GetStylistsExcludingIdsAsync(int? excludedUserIds, UserStatus status);
+        Task<List<User>> GetStylistsExcludingIdsAsync(List<int> excludedUserIds, UserStatus status);
     }
 }

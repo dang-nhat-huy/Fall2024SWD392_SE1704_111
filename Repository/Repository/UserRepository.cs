@@ -110,14 +110,20 @@ namespace Repository.Repository
         }
 
 
-        public async Task<List<User>> GetStylistsExcludingIdsAsync(int? excludedUserId, UserStatus status)
+        //public async Task<List<User>> GetStylistsExcludingIdsAsync(int? excludedUserId, UserStatus status)
+        //{
+        //    return await _context.Users
+        //        .Where(u => u.Role == UserRole.Stylist && u.Status == status && u.UserId != excludedUserId)
+        //        .Include(u => u.UserProfile)
+        //        .ToListAsync();
+        //}
+
+        public async Task<List<User>> GetStylistsExcludingIdsAsync(List<int> excludedUserIds, UserStatus status)
         {
             return await _context.Users
-                .Where(u => u.Role == UserRole.Stylist && u.Status == status && u.UserId != excludedUserId)
-                .Include(u => u.UserProfile)
+                .Where(u => u.Role == UserRole.Stylist && u.Status == status && !excludedUserIds.Contains(u.UserId))
                 .ToListAsync();
         }
-
 
 
     }

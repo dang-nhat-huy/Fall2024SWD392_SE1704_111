@@ -57,13 +57,22 @@ namespace Repository.Repository
                 .ToListAsync();
         }
 
-        public async Task<int?> GetExcludedUserIdByScheduleIdAsync(int scheduleId)
-        {
-            return await _context.ScheduleUsers
-                .Where(su => su.ScheduleId == scheduleId)
-                .Select(su => su.UserId)
-                .FirstOrDefaultAsync();
-        }
+        //public async Task<int?> GetExcludedUserIdByScheduleIdAsync(int scheduleId)
+        //{
+        //    return await _context.ScheduleUsers
+        //        .Where(su => su.ScheduleId == scheduleId)
+        //        .Select(su => su.UserId)
+        //        .FirstOrDefaultAsync();
+        //}
 
+        public async Task<List<int>> GetExcludedUserIdsByScheduleIdAsync(int scheduleId)
+        {
+            var list = await _context.ScheduleUsers
+                .Where(su => su.ScheduleId == scheduleId && su.UserId.HasValue)
+                .Select(su => su.UserId.Value)
+                .ToListAsync();
+
+            return list;
+        }
     }
 }
