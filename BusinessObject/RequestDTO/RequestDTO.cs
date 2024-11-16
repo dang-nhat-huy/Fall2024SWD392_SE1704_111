@@ -58,10 +58,9 @@ namespace BusinessObject.RequestDTO
             public string? Phone { get; set; }
             public int? VoucherId { get; set; }
             [Required]
-            public List<int>? ScheduleId { get; set; }
+            public List<createScheduleUser?> Schedule { get; set; }
             [Required]
             public List<int>? ServiceId { get; set; }
-            [Required]
             public List<int>? StylistId { get; set; }
 
         }

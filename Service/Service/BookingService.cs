@@ -21,12 +21,14 @@ namespace Service.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IJWTService _jWTService;
+        private readonly IScheduleUserService _scheduleUserService;
 
-        public BookingService(IUnitOfWork unitOfWork, IMapper mapper, IJWTService jWTService)
+        public BookingService(IUnitOfWork unitOfWork, IMapper mapper, IJWTService jWTService, IScheduleUserService scheduleUserService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _jWTService = jWTService;
+            _scheduleUserService = scheduleUserService;
         }
 
         public async Task<ResponseDTO> ChangeBookingStatus(RequestDTO.ChangebookingStatusDTO request, int bookingId)
@@ -176,55 +178,33 @@ namespace Service.Service
                 {
                     return new ResponseDTO(400, Const.FAIL_READ_MSG);
                 }
-                // Kiểm tra trùng lặp StylistId
-                if (bookingRequest.StylistId.Count != bookingRequest.StylistId.Distinct().Count())
+
+                // List to hold created schedules for each stylist
+                var createdSchedules = new List<Schedule>();
+
+                // Kiểm tra StylistId và tạo lịch cho từng stylist
+                for (int i = 0; i < bookingRequest.StylistId.Count; i++)
                 {
-                    return new ResponseDTO(400, "Stylist IDs cannot be duplicated.");
-                }
-                foreach (var stylistId in bookingRequest.StylistId)
-                {
+                    var stylistId = bookingRequest.StylistId[i];
                     var stylist = await _unitOfWork.UserRepository.GetByIdAsync(stylistId);
+
                     if (stylist == null || stylist.Role != UserRole.Stylist)
                     {
                         return new ResponseDTO(400, $"Stylist with ID {stylistId} does not exist or is not a stylist.");
                     }
+
+                    // Gán UserId cho từng lịch trong danh sách Schedule tương ứng
+                    var scheduleRequest = bookingRequest.Schedule[i];
+                    scheduleRequest.UserId = stylistId;
+
+                    // Sử dụng service để tạo lịch cho stylist
+                    var createdSchedule = await _scheduleUserService.createScheduleUser(scheduleRequest);
+
+                    // Thêm lịch đã tạo vào danh sách (nếu cần thiết)
+                    createdSchedules.Add(createdSchedule.Data as Schedule);
                 }
 
-                // Kiểm tra ScheduleId có tồn tại không
-                if (bookingRequest.ScheduleId == null || !bookingRequest.ScheduleId.Any())
-                {
-                    return new ResponseDTO(400, "Schedule IDs cannot be null or empty.");
-                }
 
-                // Kiểm tra trùng lặp ScheduleId
-                if (bookingRequest.ScheduleId.Count != bookingRequest.ScheduleId.Distinct().Count())
-                {
-                    return new ResponseDTO(400, "Schedule IDs cannot be duplicated.");
-                }
-
-                double totalScheduleDuration = 0;
-                // Kiểm tra từng ScheduleId và so sánh với tổng thời gian
-                foreach (var scheduleId in bookingRequest.ScheduleId)
-                {
-                    var schedule = await _unitOfWork.ScheduleRepository.GetByIdAsync(scheduleId);
-                    if (schedule == null)
-                    {
-                        return new ResponseDTO(400, $"Schedule with ID {scheduleId} does not exist.");
-                    }
-
-                    // Tính thời gian của lịch (đơn vị tính là phút) và cộng dồn vào totalScheduleDuration
-                    var scheduleDuration = (schedule.EndTime - schedule.StartTime)?.TotalMinutes;
-                    if (scheduleDuration.HasValue)
-                    {
-                        totalScheduleDuration += scheduleDuration.Value;
-                    }
-                }
-
-                // Kiểm tra xem tổng thời gian của dịch vụ có vượt quá tổng thời gian của lịch hay không
-                if (totalScheduleDuration < totalTime)
-                {
-                    return new ResponseDTO(400, "Total time of services exceeds the schedule duration. Please select additional schedules.");
-                }
 
                 // Tạo một đối tượng Booking mới từ DTO
                 var booking = _mapper.Map<Booking>(bookingRequest);
@@ -247,13 +227,14 @@ namespace Service.Service
                 booking.BookingDetails = new List<BookingDetail>();
                 for (int y = 0; y < bookingRequest.ServiceId.Count; y++)
                 {
-                    for (int i = 0; i < bookingRequest.ScheduleId.Count; i++)
+                    for (int i = 0; i < createdSchedules.Count; i++)
                     {
+                        var schedule = createdSchedules[i];
                         booking.BookingDetails.Add(new BookingDetail
                         {
                             ServiceId = bookingRequest.ServiceId[y],
                             StylistId = bookingRequest.StylistId[y],
-                            ScheduleId = bookingRequest.ScheduleId[i],
+                            ScheduleId = schedule.ScheduleId,
                             CreateDate = DateTime.Now,
                             CreateBy = name,
                         });
@@ -264,7 +245,7 @@ namespace Service.Service
                 if (checkUpdate > 0)
                 {
                     // Gọi hàm cập nhật status cho ScheduleUser
-                    await UpdateScheduleUserStatusAsync(bookingRequest.StylistId, bookingRequest.ScheduleId, ScheduleUserEnum.InQueue, name);
+                    await UpdateScheduleUserStatusAsync(bookingRequest.StylistId, booking.BookingDetails.Select(b => b.ScheduleId).ToList(), ScheduleUserEnum.InQueue, name);
 
                     var userInfo = _unitOfWork.UserRepository.GetById(customerId);
                     var checkoutRequest = new CheckoutRequestDTO
@@ -286,7 +267,7 @@ namespace Service.Service
 
         }
 
-        private async Task UpdateScheduleUserStatusAsync(List<int> stylistIds, List<int> scheduleIds, ScheduleUserEnum status, string updatedBy)
+        private async Task UpdateScheduleUserStatusAsync(List<int> stylistIds, List<int?> scheduleIds, ScheduleUserEnum status, string updatedBy)
         {
             try
             {
