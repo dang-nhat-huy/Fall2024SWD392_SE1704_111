@@ -167,13 +167,11 @@ namespace BusinessObject.RequestDTO
         {
             [Required(ErrorMessage = "StartTime is required.")]
             public TimeSpan? StartTime { get; set; }
-            [Required(ErrorMessage = "EndTime is required.")]
-            [EndTimeGreaterThanStartTime("StartTime", ErrorMessage = "EndTime must be greater than StartTime.")]
+            
             public TimeSpan? EndTime { get; set; }
             [Required(ErrorMessage = "StartDate is required.")]
             public DateTime? StartDate { get; set; }
-            [Required(ErrorMessage = "EndDate is required.")]
-            [EndDateValidation("StartDate", ErrorMessage = "EndDate must be greater than StartDate.")]
+            
             public DateTime? EndDate { get; set; }
         }
         public class UpdateScheduleDTO
