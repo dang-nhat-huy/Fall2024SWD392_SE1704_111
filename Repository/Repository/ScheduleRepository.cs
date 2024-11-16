@@ -41,6 +41,20 @@ namespace Repository.Repository
                      .ThenInclude(bd => bd.Stylist) // Bao gồm thông tin Stylist của BookingDetail
                  .Include(s => s.ScheduleUsers) // Bao gồm thông tin ScheduleUser liên quan
                 .ToListAsync(); // Lấy đối tượng Schedule đầu tiên hoặc null nếu không có
-        } 
+        }
+
+        public async Task<Schedule?> GetScheduleByIdAsync(int scheduleId)
+        {
+            return await _context.Schedules
+                .Include(s => s.ScheduleUsers)  // Bao gồm các ScheduleUser để kiểm tra
+                .FirstOrDefaultAsync(s => s.ScheduleId == scheduleId);
+        }
+
+        public async Task<Schedule> GetScheduleByDateTimeAsync(DateTime startDate, TimeSpan startTime)
+        {
+            return await _context.Schedules
+                .Where(s => s.StartDate == startDate && s.StartTime == startTime)
+                .FirstOrDefaultAsync();
+        }
     }
 }

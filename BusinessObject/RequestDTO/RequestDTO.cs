@@ -430,5 +430,14 @@ namespace BusinessObject.RequestDTO
             public DateTime? EndDate { get; set; }
             public ScheduleEnum? Status { get; set; }
         }
+
+        public class getStartDateAndStartTime
+        {
+            [JsonConverter(typeof(TimeSpanConverter))]
+            public TimeSpan StartTime { get; set; }
+            [DataType(DataType.Date)]
+            [DateInFuture(ErrorMessage = "Start date must not be in the past.")]
+            public DateTime StartDate { get; set; }
+        }
     }
 }

@@ -209,5 +209,39 @@ namespace Service.Service
             }
         }
 
+        public async Task<ResponseDTO> GetStylistsByScheduleAsync(getStartDateAndStartTime request)
+        {
+            try
+            {
+                // Kiểm tra lịch theo StartDate và StartTime
+                var schedule = await _unitOfWork.ScheduleRepository.GetScheduleByDateTimeAsync(request.StartDate, request.StartTime);
+
+                //toàn bộ stylist
+                var allStylist = await _unitOfWork.UserRepository.GetStylistsByStatusAsync(UserStatus.Active);
+
+                if (schedule == null)
+                {
+                    // Nếu không có lịch, lấy tất cả stylist có trạng thái Active
+                    var resultAll = _mapper.Map<List<StylistOfScheduleUserResponseDTO>>(allStylist);
+                    return new ResponseDTO(Const.SUCCESS_READ_CODE, "Successfully retrieved stylist list.", resultAll);
+                }
+                else
+                {
+                    // Nếu có lịch, lấy danh sách UserId từ ScheduleUser của lịch
+                    var excludedUserIds = await _unitOfWork.ScheduleUserRepository.GetExcludedUserIdByScheduleIdAsync(schedule.ScheduleId);
+
+                    // Trả về danh sách stylist, trừ các user có UserId đã có trong lịch
+                    var checkedStylists = await _unitOfWork.UserRepository.GetStylistsExcludingIdsAsync(excludedUserIds, UserStatus.Active);
+
+                    var resultCheck = _mapper.Map<List<StylistOfScheduleUserResponseDTO>>(checkedStylists);
+                    return new ResponseDTO(Const.SUCCESS_READ_CODE, "Successfully retrieved stylist list.", resultCheck);
+                }
+            }
+            catch(Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
     }
 }

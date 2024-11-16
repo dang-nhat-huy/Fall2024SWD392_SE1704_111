@@ -274,7 +274,12 @@ namespace BusinessObject.ResponseDTO
         public virtual User? User { get; set; }
     }
 
-
+    public class StylistOfScheduleUserResponseDTO
+    {
+        public int StylistId { get; set; }
+        public string StylistName { get; set; }
+        public UserStatus? Status { get; set; }
+    }
 
 }
 

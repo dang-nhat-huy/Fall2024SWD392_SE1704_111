@@ -1,5 +1,6 @@
 ﻿using BusinessObject;
 using BusinessObject.Model;
+using BusinessObject.ResponseDTO;
 using Microsoft.EntityFrameworkCore;
 using Repository.IRepository;
 using System;
@@ -91,5 +92,33 @@ namespace Repository.Repository
             // Kiểm tra xem có bất kỳ người dùng nào với email đã cho hay không
             return await _context.Users.AnyAsync(u => u.UserProfile.Email == email);
         }
+
+        public async Task<List<User>> GetAllStylistsAsync()
+        {
+            return await _context.Users
+                .Include(u => u.UserProfile) // Bao gồm thông tin UserProfile nếu cần
+                .Where(u => u.Role == UserRole.Stylist) // Lọc chỉ stylist
+                .ToListAsync();
+        }
+
+        public async Task<List<User>> GetStylistsByStatusAsync(UserStatus status)
+        {
+            return await _context.Users
+                .Where(u => u.Role == UserRole.Stylist && u.Status == status)
+                .Include(u => u.UserProfile)
+                .ToListAsync();
+        }
+
+
+        public async Task<List<User>> GetStylistsExcludingIdsAsync(int? excludedUserId, UserStatus status)
+        {
+            return await _context.Users
+                .Where(u => u.Role == UserRole.Stylist && u.Status == status && u.UserId != excludedUserId)
+                .Include(u => u.UserProfile)
+                .ToListAsync();
+        }
+
+
+
     }
 }

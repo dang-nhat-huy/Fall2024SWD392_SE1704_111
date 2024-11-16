@@ -49,6 +49,21 @@ namespace Repository.Repository
                 .ToListAsync();
         }
 
+        public async Task<List<int>> GetUserIdsByScheduleIdAsync(int scheduleId)
+        {
+            return await _context.ScheduleUsers
+                .Where(su => su.ScheduleId == scheduleId)
+                .Select(su => su.UserId.GetValueOrDefault())  // Dùng GetValueOrDefault() để lấy giá trị int hoặc 0 nếu null
+                .ToListAsync();
+        }
+
+        public async Task<int?> GetExcludedUserIdByScheduleIdAsync(int scheduleId)
+        {
+            return await _context.ScheduleUsers
+                .Where(su => su.ScheduleId == scheduleId)
+                .Select(su => su.UserId)
+                .FirstOrDefaultAsync();
+        }
 
     }
 }

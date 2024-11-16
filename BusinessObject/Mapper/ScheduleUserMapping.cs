@@ -47,6 +47,18 @@ namespace BusinessObject.Mapper
                 .ForPath(dest => dest.Schedule.StartTime, opt => opt.MapFrom(src => src.StartTime))
                 .ForPath(dest => dest.Schedule.EndTime, opt => opt.MapFrom(src => src.EndTime))
                 .ReverseMap();
+
+            CreateMap<ScheduleUser, getStartDateAndStartTime>()
+                .ReverseMap()
+                .ForPath(dest => dest.Schedule.StartDate, opt => opt.MapFrom(src => src.StartDate))
+                .ForPath(dest => dest.Schedule.StartTime, opt => opt.MapFrom(src => src.StartTime))
+                .ReverseMap();
+
+            CreateMap<User, StylistOfScheduleUserResponseDTO>()
+                .ForMember(dest => dest.StylistId, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.StylistName, opt => opt.MapFrom(src => src.UserProfile.FullName)) // Ensure this is correctly mapped
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ReverseMap();
         }
     }
 }

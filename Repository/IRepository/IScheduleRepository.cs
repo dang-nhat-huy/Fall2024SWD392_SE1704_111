@@ -12,5 +12,7 @@ namespace Repository.IRepository
         public  Task<int> CreateScheduleAsync(Schedule entity);
         Task<Schedule> GetScheduleById(int scheduleId);
         Task<List<Schedule>> GetScheduleHistoryByScheduleIdAsync(int scheduleId);
+        Task<Schedule?> GetScheduleByIdAsync(int scheduleId);
+        Task<Schedule> GetScheduleByDateTimeAsync(DateTime startDate, TimeSpan startTime);
     }
 }

@@ -82,5 +82,26 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
         }
+
+        [HttpPost("StylistByDate")]
+        public async Task<IActionResult> GetStylistByStartTimeAndStartDate([FromBody]getStartDateAndStartTime request)
+        {
+            try
+            {
+                var response = await _scheduleUserService.GetStylistsByScheduleAsync(request);
+
+                if (response.Status == Const.SUCCESS_READ_CODE)
+                {
+                    return Ok(response);
+                }
+
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+
+        }
     }
 }
