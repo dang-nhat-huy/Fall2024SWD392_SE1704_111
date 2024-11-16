@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -371,6 +372,65 @@ namespace BusinessObject.RequestDTO
 
                 return ValidationResult.Success;
             }
+        }
+
+        public class TimeSpanConverter : JsonConverter<TimeSpan?>
+        {
+            public override TimeSpan? ReadJson(JsonReader reader, Type objectType, TimeSpan? existingValue, bool hasExistingValue, JsonSerializer serializer)
+            {
+                if (reader.TokenType == JsonToken.String)
+                {
+                    if (TimeSpan.TryParse(reader.Value.ToString(), out var result))
+                    {
+                        return result;
+                    }
+                }
+                return null;
+            }
+
+            public override void WriteJson(JsonWriter writer, TimeSpan? value, JsonSerializer serializer)
+            {
+                writer.WriteValue(value?.ToString(@"hh\:mm\:ss"));
+            }
+        }
+
+
+        public class createScheduleUser
+        {
+            [JsonConverter(typeof(TimeSpanConverter))]
+            public TimeSpan? StartTime { get; set; }
+
+            //[JsonConverter(typeof(TimeSpanConverter))]
+            public TimeSpan? EndTime { get; set; }
+
+
+            [DataType(DataType.Date)]
+            [DateInFuture(ErrorMessage = "Start date must not be in the past.")]
+            public DateTime? StartDate { get; set; }
+
+            //[DataType(DataType.Date)]
+            //[DateInFuture(ErrorMessage = "End date must not be in the past.")]
+            public DateTime? EndDate { get; set; }
+            public int UserId { get; set; }
+        }
+
+        public class viewScheduleOfStylist
+        {
+            public string? FullName { get; set; }
+            [JsonConverter(typeof(TimeSpanConverter))]
+            public TimeSpan? StartTime { get; set; }
+
+            [JsonConverter(typeof(TimeSpanConverter))]
+            public TimeSpan? EndTime { get; set; }
+
+            [DataType(DataType.Date)]
+            [DateInFuture(ErrorMessage = "Start date must not be in the past.")]
+            public DateTime? StartDate { get; set; }
+
+            [DataType(DataType.Date)]
+            [DateInFuture(ErrorMessage = "End date must not be in the past.")]
+            public DateTime? EndDate { get; set; }
+            public ScheduleEnum? Status { get; set; }
         }
     }
 }

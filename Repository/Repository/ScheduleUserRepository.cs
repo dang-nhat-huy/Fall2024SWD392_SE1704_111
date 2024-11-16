@@ -36,5 +36,19 @@ namespace Repository.Repository
                 .Include("Schedule")
                 .ToListAsync();
         }
+
+        public async Task<List<ScheduleUser>> GetScheduleUsersOfStylistsAsync()
+        {
+            return await _context.ScheduleUsers
+                .Include(su => su.User)              // Bao gồm thông tin User
+                    .ThenInclude(u => u.UserProfile) // Bao gồm thông tin UserProfile
+                .Include(su => su.Schedule)          // Bao gồm thông tin Schedule
+                .Where(su => su.User != null && su.User.Role == UserRole.Stylist) // Lọc stylist
+                .OrderBy(su => su.Schedule.StartDate) // Sắp xếp theo ngày bắt đầu
+                .ThenBy(su => su.Schedule.StartTime)  // Sau đó sắp xếp theo giờ bắt đầu
+                .ToListAsync();
+        }
+
+
     }
 }

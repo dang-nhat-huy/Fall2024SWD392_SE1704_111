@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace BusinessObject.Mapper
 {
@@ -27,6 +28,25 @@ namespace BusinessObject.Mapper
                 .ForMember(dest => dest.User, opt => opt.Ignore());
 
             CreateMap<ScheduleUser, ScheduleCurrentUserDTO>();
+
+            CreateMap<ScheduleUser, createScheduleUser>()
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+                .ReverseMap()
+                .ForPath(dest => dest.Schedule.StartDate, opt => opt.MapFrom(src => src.StartDate))
+                .ForPath(dest => dest.Schedule.EndDate, opt => opt.MapFrom(src => src.EndDate))
+                .ForPath(dest => dest.Schedule.StartTime, opt => opt.MapFrom(src => src.StartTime))
+                .ForPath(dest => dest.Schedule.EndTime, opt => opt.MapFrom(src => src.EndTime))
+                .ReverseMap();
+
+            CreateMap<ScheduleUser, viewScheduleOfStylist>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ReverseMap()
+                .ForPath(dest => dest.User.UserProfile.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForPath(dest => dest.Schedule.StartDate, opt => opt.MapFrom(src => src.StartDate))
+                .ForPath(dest => dest.Schedule.EndDate, opt => opt.MapFrom(src => src.EndDate))
+                .ForPath(dest => dest.Schedule.StartTime, opt => opt.MapFrom(src => src.StartTime))
+                .ForPath(dest => dest.Schedule.EndTime, opt => opt.MapFrom(src => src.EndTime))
+                .ReverseMap();
         }
     }
 }

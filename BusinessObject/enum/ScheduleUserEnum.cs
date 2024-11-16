@@ -15,5 +15,14 @@ namespace BusinessObject
         Delay,
         Complete,
         Cancel,
+        Assign,
+        NotAssign,
+    }
+
+    public enum CreateScheduleUserEnum
+    {
+        None = 0,
+        Assign,
+        NotAssign,
     }
 }
