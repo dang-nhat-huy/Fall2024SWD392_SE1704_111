@@ -61,5 +61,26 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
         }
+
+        [HttpGet("StylistSchedule")]
+        public async Task<IActionResult> GetScheduleUserOfStylist()
+        {
+            try
+            {
+                var response = await _scheduleUserService.GetSchedulesOfStylistsAsync();
+
+                if (response.Status == Const.SUCCESS_READ_CODE)
+                {
+                    return Ok(response);
+                }
+
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+
+        }
     }
 }

@@ -182,5 +182,32 @@ namespace Service.Service
             }
         }
 
+        public async Task<ResponseDTO> GetSchedulesOfStylistsAsync()
+        {
+            try
+            {
+                // Gọi phương thức từ repository
+                var scheduleUsers = await _unitOfWork.ScheduleUserRepository.GetScheduleUsersOfStylistsAsync();
+
+                // Ánh xạ dữ liệu sang DTO
+                var result = scheduleUsers.Select(su => new viewScheduleOfStylist
+                {
+                    FullName = su.User?.UserProfile.FullName,
+                    StartTime = su.Schedule?.StartTime,
+                    EndTime = su.Schedule?.EndTime,
+                    StartDate = su.Schedule?.StartDate,
+                    EndDate = su.Schedule?.EndDate,
+                    Status = su.Schedule?.Status
+                }).ToList();
+
+                // Trả về kết quả
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, "Successfully retrieved schedule list.", result);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
     }
 }

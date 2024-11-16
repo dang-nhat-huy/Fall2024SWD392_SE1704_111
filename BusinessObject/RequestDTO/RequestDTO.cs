@@ -413,5 +413,24 @@ namespace BusinessObject.RequestDTO
             public DateTime? EndDate { get; set; }
             public int UserId { get; set; }
         }
+
+        public class viewScheduleOfStylist
+        {
+            public string? FullName { get; set; }
+            [JsonConverter(typeof(TimeSpanConverter))]
+            public TimeSpan? StartTime { get; set; }
+
+            [JsonConverter(typeof(TimeSpanConverter))]
+            public TimeSpan? EndTime { get; set; }
+
+            [DataType(DataType.Date)]
+            [DateInFuture(ErrorMessage = "Start date must not be in the past.")]
+            public DateTime? StartDate { get; set; }
+
+            [DataType(DataType.Date)]
+            [DateInFuture(ErrorMessage = "End date must not be in the past.")]
+            public DateTime? EndDate { get; set; }
+            public ScheduleEnum? Status { get; set; }
+        }
     }
 }
