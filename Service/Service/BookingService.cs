@@ -173,36 +173,35 @@ namespace Service.Service
                     }
                 }
 
-                // Kiểm tra StylistId
-                if (bookingRequest.StylistId == null || !bookingRequest.StylistId.Any())
-                {
-                    return new ResponseDTO(400, Const.FAIL_READ_MSG);
-                }
+                
 
                 // List to hold created schedules for each stylist
                 var createdSchedules = new List<Schedule>();
-
-                // Kiểm tra StylistId và tạo lịch cho từng stylist
-                for (int i = 0; i < bookingRequest.StylistId.Count; i++)
+                if(bookingRequest.StylistId != null)
                 {
-                    var stylistId = bookingRequest.StylistId[i];
-                    var stylist = await _unitOfWork.UserRepository.GetByIdAsync(stylistId);
-
-                    if (stylist == null || stylist.Role != UserRole.Stylist)
+                    // Kiểm tra StylistId và tạo lịch cho từng stylist
+                    for (int i = 0; i < bookingRequest.StylistId.Count; i++)
                     {
-                        return new ResponseDTO(400, $"Stylist with ID {stylistId} does not exist or is not a stylist.");
+                        var stylistId = bookingRequest.StylistId[i];
+                        var stylist = await _unitOfWork.UserRepository.GetUserByIdAsync(stylistId);
+
+                        if (stylist == null || stylist.Role != UserRole.Stylist)
+                        {
+                            return new ResponseDTO(400, $"Stylist with ID {stylistId} does not exist or is not a stylist.");
+                        }
+
+                        // Gán UserId cho từng lịch trong danh sách Schedule tương ứng
+                        var scheduleRequest = bookingRequest.Schedule[i];
+                        scheduleRequest.UserId = stylistId;
+
+                        // Sử dụng service để tạo lịch cho stylist
+                        var createdSchedule = await _scheduleUserService.createScheduleUser(scheduleRequest);
+
+                        // Thêm lịch đã tạo vào danh sách (nếu cần thiết)
+                        createdSchedules.Add(createdSchedule.Data as Schedule);
                     }
-
-                    // Gán UserId cho từng lịch trong danh sách Schedule tương ứng
-                    var scheduleRequest = bookingRequest.Schedule[i];
-                    scheduleRequest.UserId = stylistId;
-
-                    // Sử dụng service để tạo lịch cho stylist
-                    var createdSchedule = await _scheduleUserService.createScheduleUser(scheduleRequest);
-
-                    // Thêm lịch đã tạo vào danh sách (nếu cần thiết)
-                    createdSchedules.Add(createdSchedule.Data as Schedule);
                 }
+                
 
 
 
@@ -234,7 +233,7 @@ namespace Service.Service
                         {
                             ServiceId = bookingRequest.ServiceId[y],
                             StylistId = bookingRequest.StylistId[y],
-                            ScheduleId = schedule.ScheduleId,
+                            ScheduleId = schedule?.ScheduleId,
                             CreateDate = DateTime.Now,
                             CreateBy = name,
                         });
@@ -244,8 +243,12 @@ namespace Service.Service
                 var checkUpdate = await _unitOfWork.BookingRepository.CreateBookingAsync(booking);
                 if (checkUpdate > 0)
                 {
-                    // Gọi hàm cập nhật status cho ScheduleUser
-                    await UpdateScheduleUserStatusAsync(bookingRequest.StylistId, booking.BookingDetails.Select(b => b.ScheduleId).ToList(), ScheduleUserEnum.InQueue, name);
+                    if(bookingRequest.StylistId!= null)
+                    {
+                        // Gọi hàm cập nhật status cho ScheduleUser
+                        await UpdateScheduleUserStatusAsync(bookingRequest.StylistId, booking.BookingDetails.Select(b => b.ScheduleId).ToList(), ScheduleUserEnum.InQueue, name);
+
+                    }
 
                     var userInfo = _unitOfWork.UserRepository.GetById(customerId);
                     var checkoutRequest = new CheckoutRequestDTO
@@ -267,7 +270,7 @@ namespace Service.Service
 
         }
 
-        private async Task UpdateScheduleUserStatusAsync(List<int> stylistIds, List<int?> scheduleIds, ScheduleUserEnum status, string updatedBy)
+        private async Task UpdateScheduleUserStatusAsync(List<int?> stylistIds, List<int?> scheduleIds, ScheduleUserEnum status, string updatedBy)
         {
             try
             {

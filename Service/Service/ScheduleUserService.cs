@@ -134,7 +134,7 @@ namespace Service.Service
                 if (request.UserId != 0)
                 {
                     // Kiểm tra UserId có hợp lệ hay không
-                    var targetUser = await _unitOfWork.UserRepository.GetByIdAsync(request.UserId);
+                    var targetUser = await _unitOfWork.UserRepository.GetUserByIdAsync(request.UserId);
                     if (targetUser == null)
                     {
                         return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
