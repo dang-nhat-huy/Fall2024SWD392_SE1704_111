@@ -108,7 +108,6 @@ namespace Service.Service
                                               s.EndDate == request.EndDate && s.EndTime == request.EndTime);
 
                 Schedule schedule;
-
                 if (existingSchedule != null)
                 {
                     schedule = existingSchedule;
@@ -128,7 +127,7 @@ namespace Service.Service
                     };
 
                     // Lưu Schedule vào cơ sở dữ liệu
-                    await _unitOfWork.ScheduleRepository.CreateAsync(schedule);
+                    var createSchedule = await _unitOfWork.ScheduleRepository.CreateAsync(schedule);
                 }
 
                 // Nếu UserId được nhập vào
@@ -174,7 +173,7 @@ namespace Service.Service
 
                 // Lưu ScheduleUser vào cơ sở dữ liệu
                 await _unitOfWork.ScheduleUserRepository.CreateAsync(scheduleUser);
-                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "create schedule stylist successfully", request);
+                return new ResponseDTO(Const.SUCCESS_CREATE_CODE, "create schedule stylist successfully", schedule);
             }
             catch (Exception ex)
             {

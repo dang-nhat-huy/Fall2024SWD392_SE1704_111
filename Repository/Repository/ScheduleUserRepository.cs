@@ -23,7 +23,7 @@ namespace Repository.Repository
                 .Where(u => u.User.Role == UserRole.Stylist);
         }
 
-        public async Task<ScheduleUser?> GetByUserAndScheduleIdAsync(int userId, int scheduleId)
+        public async Task<ScheduleUser?> GetByUserAndScheduleIdAsync(int userId, int? scheduleId)
         {
             return await _context.ScheduleUsers
                 .FirstOrDefaultAsync(su => su.UserId == userId && su.ScheduleId == scheduleId);
