@@ -414,6 +414,7 @@ namespace BusinessObject.RequestDTO
 
         public class viewScheduleOfStylist
         {
+            public int ScheduleUserId { get; set; }
             public string? FullName { get; set; }
             [JsonConverter(typeof(TimeSpanConverter))]
             public TimeSpan? StartTime { get; set; }

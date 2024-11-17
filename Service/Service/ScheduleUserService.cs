@@ -192,6 +192,7 @@ namespace Service.Service
                 // Ánh xạ dữ liệu sang DTO
                 var result = scheduleUsers.Select(su => new viewScheduleOfStylist
                 {
+                    ScheduleUserId = su.ScheduleUserId,
                     FullName = su.User?.UserProfile.FullName,
                     StartTime = su.Schedule?.StartTime,
                     EndTime = su.Schedule?.EndTime,
@@ -238,6 +239,117 @@ namespace Service.Service
                 }
             }
             catch(Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<ResponseDTO> GetSchedulesOfNoStylistAssignAsync()
+        {
+            try
+            {
+                // Gọi phương thức từ repository để lấy các schedule có UserId là null
+                var scheduleUsers = await _unitOfWork.ScheduleUserRepository.GetSchedulesWithNoUserAsync();
+
+                // Ánh xạ dữ liệu sang DTO
+                var result = scheduleUsers.Select(su => new viewScheduleOfStylist
+                {
+                    ScheduleUserId = su.ScheduleUserId,
+                    FullName = su.User?.UserProfile.FullName,
+                    StartTime = su.Schedule?.StartTime,
+                    EndTime = su.Schedule?.EndTime,
+                    StartDate = su.Schedule?.StartDate,
+                    EndDate = su.Schedule?.EndDate,
+                    Status = su.Schedule?.Status
+                }).ToList();
+
+                // Trả về kết quả
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, "Successfully retrieved schedule list.", result);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<ResponseDTO> UpdateScheduleUserAsync(int scheduleUserId)
+        {
+            try
+            {
+                // Lấy người dùng hiện tại
+                var currentUser = await _jWTService.GetCurrentUserAsync();
+                if (currentUser == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                }
+
+                // Kiểm tra nếu vai trò của người dùng hiện tại không phải Stylist
+                if (currentUser.Role != UserRole.Stylist)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Current user is not a Stylist.");
+                }
+
+                // Lấy ScheduleUser dựa trên scheduleUserId từ repository
+                var scheduleUser = await _unitOfWork.ScheduleUserRepository.GetByIdAsync(scheduleUserId);
+
+                if (scheduleUser == null || scheduleUser.UserId != null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "ScheduleUser not found or already assigned to another user.");
+                }
+
+                // Cập nhật UserId và thông tin chỉnh sửa
+                scheduleUser.UserId = currentUser.UserId;
+                scheduleUser.UpdateBy = currentUser.UserName;
+                scheduleUser.UpdateDate = DateTime.Now;
+
+                // Lưu thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.ScheduleUserRepository.UpdateAsync(scheduleUser);
+
+                return new ResponseDTO(Const.SUCCESS_UPDATE_CODE, "Successfully updated ScheduleUser.");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<ResponseDTO> GetSchedulesOfCurrentStylistAsync()
+        {
+            try
+            {
+                // Lấy thông tin người dùng hiện tại
+                var currentUser = await _jWTService.GetCurrentUserAsync();
+                if (currentUser == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                }
+
+                // Kiểm tra nếu vai trò của người dùng hiện tại không phải Stylist
+                if (currentUser.Role != UserRole.Stylist)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Current user is not a Stylist.");
+                }
+
+                // Gọi phương thức từ repository để lấy các schedule của current user
+                var scheduleUsers = await _unitOfWork.ScheduleUserRepository
+                    .GetSchedulesOfStylistAsync(currentUser.UserId); // Sử dụng phương thức từ repository
+
+                // Ánh xạ dữ liệu sang DTO
+                var result = scheduleUsers.Select(su => new viewScheduleOfStylist
+                {
+                    ScheduleUserId = su.ScheduleUserId,
+                    FullName = currentUser.UserProfile.FullName, // Thông tin người dùng hiện tại
+                    StartTime = su.Schedule?.StartTime,
+                    EndTime = su.Schedule?.EndTime,
+                    StartDate = su.Schedule?.StartDate,
+                    EndDate = su.Schedule?.EndDate,
+                    Status = su.Schedule?.Status
+                }).ToList();
+
+                // Trả về kết quả
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, "Successfully retrieved schedule list for the current stylist.", result);
+            }
+            catch (Exception ex)
             {
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }

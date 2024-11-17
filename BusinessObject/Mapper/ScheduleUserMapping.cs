@@ -39,6 +39,7 @@ namespace BusinessObject.Mapper
                 .ReverseMap();
 
             CreateMap<ScheduleUser, viewScheduleOfStylist>()
+                .ForMember(dest => dest.ScheduleUserId, opt => opt.MapFrom(src => src.ScheduleUserId))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ReverseMap()
                 .ForPath(dest => dest.User.UserProfile.FullName, opt => opt.MapFrom(src => src.FullName))

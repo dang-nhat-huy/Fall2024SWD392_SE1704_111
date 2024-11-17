@@ -18,5 +18,8 @@ namespace Service.IService
         Task<ResponseDTO> createScheduleUser(createScheduleUser request);
         Task<ResponseDTO> GetSchedulesOfStylistsAsync();
         Task<ResponseDTO> GetStylistsByScheduleAsync(getStartDateAndStartTime request);
+        Task<ResponseDTO> GetSchedulesOfNoStylistAssignAsync();
+        Task<ResponseDTO> UpdateScheduleUserAsync(int scheduleId);
+        Task<ResponseDTO> GetSchedulesOfCurrentStylistAsync();
     }
 }

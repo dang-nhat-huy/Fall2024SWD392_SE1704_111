@@ -74,5 +74,27 @@ namespace Repository.Repository
 
             return list;
         }
+
+        public async Task<List<ScheduleUser>> GetSchedulesWithNoUserAsync()
+        {
+            return await _context.ScheduleUsers
+                .Include(su => su.User)
+                .ThenInclude(u => u.UserProfile)
+                .Include(su => su.Schedule)
+                .Where(su => su.UserId == null)
+                .ToListAsync();
+        }
+
+        public async Task<List<ScheduleUser>> GetSchedulesOfStylistAsync(int userId)
+        {
+            return await _context.ScheduleUsers
+                .Include(su => su.Schedule)
+                .Where(su => su.UserId == userId)  // Lọc theo UserId
+                .OrderBy(su => su.Schedule.StartDate)  // Sắp xếp theo ngày bắt đầu
+                .ThenBy(su => su.Schedule.StartTime)  // Sắp xếp theo giờ bắt đầu
+                .ToListAsync();
+        }
+
+
     }
 }
