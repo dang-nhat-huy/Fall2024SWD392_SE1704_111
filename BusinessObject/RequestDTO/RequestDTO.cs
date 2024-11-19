@@ -262,7 +262,9 @@ namespace BusinessObject.RequestDTO
                 if (value != null)
                 {
                     var date = (DateTime)value;
-                    if (date < DateTime.Now)
+
+                    // So sánh ngày không nhỏ hơn ngày hiện tại (chấp nhận ngày hôm nay)
+                    if (date.Date < DateTime.Now.Date)
                     {
                         return new ValidationResult(ErrorMessage);
                     }
@@ -270,6 +272,7 @@ namespace BusinessObject.RequestDTO
                 return ValidationResult.Success;
             }
         }
+
 
         public class EndDateValidation : ValidationAttribute
         {
@@ -393,9 +396,29 @@ namespace BusinessObject.RequestDTO
             }
         }
 
+        public class TimeInFuture : ValidationAttribute
+        {
+            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            {
+                if (value != null)
+                {
+                    var inputTime = (TimeSpan)value;
+                    var currentTime = DateTime.Now.TimeOfDay;
+
+                    // Kiểm tra thời gian không được nhỏ hơn thời gian hiện tại
+                    if (inputTime < currentTime)
+                    {
+                        return new ValidationResult(ErrorMessage ?? "Thời gian không được ở quá khứ.");
+                    }
+                }
+                return ValidationResult.Success;
+            }
+        }
+
 
         public class createScheduleUser
         {
+            [TimeInFuture(ErrorMessage = "Time must not in the past.")]
             [JsonConverter(typeof(TimeSpanConverter))]
             public TimeSpan? StartTime { get; set; }
 
