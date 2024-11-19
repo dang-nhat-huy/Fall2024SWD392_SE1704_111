@@ -181,5 +181,36 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
         }
 
+        [HttpPut("updateScheduleUserByUserId/{scheduleUserId}")]
+        public async Task<IActionResult> UpdateScheduleUserByUserId(int scheduleUserId, [FromQuery] int userId)
+        {
+            try
+            {
+                // Gọi hàm service để cập nhật ScheduleUser
+                var result = await _scheduleUserService.UpdateScheduleUserByUserIdAsync(scheduleUserId, userId);
+
+                // Kiểm tra trạng thái trả về và phản hồi kết quả
+                if (result.Status == Const.SUCCESS_UPDATE_CODE)
+                {
+                    return Ok(result);
+                }
+                else if (result.Status == Const.FAIL_READ_CODE)
+                {
+                    return NotFound(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ và trả về lỗi server
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message));
+            }
+        }
+
+
     }
 }

@@ -354,5 +354,53 @@ namespace Service.Service
             }
         }
 
+        public async Task<ResponseDTO> UpdateScheduleUserByUserIdAsync(int scheduleUserId, int userId)
+        {
+            try
+            {
+                // Lấy người dùng hiện tại từ JWT
+                var currentUser = await _jWTService.GetCurrentUserAsync();
+                if (currentUser == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Current user not found.");
+                }
+
+                // Lấy thông tin người dùng được chỉ định từ repository
+                var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Specified user not found.");
+                }
+
+                // Kiểm tra nếu vai trò của người dùng được chỉ định không phải Stylist
+                if (user.Role != UserRole.Stylist)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Specified user is not a Stylist.");
+                }
+
+                // Lấy ScheduleUser dựa trên scheduleUserId từ repository
+                var scheduleUser = await _unitOfWork.ScheduleUserRepository.GetByIdAsync(scheduleUserId);
+
+                if (scheduleUser == null || scheduleUser.UserId != null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "ScheduleUser not found or already assigned to another user.");
+                }
+
+                // Cập nhật UserId và thông tin chỉnh sửa
+                scheduleUser.UserId = user.UserId;
+                scheduleUser.UpdateBy = currentUser.UserName; // Dùng currentUser để cập nhật trường UpdateBy
+                scheduleUser.UpdateDate = DateTime.Now;
+
+                // Lưu thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.ScheduleUserRepository.UpdateAsync(scheduleUser);
+
+                return new ResponseDTO(Const.SUCCESS_UPDATE_CODE, "Successfully updated ScheduleUser.");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
     }
 }

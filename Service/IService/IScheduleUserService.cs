@@ -21,5 +21,6 @@ namespace Service.IService
         Task<ResponseDTO> GetSchedulesOfNoStylistAssignAsync();
         Task<ResponseDTO> UpdateScheduleUserAsync(int scheduleId);
         Task<ResponseDTO> GetSchedulesOfCurrentStylistAsync();
+        Task<ResponseDTO> UpdateScheduleUserByUserIdAsync(int scheduleUserId, int userId);
     }
 }
