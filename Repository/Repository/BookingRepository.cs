@@ -17,7 +17,14 @@ namespace Repository.Repository
 
         public async Task<Booking?> GetBookingByIdAsync(int id)
         {
-            return await _context.Bookings.FirstOrDefaultAsync(u => u.BookingId == id);
+            return await _context.Bookings
+                    .Include(b => b.BookingDetails)                 // Bao gồm thông tin chi tiết Booking
+                    .Include(b => b.Customer)                      // Bao gồm thông tin Customer
+                    .Include(b => b.Manager)                       // Bao gồm thông tin Manager
+                    .Include(b => b.Staff)                         // Bao gồm thông tin Staff
+                    .Include(b => b.Payments)                      // Bao gồm thông tin Payment
+                    .Include(b => b.Reports)                       // Bao gồm thông tin Report
+                    .SingleOrDefaultAsync(b => b.BookingId == id);
         }
 
         public async Task<List<Booking>> GetBookingIncludeByIdAsync(int id)
@@ -41,7 +48,7 @@ namespace Repository.Repository
                 .Where(b => b.CustomerId == customerId)
                 .Include(b => b.BookingDetails)
                     .ThenInclude(bd => bd.Service)
-                .Include(b => b.BookingDetails)  
+                .Include(b => b.BookingDetails)
                     .ThenInclude(bd => bd.Stylist)
                 .Include(b => b.BookingDetails)
                 .ThenInclude(bd => bd.Schedule)

@@ -2,6 +2,7 @@
 using BusinessObject;
 using BusinessObject.Model;
 using BusinessObject.Paging;
+using BusinessObject.RequestDTO;
 using BusinessObject.ResponseDTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -270,7 +271,7 @@ namespace Service.Service
             }
         }
 
-        public async Task<ResponseDTO> UpdateScheduleUserAsync(int scheduleUserId)
+        public async Task<ResponseDTO> UpdateScheduleUserAsync(int scheduleUserId, int bookingID)
         {
             try
             {
@@ -286,6 +287,21 @@ namespace Service.Service
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Current user is not a Stylist.");
                 }
+
+
+                var booking = await _unitOfWork.BookingRepository.GetBookingByIdAsync(bookingID);
+                if (booking == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Booking not found.");
+                }
+
+                // Duyệt qua tất cả các BookingDetails để cập nhật StylistId
+                foreach (var bookingDetails in booking.BookingDetails)
+                {
+                    bookingDetails.Stylist = currentUser;
+                }
+
+                _unitOfWork.BookingRepository.Update(booking);
 
                 // Lấy ScheduleUser dựa trên scheduleUserId từ repository
                 var scheduleUser = await _unitOfWork.ScheduleUserRepository.GetByIdAsync(scheduleUserId);
@@ -328,6 +344,7 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Current user is not a Stylist.");
                 }
 
+
                 // Gọi phương thức từ repository để lấy các schedule của current user
                 var scheduleUsers = await _unitOfWork.ScheduleUserRepository
                     .GetSchedulesOfStylistAsync(currentUser.UserId); // Sử dụng phương thức từ repository
@@ -353,7 +370,7 @@ namespace Service.Service
             }
         }
 
-        public async Task<ResponseDTO> UpdateScheduleUserByUserIdAsync(int scheduleUserId, int userId)
+        public async Task<ResponseDTO> UpdateScheduleUserByUserIdAsync(AssignStylistRequestDTO requestDTO)
         {
             try
             {
@@ -365,7 +382,7 @@ namespace Service.Service
                 }
 
                 // Lấy thông tin người dùng được chỉ định từ repository
-                var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+                var user = await _unitOfWork.UserRepository.GetUserByIdAsync(requestDTO.StylistId);
                 if (user == null)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Specified user not found.");
@@ -377,8 +394,22 @@ namespace Service.Service
                     return new ResponseDTO(Const.FAIL_READ_CODE, "Specified user is not a Stylist.");
                 }
 
+                var booking = await _unitOfWork.BookingRepository.GetBookingByIdAsync(requestDTO.BookingId);
+                if (booking == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "Booking not found.");
+                }
+
+                // Duyệt qua tất cả các BookingDetails để cập nhật StylistId
+                foreach (var bookingDetails in booking.BookingDetails)
+                {
+                    bookingDetails.Stylist = user;
+                }
+
+                _unitOfWork.BookingRepository.Update(booking);
+
                 // Lấy ScheduleUser dựa trên scheduleUserId từ repository
-                var scheduleUser = await _unitOfWork.ScheduleUserRepository.GetByIdAsync(scheduleUserId);
+                var scheduleUser = await _unitOfWork.ScheduleUserRepository.GetByIdAsync(requestDTO.ScheduleUserId);
 
                 if (scheduleUser == null || scheduleUser.UserId != null)
                 {

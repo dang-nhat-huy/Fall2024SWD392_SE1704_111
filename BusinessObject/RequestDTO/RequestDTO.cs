@@ -74,6 +74,12 @@ namespace BusinessObject.RequestDTO
             public int BookingId { get; set; } // ID của booking
         }
 
+        public class AssignStylistRequestDTO
+        {
+            public int StylistId { get; set; }
+            public int BookingId { get; set; } // ID của booking
+            public int ScheduleUserId { get; set; }
+        }
         public class UpdateUserProfileDTO
         {
             [Url(ErrorMessage = "Invalid URL format.")]

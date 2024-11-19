@@ -127,12 +127,12 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         }
 
         [HttpPut("AssignStylistToSchedule/{scheduleId}")]
-        public async Task<IActionResult> UpdateScheduleUser(int scheduleId)
+        public async Task<IActionResult> UpdateScheduleUser(int scheduleId, int bookingID)
         {
             try
             {
                 // Gọi service để cập nhật ScheduleUser
-                var response = await _scheduleUserService.UpdateScheduleUserAsync(scheduleId);
+                var response = await _scheduleUserService.UpdateScheduleUserAsync(scheduleId, bookingID);
 
                 // Kiểm tra kết quả từ service và trả về phản hồi tương ứng
                 if (response.Status == Const.SUCCESS_UPDATE_CODE)
@@ -181,13 +181,13 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
         }
 
-        [HttpPut("updateScheduleUserByUserId/{scheduleUserId}")]
-        public async Task<IActionResult> UpdateScheduleUserByUserId(int scheduleUserId, [FromQuery] int userId)
+        [HttpPut("updateScheduleUserByUserId")]
+        public async Task<IActionResult> UpdateScheduleUserByUserId([FromBody]AssignStylistRequestDTO requestDTO)
         {
             try
             {
                 // Gọi hàm service để cập nhật ScheduleUser
-                var result = await _scheduleUserService.UpdateScheduleUserByUserIdAsync(scheduleUserId, userId);
+                var result = await _scheduleUserService.UpdateScheduleUserByUserIdAsync(requestDTO);
 
                 // Kiểm tra trạng thái trả về và phản hồi kết quả
                 if (result.Status == Const.SUCCESS_UPDATE_CODE)
