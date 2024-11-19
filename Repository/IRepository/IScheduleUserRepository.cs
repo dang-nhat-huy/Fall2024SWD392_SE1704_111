@@ -11,7 +11,7 @@ namespace Repository.IRepository
     public interface IScheduleUserRepository : IGenericRepository<ScheduleUser>
     {
         Task<IQueryable<ScheduleUser>> GetListScheduleByRoleAsync();
-        Task<ScheduleUser?> GetByUserAndScheduleIdAsync(int userId, int? scheduleId);
+        Task<ScheduleUser?> GetByUserAndScheduleIdAsync(int? userId, int? scheduleId);
         Task<List<ScheduleUser>> GetScheduleUserByStylistIdAsync(int stylistId);
         Task<List<ScheduleUser>> GetScheduleUsersOfStylistsAsync();
         //Task<int?> GetExcludedUserIdByScheduleIdAsync(int scheduleId);

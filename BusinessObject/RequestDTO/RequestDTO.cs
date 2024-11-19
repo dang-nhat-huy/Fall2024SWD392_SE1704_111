@@ -60,8 +60,8 @@ namespace BusinessObject.RequestDTO
             [Required]
             public List<createScheduleUser?> Schedule { get; set; }
             [Required]
-            public List<int>? ServiceId { get; set; }
-            public List<int>? StylistId { get; set; }
+            public List<int> ServiceId { get; set; }
+            public List<int?> StylistId { get; set; }
 
         }
 
@@ -433,7 +433,7 @@ namespace BusinessObject.RequestDTO
             //[DataType(DataType.Date)]
             //[DateInFuture(ErrorMessage = "End date must not be in the past.")]
             public DateTime? EndDate { get; set; }
-            public int UserId { get; set; }
+            public int? UserId { get; set; }
         }
 
         public class viewScheduleOfStylist
