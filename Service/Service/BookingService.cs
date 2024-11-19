@@ -173,11 +173,11 @@ namespace Service.Service
                     }
                 }
 
-                
+
 
                 // List to hold created schedules for each stylist
                 var createdSchedules = new List<Schedule>();
-                if(bookingRequest.StylistId != null)
+                if (bookingRequest.StylistId != null)
                 {
                     // Kiểm tra StylistId và tạo lịch cho từng stylist
                     for (int i = 0; i < bookingRequest.StylistId.Count; i++)
@@ -201,8 +201,13 @@ namespace Service.Service
                         createdSchedules.Add(createdSchedule.Data as Schedule);
                     }
                 }
-                
 
+                foreach (var scheduleRequest in bookingRequest.Schedule)
+                {
+                    scheduleRequest.UserId = null; // Không gán stylistId
+                    var createdSchedule = await _scheduleUserService.createScheduleUser(scheduleRequest);
+                    createdSchedules.Add(createdSchedule.Data as Schedule);
+                }
 
 
                 // Tạo một đối tượng Booking mới từ DTO
@@ -232,7 +237,9 @@ namespace Service.Service
                         booking.BookingDetails.Add(new BookingDetail
                         {
                             ServiceId = bookingRequest.ServiceId[y],
-                            StylistId = bookingRequest.StylistId[y],
+                            StylistId = bookingRequest.StylistId != null && bookingRequest.StylistId.Count > y
+                                        ? bookingRequest.StylistId[y]
+                                        : null,
                             ScheduleId = schedule?.ScheduleId,
                             CreateDate = DateTime.Now,
                             CreateBy = name,
@@ -243,7 +250,7 @@ namespace Service.Service
                 var checkUpdate = await _unitOfWork.BookingRepository.CreateBookingAsync(booking);
                 if (checkUpdate > 0)
                 {
-                    if(bookingRequest.StylistId!= null)
+                    if (bookingRequest.StylistId != null)
                     {
                         // Gọi hàm cập nhật status cho ScheduleUser
                         await UpdateScheduleUserStatusAsync(bookingRequest.StylistId, booking.BookingDetails.Select(b => b.ScheduleId).ToList(), ScheduleUserEnum.InQueue, name);
@@ -321,12 +328,12 @@ namespace Service.Service
                 }
 
                 // Lấy danh sách booking của user hiện tại từ repository
-                var bookings = await _unitOfWork.BookingRepository.GetBookingHistoryByCustomerIdAsync(user.UserId);               
+                var bookings = await _unitOfWork.BookingRepository.GetBookingHistoryByCustomerIdAsync(user.UserId);
                 if (bookings == null || bookings.Count == 0)
                 {
                     return new ResponseDTO(Const.FAIL_READ_CODE, "No booking history found.");
                 }
-                
+
                 // Ánh xạ kết quả từ Booking sang BookingHistoryDTO bằng ánh xạ thủ công
                 List<BookingHistoryDTO> bookingHistoryDto = new List<BookingHistoryDTO>();
 
