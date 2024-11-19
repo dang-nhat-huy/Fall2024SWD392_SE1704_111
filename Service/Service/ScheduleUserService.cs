@@ -130,11 +130,10 @@ namespace Service.Service
                     var createSchedule = await _unitOfWork.ScheduleRepository.CreateAsync(schedule);
                 }
 
-                // Nếu UserId được nhập vào
-                if (request.UserId != 0)
+                if (request.UserId != null)
                 {
                     // Kiểm tra UserId có hợp lệ hay không
-                    var targetUser = await _unitOfWork.UserRepository.GetByIdAsync(request.UserId);
+                    var targetUser = await _unitOfWork.UserRepository.GetUserByIdAsync(request.UserId);
                     if (targetUser == null)
                     {
                         return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");

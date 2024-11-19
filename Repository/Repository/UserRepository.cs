@@ -30,9 +30,13 @@ namespace Repository.Repository
                 .FirstOrDefaultAsync(u => u.UserId == userId);  // Tìm user theo userId
         }
 
-        public async Task<User?> GetUserByIdAsync(int userId)
+        public async Task<User?> GetUserByIdAsync(int? userId)
         {
-            return await GetByIdAsync(userId);
+            if (!userId.HasValue) // Kiểm tra nếu userId là null
+            {
+                return null;
+            }
+            return await GetByIdAsync(userId.Value);
         }
 
         public async Task<List<User?>> GetUserByNameAsync(string fullName)
