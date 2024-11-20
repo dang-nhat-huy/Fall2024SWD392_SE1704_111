@@ -30,21 +30,13 @@ namespace BusinessObject.Mapper
 
             CreateMap<Booking, ChangebookingStatusDTO>().ReverseMap();
 
-            CreateMap<Booking, BookingHistoryDTO>()
+            _ = CreateMap<Booking, BookingHistoryDTO>()
                 .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
                 .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src =>
                     src.BookingDetails.Select(detail => detail.Schedule.StartDate).FirstOrDefault() ?? DateTime.MinValue))
                 .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src =>
                     src.BookingDetails.Select(detail => detail.Schedule.EndDate).LastOrDefault() ?? DateTime.MinValue))
-                .ForMember(dest => dest.Services, opt => opt.MapFrom(src =>
-                    src.BookingDetails.Select(bookingDetail => new ServiceDetailDTO
-        {
-            ServiceId = bookingDetail.ServiceId ?? 0,
-            ServiceName = bookingDetail.Service.ServiceName,
-            StylistName = bookingDetail.Stylist.UserName,
-            EstimateTime = bookingDetail.Service.EstimateTime,
-            Price = bookingDetail.Service.Price
-        }).ToList()))
+
     .ForMember(dest => dest.Schedules, opt => opt.MapFrom(src =>
         src.BookingDetails.Select(bookingDetail => new ScheduledDetailDTO
         {
@@ -54,7 +46,20 @@ namespace BusinessObject.Mapper
             StartDate = bookingDetail.Schedule.StartDate,
             EndDate = bookingDetail.Schedule.EndDate,
         }).ToList()))
-    .ReverseMap();
+        .ForMember(dest => dest.Services, opt => opt.Ignore()) // Bỏ qua mapping tự động cho Services
+        .AfterMap((src, dest) =>
+        {
+            // Mapping cho Services
+            dest.Services = src.BookingDetails.Select(bookingDetail => new ServiceDetailDTO
+            {
+                ServiceId = bookingDetail.ServiceId ?? 0,
+                ServiceName = bookingDetail.Service.ServiceName,
+                StylistName = bookingDetail.Stylist?.UserName, // Kiểm tra null ở đây
+                EstimateTime = bookingDetail.Service.EstimateTime,
+                Price = bookingDetail.Service.Price
+            }).ToList();
+        })
+        .ReverseMap();
 
             CreateMap<Booking, BookingResponseDTO>()
                  .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.BookingId))
