@@ -461,8 +461,8 @@ namespace BusinessObject.RequestDTO
         {
 
 
-            //[JsonConverter(typeof(TimeSpanConverter))]
-            //public TimeSpan? EndTime { get; set; }
+            [JsonConverter(typeof(TimeSpanConverter))]
+            public TimeSpan? EndTime { get; set; }
 
 
             [DataType(DataType.Date)]
@@ -475,7 +475,7 @@ namespace BusinessObject.RequestDTO
 
             //[DataType(DataType.Date)]
             //[DateInFuture(ErrorMessage = "End date must not be in the past.")]
-            //public DateTime? EndDate { get; set; }
+            public DateTime? EndDate { get; set; }
             public int? UserId { get; set; }
         }
 
