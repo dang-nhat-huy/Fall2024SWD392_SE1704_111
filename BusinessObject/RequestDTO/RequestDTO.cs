@@ -74,6 +74,12 @@ namespace BusinessObject.RequestDTO
             public int BookingId { get; set; } // ID của booking
         }
 
+        public class AssignStylistRequestDTO
+        {
+            public int StylistId { get; set; }
+            public int BookingId { get; set; } // ID của booking
+            public int ScheduleUserId { get; set; }
+        }
         public class UpdateUserProfileDTO
         {
             [Url(ErrorMessage = "Invalid URL format.")]
@@ -454,7 +460,6 @@ namespace BusinessObject.RequestDTO
 
         public class createScheduleUser
         {
-            [TimeInFuture(ErrorMessage = "Time must not in the past.")]
             [JsonConverter(typeof(TimeSpanConverter))]
             public TimeSpan? StartTime { get; set; }
 
