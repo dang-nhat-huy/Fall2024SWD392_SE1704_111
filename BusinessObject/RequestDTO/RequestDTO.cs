@@ -396,24 +396,60 @@ namespace BusinessObject.RequestDTO
             }
         }
 
+        //public class TimeInFuture : ValidationAttribute
+        //{
+        //    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        //    {
+        //        if (value != null)
+        //        {
+        //            var inputTime = (TimeSpan)value;
+        //            var currentTime = DateTime.Now.TimeOfDay;
+
+        //            // Kiểm tra thời gian không được nhỏ hơn thời gian hiện tại
+        //            if (inputTime < currentTime)
+        //            {
+        //                return new ValidationResult(ErrorMessage ?? "Thời gian không được ở quá khứ.");
+        //            }
+        //        }
+        //        return ValidationResult.Success;
+        //    }
+        //}
+
         public class TimeInFuture : ValidationAttribute
         {
             protected override ValidationResult IsValid(object value, ValidationContext validationContext)
             {
-                if (value != null)
-                {
-                    var inputTime = (TimeSpan)value;
-                    var currentTime = DateTime.Now.TimeOfDay;
+                if (value is not TimeSpan inputTime)
+                    return ValidationResult.Success;
 
-                    // Kiểm tra thời gian không được nhỏ hơn thời gian hiện tại
-                    if (inputTime < currentTime)
+                // Lấy đối tượng từ context để kiểm tra StartDate
+                var startDateProperty = validationContext.ObjectType.GetProperty("StartDate");
+                if (startDateProperty == null)
+                    throw new ArgumentException("StartDate property not found.");
+
+                var startDateValue = startDateProperty.GetValue(validationContext.ObjectInstance) as DateTime?;
+
+                if (startDateValue == null)
+                    return new ValidationResult("Start date is required for time validation.");
+
+                // Ghép TimeSpan vào StartDate để tính toán
+                var inputDateTime = startDateValue.Value.Date.Add(inputTime);
+
+                // Nếu StartDate là hôm nay, kiểm tra thời gian phải là hiện tại hoặc tương lai
+                if (startDateValue.Value.Date == DateTime.Now.Date)
+                {
+                    if (inputDateTime < DateTime.Now)
                     {
-                        return new ValidationResult(ErrorMessage ?? "Thời gian không được ở quá khứ.");
+                        return new ValidationResult(ErrorMessage ?? "Time must not be in the past for today's date.");
                     }
                 }
+
+                // Nếu StartDate là tương lai, thời gian nào cũng hợp lệ
                 return ValidationResult.Success;
             }
         }
+
+
 
 
         public class createScheduleUser
