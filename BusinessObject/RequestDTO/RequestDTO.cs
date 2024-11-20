@@ -428,52 +428,54 @@ namespace BusinessObject.RequestDTO
                 if (value is not TimeSpan inputTime)
                     return ValidationResult.Success;
 
-                // Lấy đối tượng từ context để kiểm tra StartDate
+                // Lấy thuộc tính StartDate từ đối tượng DTO
                 var startDateProperty = validationContext.ObjectType.GetProperty("StartDate");
                 if (startDateProperty == null)
                     throw new ArgumentException("StartDate property not found.");
 
                 var startDateValue = startDateProperty.GetValue(validationContext.ObjectInstance) as DateTime?;
-
                 if (startDateValue == null)
                     return new ValidationResult("Start date is required for time validation.");
 
-                // Ghép TimeSpan vào StartDate để tính toán
+                // Ghép TimeSpan vào ngày StartDate
                 var inputDateTime = startDateValue.Value.Date.Add(inputTime);
 
-                // Nếu StartDate là hôm nay, kiểm tra thời gian phải là hiện tại hoặc tương lai
-                if (startDateValue.Value.Date == DateTime.Now.Date)
+                if (startDateValue.Value.Date == DateTime.Now.Date) // Nếu là hôm nay
                 {
-                    if (inputDateTime < DateTime.Now)
+                    if (inputDateTime < DateTime.Now) // Kiểm tra nếu thời gian là trong quá khứ
                     {
-                        return new ValidationResult(ErrorMessage ?? "Time must not be in the past for today's date.");
+                        return new ValidationResult(ErrorMessage ?? "Start time must be in the future for today's date.");
                     }
                 }
+                else if (startDateValue.Value.Date < DateTime.Now.Date) // Nếu ngày thuộc quá khứ
+                {
+                    return new ValidationResult(ErrorMessage ?? "Start date cannot be in the past.");
+                }
 
-                // Nếu StartDate là tương lai, thời gian nào cũng hợp lệ
+                // Nếu là ngày tương lai, luôn hợp lệ
                 return ValidationResult.Success;
             }
         }
 
-
-
-
         public class createScheduleUser
         {
-            [JsonConverter(typeof(TimeSpanConverter))]
-            public TimeSpan? StartTime { get; set; }
+
 
             //[JsonConverter(typeof(TimeSpanConverter))]
-            public TimeSpan? EndTime { get; set; }
+            //public TimeSpan? EndTime { get; set; }
 
 
             [DataType(DataType.Date)]
             [DateInFuture(ErrorMessage = "Start date must not be in the past.")]
             public DateTime? StartDate { get; set; }
 
+            [JsonConverter(typeof(TimeSpanConverter))]
+            [TimeInFuture(ErrorMessage = "Start time must not be in the past.")]
+            public TimeSpan? StartTime { get; set; }
+
             //[DataType(DataType.Date)]
             //[DateInFuture(ErrorMessage = "End date must not be in the past.")]
-            public DateTime? EndDate { get; set; }
+            //public DateTime? EndDate { get; set; }
             public int? UserId { get; set; }
         }
 
