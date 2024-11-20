@@ -424,7 +424,6 @@ namespace BusinessObject.RequestDTO
 
         public class createScheduleUser
         {
-            [TimeInFuture(ErrorMessage = "Time must not in the past.")]
             [JsonConverter(typeof(TimeSpanConverter))]
             public TimeSpan? StartTime { get; set; }
 
