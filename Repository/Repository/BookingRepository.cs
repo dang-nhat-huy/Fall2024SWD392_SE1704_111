@@ -86,12 +86,13 @@ namespace Repository.Repository
                     .ThenInclude(bd => bd.Stylist)
                 .Include(b => b.BookingDetails)
                 .ThenInclude(bd => bd.Schedule)
-                .Include(b => b.Customer)        // Bao gồm thông tin Customer
-                .Include(b => b.Manager)         // Bao gồm thông tin Manager
-                .Include(b => b.Staff)           // Bao gồm thông tin Staff
-                .Include(b => b.Payments)        // Bao gồm thông tin Payment
-                .Include(b => b.Reports)         // Bao gồm thông tin Report
-                .ToListAsync();                  // Chuyển đổi thành danh sách
+                .Include(b => b.Customer)        
+                .Include(b => b.Manager)         
+                .Include(b => b.Staff)           
+                .Include(b => b.Payments)        
+                .Include(b => b.Reports)         
+                .OrderByDescending(b => b.CreateDate)
+                .ToListAsync();                  
         }
     }
 }

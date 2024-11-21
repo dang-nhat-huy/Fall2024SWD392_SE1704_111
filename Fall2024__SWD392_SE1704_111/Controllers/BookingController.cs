@@ -99,7 +99,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpGet("bookingList")]
         public async Task<IActionResult> GetAllBookings()
         {
