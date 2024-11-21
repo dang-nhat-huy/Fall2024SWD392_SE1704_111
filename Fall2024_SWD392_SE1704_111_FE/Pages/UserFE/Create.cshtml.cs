@@ -27,8 +27,8 @@ namespace Fall2024_SWD392_SE1704_111_FE.Pages.UserFE
         public async Task<IActionResult> OnGetAsync()
         {
             ViewData["UserRoles"] = new SelectList(
-                Enum.GetValues(typeof(CreateUserRole))
-                    .Cast<CreateUserRole>()
+                Enum.GetValues(typeof(UserRole))
+                    .Cast<UserRole>()
                     .Select(role => new { Value = (int)role, Text = role.ToString() }),
                 "Value",
                 "Text"
