@@ -36,6 +36,8 @@ namespace Service.Service
             try
             {
                 // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+
                 var booking = await _unitOfWork.BookingRepository.GetBookingByIdAsync(bookingId);
                 if (booking == null)
                 {
@@ -45,6 +47,8 @@ namespace Service.Service
                 // Sử dụng AutoMapper để ánh xạ thông tin từ DTO vào user
 
                 booking.Status = (BookingStatus?)request.Status;
+                booking.UpdateDate = DateTime.Now;
+                booking.UpdateBy = user.UserName;
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 await _unitOfWork.BookingRepository.UpdateAsync(booking);
