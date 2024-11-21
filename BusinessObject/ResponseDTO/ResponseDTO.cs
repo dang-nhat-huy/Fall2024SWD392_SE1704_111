@@ -160,6 +160,20 @@ namespace BusinessObject.ResponseDTO
 
     }
 
+    public class BookingHistoryNullStylistDTO
+    {
+        public int BookingId { get; set; }
+        // Danh sách các dịch vụ kèm tên nhân viên thực hiện
+        public string? UserName { get; set; }
+        public List<ServiceDetailDTO> Services { get; set; } = new List<ServiceDetailDTO>();
+        public List<ScheduledDetailDTO> Schedules { get; set; } = new List<ScheduledDetailDTO>();
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public double TotalPrice { get; set; }
+        public BookingStatus? Status { get; set; }
+
+    }
+
     public class BookingOfStylistDTO
     {
         public int BookingId { get; set; }

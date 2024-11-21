@@ -55,6 +55,18 @@ namespace Repository.Repository
                 .ToListAsync();
         }
 
+        public async Task<List<Booking>> GetBookingHistoryWithNullStylistAsync()
+        {
+            return await _context.Bookings
+                .Where(b => b.BookingDetails.Any(d => d.StylistId == null))
+                .Include(b => b.Customer)
+                .Include(b => b.BookingDetails)
+                    .ThenInclude(d => d.Service)
+                .Include(b => b.BookingDetails)
+                    .ThenInclude(d => d.Schedule)
+                .ToListAsync();
+        }
+
         public IQueryable<Booking> GetCustomerNameByCreatedByAsync(string fullName)
         {
             var customerList = _context.Bookings

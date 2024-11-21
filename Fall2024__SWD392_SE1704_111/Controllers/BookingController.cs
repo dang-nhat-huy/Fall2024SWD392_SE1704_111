@@ -77,7 +77,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("history")]
         public async Task<IActionResult> GetBookingHistoryOfCurrentUser()
         {
@@ -163,6 +163,28 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
 
             return Ok(response); // Trả về mã 200 nếu thành công
+        }
+
+        [Authorize]
+        [HttpGet("bookings/NoStylist")]
+        public async Task<IActionResult> GetBookingHistoryWithNullStylist()
+        {
+            try
+            {
+                var response = await _bookingService.GetBookingHistoryOfNullStylist();
+
+                if (response.Status == Const.SUCCESS_READ_CODE)
+                {
+                    return Ok(response);
+                }
+
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+
         }
     }
 }
