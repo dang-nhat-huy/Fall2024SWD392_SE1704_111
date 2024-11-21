@@ -19,5 +19,6 @@ namespace Repository.IRepository
         Task<List<Booking>> GetBookingHistoryWithNullStylistAsync();
 
         Task<List<Booking>> GetBookingListAsync();
+        Task<List<Booking>> GetBookingListWithStylistNameAsync(string stylistName);
     }
 }

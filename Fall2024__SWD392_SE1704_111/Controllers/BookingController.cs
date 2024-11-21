@@ -99,13 +99,34 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpGet("bookingList")]
         public async Task<IActionResult> GetAllBookings()
         {
             try
             {
                 var response = await _bookingService.GetAllBookingsAsync();
+
+                if (response.Status == Const.SUCCESS_READ_CODE)
+                {
+                    return Ok(response);
+                }
+
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        //[Authorize(Roles = "Manager")]
+        [HttpGet("bookingListByName")]
+        public async Task<IActionResult> GetAllBookingWithStylistName(string stylistName)
+        {
+            try
+            {
+                var response = await _bookingService.GetBookingHistoryWithStylist(stylistName);
 
                 if (response.Status == Const.SUCCESS_READ_CODE)
                 {

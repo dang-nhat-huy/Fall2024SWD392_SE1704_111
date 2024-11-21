@@ -26,5 +26,7 @@ namespace Service.IService
         Task<PagedResult<Booking>> GetCustomerPagingByCreatedByAsync(string customerName, int pageNumber, int pageSize);
 
         Task<ResponseDTO> GetBookingHistoryOfNullStylist();
+
+        Task<ResponseDTO> GetBookingHistoryWithStylist(string stylistName);
     }
 }

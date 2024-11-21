@@ -94,5 +94,26 @@ namespace Repository.Repository
                 .OrderByDescending(b => b.CreateDate)
                 .ToListAsync();                  
         }
+
+        public async Task<List<Booking>> GetBookingListWithStylistNameAsync(string stylistName)
+        {
+            return await _context.Bookings
+                .Include(b => b.BookingDetails)
+                    .ThenInclude(bd => bd.Service)
+                .Include(b => b.BookingDetails)
+                    .ThenInclude(bd => bd.Stylist)
+                .Include(b => b.BookingDetails)
+                    .ThenInclude(bd => bd.Schedule)
+                .Include(b => b.Customer)        // Bao gồm thông tin Customer
+                .Include(b => b.Manager)         // Bao gồm thông tin Manager
+                .Include(b => b.Staff)           // Bao gồm thông tin Staff
+                .Include(b => b.Payments)        // Bao gồm thông tin Payment
+                .Include(b => b.Reports)         // Bao gồm thông tin Report
+                .Where(b => b.BookingDetails.Any(bd =>
+                    bd.Stylist != null && bd.Stylist.UserName.Contains(stylistName)))
+                .OrderBy(b => b.CreateDate)      // Sắp xếp theo CreateDate
+                .ToListAsync();
+        }
+
     }
 }

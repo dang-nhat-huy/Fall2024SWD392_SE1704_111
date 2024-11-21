@@ -526,5 +526,54 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+
+        public async Task<ResponseDTO> GetBookingHistoryWithStylist(string stylistName)
+        {
+            try
+            {
+                // Lấy người dùng hiện tại
+                var user = await _jWTService.GetCurrentUserAsync();
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                }
+
+                // Lấy danh sách booking của user hiện tại từ repository
+                var bookings = await _unitOfWork.BookingRepository.GetBookingListWithStylistNameAsync(stylistName);
+                if (bookings == null || bookings.Count == 0)
+                {
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "No booking history found.");
+                }
+
+                // Ánh xạ kết quả từ Booking sang BookingHistoryDTO bằng ánh xạ thủ công
+                List<BookingHistoryNullStylistDTO> bookingHistoryDto = new List<BookingHistoryNullStylistDTO>();
+
+                foreach (var booking in bookings)
+                {
+                    var dto = _mapper.Map<BookingHistoryNullStylistDTO>(booking);
+                    bookingHistoryDto.Add(dto);
+                }
+
+                foreach (var booking in bookingHistoryDto)
+                {
+                    // Lọc dịch vụ chỉ lấy dịch vụ duy nhất (không trùng lặp)
+                    booking.Services = booking.Services
+                        .DistinctBy(s => s.ServiceId)
+                        .ToList();
+
+                    // Lọc lịch trình chỉ lấy lịch trình duy nhất (không trùng lặp)
+                    booking.Schedules = booking.Schedules
+                        .DistinctBy(sched => sched.ScheduleId)
+                        .ToList();
+
+                }
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, "Booking history retrieved successfully.", bookingHistoryDto);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
     }
 }
