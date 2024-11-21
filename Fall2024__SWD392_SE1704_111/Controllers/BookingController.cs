@@ -165,7 +165,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             return Ok(response); // Trả về mã 200 nếu thành công
         }
 
-        [Authorize]
+        [Authorize(Roles = "Staff, Manager")]
         [HttpGet("bookings/NoStylist")]
         public async Task<IActionResult> GetBookingHistoryWithNullStylist()
         {
