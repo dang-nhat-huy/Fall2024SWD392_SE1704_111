@@ -76,5 +76,22 @@ namespace Repository.Repository
 
 
         }
+
+        public async Task<List<Booking>> GetBookingListAsync()
+        {
+            return await _context.Bookings
+                .Include(b => b.BookingDetails)
+                    .ThenInclude(bd => bd.Service)
+                .Include(b => b.BookingDetails)
+                    .ThenInclude(bd => bd.Stylist)
+                .Include(b => b.BookingDetails)
+                .ThenInclude(bd => bd.Schedule)
+                .Include(b => b.Customer)        // Bao gồm thông tin Customer
+                .Include(b => b.Manager)         // Bao gồm thông tin Manager
+                .Include(b => b.Staff)           // Bao gồm thông tin Staff
+                .Include(b => b.Payments)        // Bao gồm thông tin Payment
+                .Include(b => b.Reports)         // Bao gồm thông tin Report
+                .ToListAsync();                  // Chuyển đổi thành danh sách
+        }
     }
 }

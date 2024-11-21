@@ -373,17 +373,37 @@ namespace Service.Service
         {
             try
             {
-                var listBooking = await _unitOfWork.BookingRepository.GetAllAsync();
+                var listBooking = await _unitOfWork.BookingRepository.GetBookingListAsync();
 
-                if (listBooking == null)
+                if (listBooking == null || listBooking.Count == 0)
                 {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "No Bookings found.");
+                    return new ResponseDTO(Const.FAIL_READ_CODE, "No booking history found.");
                 }
-                else
+
+                // Ánh xạ kết quả từ Booking sang BookingHistoryDTO bằng ánh xạ thủ công
+                List<BookingHistoryNullStylistDTO> bookingHistoryDto = new List<BookingHistoryNullStylistDTO>();
+
+                foreach (var booking in listBooking)
                 {
-                    var result = _mapper.Map<List<BookingResponseDTO>>(listBooking);
-                    return new ResponseDTO(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+                    var dto = _mapper.Map<BookingHistoryNullStylistDTO>(booking);
+                    bookingHistoryDto.Add(dto);
                 }
+
+                foreach (var booking in bookingHistoryDto)
+                {
+                    // Lọc dịch vụ chỉ lấy dịch vụ duy nhất (không trùng lặp)
+                    booking.Services = booking.Services
+                        .DistinctBy(s => s.ServiceId)
+                        .ToList();
+
+                    // Lọc lịch trình chỉ lấy lịch trình duy nhất (không trùng lặp)
+                    booking.Schedules = booking.Schedules
+                        .DistinctBy(sched => sched.ScheduleId)
+                        .ToList();
+
+                }
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, "Booking history retrieved successfully.", bookingHistoryDto);
             }
             catch (Exception ex)
             {

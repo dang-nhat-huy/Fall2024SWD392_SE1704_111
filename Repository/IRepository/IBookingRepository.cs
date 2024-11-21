@@ -17,5 +17,7 @@ namespace Repository.IRepository
         Task<List<Booking>> GetBookingIncludeByIdAsync(int id);
 
         Task<List<Booking>> GetBookingHistoryWithNullStylistAsync();
+
+        Task<List<Booking>> GetBookingListAsync();
     }
 }
